@@ -41,3 +41,4 @@ class Bom(models.Model):
     time_process = fields.Float('Time Process')
     tech_process_ids = fields.Many2one('tech.process')
 
+"""Tran Viet check feature"""
