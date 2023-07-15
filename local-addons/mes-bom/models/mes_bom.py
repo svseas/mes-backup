@@ -40,9 +40,3 @@ class Bom(models.Model):
     tech_process_ids = fields.Many2one('tech.process', 'Technical Process')
     time_process = fields.Float('Time Process')
     tech_process_ids = fields.Many2one('tech.process')
-
-
-
-"""quang test git hub"""
-
-"""Tran Viet check feature"""
