@@ -31,6 +31,7 @@ class TechProcess(models.Model):
     output_description = fields.Char(string='Output Description')
     image = fields.Image(string='Image')
     sequence = fields.Many2one('tech.sequence', string='Sequence')
+    ng_percent = fields.Float(string='NG Percent')
 
 
 class Bom(models.Model):
