@@ -4,6 +4,7 @@ from odoo import models, fields, api
 
 
 class TechSequence(models.Model):
+    """Technological Sequence to be added"""
     _name = 'tech.sequence'
     _rec_name = 'order'
 
@@ -37,3 +38,5 @@ class Bom(models.Model):
 
     tech_process_ids = fields.Many2one('tech.process', 'Technical Process')
     time_process = fields.Float('Time Process')
+    tech_process_ids = fields.Many2one('tech.process')
+
