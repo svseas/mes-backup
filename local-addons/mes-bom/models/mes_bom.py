@@ -26,3 +26,4 @@ class Bom(models.Model):
 
     tech_process_ids = fields.Many2one('tech.process')
 
+"""Tran Viet check feature"""
