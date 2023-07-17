@@ -15,6 +15,7 @@
                                 <field name="name"/>
                                 <field name="tech_stage_ids" widget="many2many_tags"/>
                                 <field name="sequence"/>
+                                <field name="ng_percent" widget="percentage"/>
                             </tree>
                         </field>
                     </page>
@@ -22,6 +23,91 @@
             </field>
         </record>
 
+        <!--        MENU ITEMS-->
+        <record id="tech_process_action" model="ir.actions.act_window">
+            <field name="name">Technological Process</field>
+            <field name="res_model">tech.process</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <record id="tech_stage_action" model="ir.actions.act_window">
+            <field name="name">Technological Stage</field>
+            <field name="res_model">tech.stage</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <record id="tech_sequence_action" model="ir.actions.act_window">
+            <field name="name">Sequence</field>
+            <field name="res_model">tech.sequence</field>
+            <field name="view_mode">tree,form</field>
+        </record>
 
+
+        <menuitem id="menu_mes_tech_process"
+                  parent="mrp.menu_mrp_configuration"
+                  name="Technical Process"
+                  action="tech_process_action"
+                  sequence="30"/>
+        <menuitem id="menu_mes_tech_stage"
+                  parent="mrp.menu_mrp_configuration"
+                  name="Technical Stages"
+                  action="tech_stage_action"
+                  sequence="40"/>
+
+
+        <!--        TECHNICAL PROCESS VIEW (TREE, FORM)-->
+
+        <record id="tech_process_view_form" model="ir.ui.view">
+            <field name="name">tech.process.view.form</field>
+            <field name="model">tech.process</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="description"/>
+                            <field name="input_description"/>
+                            <field name="output_description"/>
+                        </group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="image"/>
+                            <field name="ng_percent"/>
+                            <field name="bom_id"/>
+                        </group>
+                    </sheet>
+                    <sheet>
+                        <notebook>
+                        <page string="Technical Stages" name="technical_stages">
+                            <field name="tech_stage_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                    <field name="machine_ids"/>
+                                    <field name="waste_percent"/>
+                                    <field name="sequence"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="tech_process_view_tree" model="ir.ui.view">
+            <field name="name">tech.process.view.tree</field>
+            <field name="model">tech.process</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="input_description"/>
+                    <field name="output_description"/>
+                    <field name="sequence"/>
+                    <field name="image"/>
+                    <field name="ng_percent"/>
+                    <field name="bom_id"/>
+                </tree>
+            </field>
+        </record>
     </data>
 </odoo>

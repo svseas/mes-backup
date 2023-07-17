@@ -33,7 +33,11 @@ class TechProcess(models.Model):
                                      string='Technical Stages')
     description = fields.Char(string='Process Description')
     input_description = fields.Char(string='Input Description')
+    input = fields.Many2one('product.product',
+                            string="Input")
     output_description = fields.Char(string='Output Description')
+    output = fields.Many2one('product.product',
+                             string='Output')
     image = fields.Image(string='Image')
     sequence = fields.Many2one('tech.sequence', string='Sequence')
     ng_percent = fields.Float(string='NG Percent')
@@ -46,4 +50,8 @@ class Bom(models.Model):
     tech_process_ids = fields.One2many('tech.process', 'bom_id',
                                        string='Technical Process')
     time_process = fields.Float('Time Process')
+    waste_percent = fields.Float(string='Waste Percent')
+    ng_percent = fields.Float(string='NG Percent')
+    created_by = fields.Many2one('res.users',
+                                 string='Created By')
 
