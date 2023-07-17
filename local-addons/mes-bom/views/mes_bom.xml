@@ -1,0 +1,27 @@
+<odoo>
+    <data>
+        <record id="mes_bom_form" model="ir.ui.view">
+            <field name="name">mes.bom.form.view.inherit</field>
+            <field name="model">mrp.bom</field>
+            <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='product_id']" position="after">
+                    <field name="time_process" widget="float_time"/>
+                </xpath>
+                <notebook position="inside">
+                    <page string="Technical Process" name="bom_technical_process">
+                        <field name="tech_process_ids">
+                            <tree>
+                                <field name="name"/>
+                                <field name="tech_stage_ids" widget="many2many_tags"/>
+                                <field name="sequence"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

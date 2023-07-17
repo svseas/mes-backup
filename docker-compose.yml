@@ -2,7 +2,7 @@ version: "3.1"
 services:
   web:
     image: odoo:16
-    container_name: web-odoo
+    container_name: web-odoo-mes
     depends_on:
       - db
     volumes:
@@ -43,7 +43,7 @@ services:
   proxy:
     depends_on:
             - web
-    container_name: odoo_proxy
+    container_name: odoo-proxy-mes
     build:
         context: .
         dockerfile: Dockerfile-nginx
