@@ -7,6 +7,9 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='product_id']" position="after">
                     <field name="time_process" widget="float_time"/>
+                    <field name="waste_percent" widget="percentage"/>
+                    <field name="ng_percent" widget="percentage"/>
+                    <field name="created_by"/>
                 </xpath>
                 <notebook position="inside">
                     <page string="Technical Process" name="bom_technical_process">
@@ -46,6 +49,7 @@
                   name="Technical Process"
                   action="tech_process_action"
                   sequence="30"/>
+
         <menuitem id="menu_mes_tech_stage"
                   parent="mrp.menu_mrp_configuration"
                   name="Technical Stages"
@@ -64,13 +68,15 @@
                         <group>
                             <field name="name"/>
                             <field name="description"/>
+                            <field name="input"/>
                             <field name="input_description"/>
+                            <field name="output"/>
                             <field name="output_description"/>
                         </group>
                         <group>
                             <field name="sequence"/>
-                            <field name="image"/>
-                            <field name="ng_percent"/>
+                            <field name="image" widget="image"/>
+                            <field name="ng_percent" widget="percentage"/>
                             <field name="bom_id"/>
                         </group>
                     </sheet>

@@ -14,6 +14,7 @@ class TechSequence(models.Model):
 class TechStage(models.Model):
     _name = 'tech.stage'
     _rec_name = 'name'
+    _order = "sequence"
 
     name = fields.Char('Stage Name')
     machine_ids = fields.Char('Machines')
@@ -26,6 +27,7 @@ class TechStage(models.Model):
 class TechProcess(models.Model):
     _name = 'tech.process'
     _rec_name = 'name'
+    _order = "sequence"
 
     name = fields.Char(string='Process Name')
     tech_stage_ids = fields.One2many('tech.stage',
@@ -41,7 +43,8 @@ class TechProcess(models.Model):
     image = fields.Image(string='Image')
     sequence = fields.Many2one('tech.sequence', string='Sequence')
     ng_percent = fields.Float(string='NG Percent')
-    bom_id = fields.Many2one('mrp.bom')
+    bom_id = fields.Many2one('mrp.bom',
+                             string='BOM')
 
 
 class Bom(models.Model):
