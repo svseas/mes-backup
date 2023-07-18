@@ -3,12 +3,32 @@
 from odoo import models, fields, api
 
 
+#TO DO
+#REFACTOR WORKER INTO DIFFERENT ADD-ON: MES-WORKER
+class MrpWorkerGroup(models.Model):
+    """Worker Group for BOM and other modules in MRP"""
+    _name = 'worker.group'
+    _rec_name = 'name'
+
+    name = fields.Char(string='Group Name')
+    code = fields.Char(string='Group Code')
+    expertise_level = fields.Selection(selection=[('type_one', 'Type 1'),
+                                                  ('type_two', 'Type 2'),
+                                                  ('type_three', 'Type 3')])
+    capacity = fields.Float(string='Capacity',
+                            help='Capacity is in hours')
+    worker_ids = fields.Many2many('res.users',
+                                  string="Worker List")
+
+
 class TechSequence(models.Model):
     """Technological Sequence to be added"""
     _name = 'tech.sequence'
     _rec_name = 'order'
 
     order = fields.Integer(string='Order')
+
+
 
 
 class TechStage(models.Model):
