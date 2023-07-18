@@ -16,7 +16,8 @@ class TechStage(models.Model):
     _rec_name = 'name'
     _order = "sequence"
 
-    name = fields.Char('Stage Name')
+    name = fields.Char(string='Stage Name')
+    code = fields.Char(sring='Stage Code')
     machine_ids = fields.Char('Machines')
     description = fields.Char('Description')
     waste_percent = fields.Float('Waste Percent')
@@ -30,6 +31,7 @@ class TechProcess(models.Model):
     _order = "sequence"
 
     name = fields.Char(string='Process Name')
+    code = fields.Char(string='Process Code')
     tech_stage_ids = fields.One2many('tech.stage',
                                      'tech_process_id',
                                      string='Technical Stages')

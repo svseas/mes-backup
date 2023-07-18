@@ -67,6 +67,7 @@
                     <sheet>
                         <group>
                             <field name="name"/>
+                            <field name="code"/>
                             <field name="description"/>
                             <field name="input"/>
                             <field name="input_description"/>
@@ -82,18 +83,19 @@
                     </sheet>
                     <sheet>
                         <notebook>
-                        <page string="Technical Stages" name="technical_stages">
-                            <field name="tech_stage_ids">
-                                <tree>
-                                    <field name="name"/>
-                                    <field name="description"/>
-                                    <field name="machine_ids"/>
-                                    <field name="waste_percent"/>
-                                    <field name="sequence"/>
-                                </tree>
-                            </field>
-                        </page>
-                    </notebook>
+                            <page string="Technical Stages" name="technical_stages">
+                                <field name="tech_stage_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="description"/>
+                                        <field name="machine_ids"/>
+                                        <field name="waste_percent" widget="percentage"/>
+                                        <field name="sequence"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
@@ -105,13 +107,50 @@
             <field name="arch" type="xml">
                 <tree>
                     <field name="name"/>
+                    <field name="code"/>
                     <field name="description"/>
                     <field name="input_description"/>
                     <field name="output_description"/>
                     <field name="sequence"/>
                     <field name="image"/>
-                    <field name="ng_percent"/>
+                    <field name="ng_percent" widget="percentage"/>
                     <field name="bom_id"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <!--        TECHNICAL STAGE VIEW (TREE, FORM)-->
+        <record id="tech_stage_view_form" model="ir.ui.view">
+            <field name="name">tech.stage.view.form</field>
+            <field name="model">tech.stage</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="description"/>
+                        <field name="machine_ids"/>
+                    </group>
+                    <group>
+                        <field name="sequence"/>
+                        <field name="waste_percent" widget="percentage"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="tech_stage_view_tree" model="ir.ui.view">
+            <field name="name">tech.stage.view.tree</field>
+            <field name="model">tech.stage</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="description"/>
+                    <field name="machine_ids"/>
+                    <field name="sequence"/>
+                    <field name="waste_percent" widget="percentage"/>
                 </tree>
             </field>
         </record>
