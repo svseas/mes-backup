@@ -22,6 +22,17 @@
                             </tree>
                         </field>
                     </page>
+                    <page string="Worker Group" name="bom_worker_group">
+                        <field name="worker_group_ids">
+                            <tree>
+                                <field name="name"/>
+                                <field name="code"/>
+                                <field name="expertise_level"/>
+                                <field name="capacity"/>
+                                <field name="worker_ids"/>
+                            </tree>
+                        </field>
+                    </page>
                 </notebook>
             </field>
         </record>
@@ -69,7 +80,6 @@
                             <field name="name"/>
                             <field name="code"/>
                             <field name="description"/>
-                            <field name="input"/>
                             <field name="input_description"/>
                             <field name="output"/>
                             <field name="output_description"/>
@@ -92,6 +102,24 @@
                                         <field name="machine_ids"/>
                                         <field name="waste_percent" widget="percentage"/>
                                         <field name="sequence"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Input Components" name="input_components">
+                                <field name="input">
+                                    <tree>
+                                        <field name="name"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Worker Group" name="worker_group">
+                                <field name="worker_group_ids">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="code"/>
+                                        <field name="expertise_level"/>
+                                        <field name="capacity" widget="float_time"/>
+                                        <field name="name"/>
                                     </tree>
                                 </field>
                             </page>
@@ -136,6 +164,7 @@
                         <field name="sequence"/>
                         <field name="waste_percent" widget="percentage"/>
                     </group>
+
                 </form>
             </field>
         </record>
