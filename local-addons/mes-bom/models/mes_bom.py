@@ -3,8 +3,8 @@
 from odoo import models, fields, api
 
 
-#TO DO
-#REFACTOR WORKER INTO DIFFERENT ADD-ON: MES-WORKER
+# TO DO
+# REFACTOR WORKER INTO DIFFERENT ADD-ON: MES-WORKER
 class MrpWorkerGroup(models.Model):
     """Worker Group for BOM and other modules in MRP"""
     _name = 'worker.group'
@@ -27,6 +27,9 @@ class ProductProducts(models.Model):
     _inherit = 'product.product'
 
     tech_process_id = fields.Many2one('tech.process', string='Tech Process')
+    manufacturing_type = fields.Selection(selection=[('sfg', 'SFG'), ('material', 'Material')],
+                                          default='sfg')
+
 
 class TechSequence(models.Model):
     """Technological Sequence to be added"""
@@ -48,6 +51,7 @@ class TechStage(models.Model):
     waste_percent = fields.Float('Waste Percent')
     sequence = fields.Many2one('tech.sequence', string='Sequence')
     tech_process_id = fields.Many2one('tech.process')
+    consumption = fields.Float(string='Consumption')
 
 
 class TechProcess(models.Model):
@@ -61,14 +65,17 @@ class TechProcess(models.Model):
                                      'tech_process_id',
                                      string='Technical Stages')
     description = fields.Char(string='Process Description')
-    input_description = fields.Char(string='Input Description')
+    input_description = fields.Html(string='Input Description')
     input = fields.One2many('product.product',
                             'tech_process_id',
                             string="Input")
-    output_description = fields.Char(string='Output Description')
+    output_description = fields.Html(string='Output Description')
     output = fields.Many2one('product.product',
                              string='Output')
+    sfg = fields.Boolean(string='SFG', default=False)
     image = fields.Image(string='Image')
+    documents = fields.Binary(string='Document')
+    document_name = fields.Char(string="File Name")
     sequence = fields.Many2one('tech.sequence', string='Sequence')
     ng_percent = fields.Float(string='NG Percent')
     bom_id = fields.Many2one('mrp.bom',
@@ -81,11 +88,16 @@ class Bom(models.Model):
 
     tech_process_ids = fields.One2many('tech.process', 'bom_id',
                                        string='Technical Process')
-    time_process = fields.Float('Time Process')
-    waste_percent = fields.Float(string='Waste Percent')
-    ng_percent = fields.Float(string='NG Percent')
+    time_process = fields.Float('Time Process*',
+                                required=True,
+                                default=0)
+    waste_percent = fields.Float(string='Waste Percent*')
+    ng_percent = fields.Float(string='NG Percent*',
+                              required=True,
+                              default=0)
     created_by = fields.Many2one('res.users',
-                                 string='Created By')
+                                 string='Created By*',
+                                 required=True)
     worker_group_ids = fields.One2many('worker.group', 'bom_id', string='Worker Group')
-
-
+    quantity = fields.Float(string='Qty*', required=True)
+    uom = fields.Many2one('measure.unit')

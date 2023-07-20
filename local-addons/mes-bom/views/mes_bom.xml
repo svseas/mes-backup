@@ -11,7 +11,7 @@
                     <field name="ng_percent" widget="percentage"/>
                     <field name="created_by"/>
                 </xpath>
-                <notebook position="inside">
+                <page name="components" position="before">
                     <page string="Technical Process" name="bom_technical_process">
                         <field name="tech_process_ids">
                             <tree>
@@ -22,6 +22,8 @@
                             </tree>
                         </field>
                     </page>
+                </page>
+                <page name="components" position="after">
                     <page string="Worker Group" name="bom_worker_group">
                         <field name="worker_group_ids">
                             <tree>
@@ -33,7 +35,7 @@
                             </tree>
                         </field>
                     </page>
-                </notebook>
+                </page>
             </field>
         </record>
 
@@ -80,15 +82,14 @@
                             <field name="name"/>
                             <field name="code"/>
                             <field name="description"/>
-                            <field name="input_description"/>
-                            <field name="output"/>
-                            <field name="output_description"/>
                         </group>
                         <group>
                             <field name="sequence"/>
-                            <field name="image" widget="image"/>
                             <field name="ng_percent" widget="percentage"/>
                             <field name="bom_id"/>
+                            <field name="image" widget="image"/>
+                            <field name="documents" filename="document_name"/>
+                            <field name="document_name" invisible="1"/>
                         </group>
                     </sheet>
                     <sheet>
@@ -100,17 +101,30 @@
                                         <field name="code"/>
                                         <field name="description"/>
                                         <field name="machine_ids"/>
+                                        <field name="consumption"/>
                                         <field name="waste_percent" widget="percentage"/>
                                         <field name="sequence"/>
                                     </tree>
                                 </field>
                             </page>
                             <page string="Input Components" name="input_components">
+                                <group>
+                                    <group>
+                                        <field name="input_description"/>
+                                    </group>
+                                </group>
                                 <field name="input">
                                     <tree>
                                         <field name="name"/>
                                     </tree>
                                 </field>
+                            </page>
+                            <page string="Output" name="output">
+                                <group>
+                                    <field name="sfg"/>
+                                    <field name="output"/>
+                                    <field name="output_description"/>
+                                </group>
                             </page>
                             <page string="Worker Group" name="worker_group">
                                 <field name="worker_group_ids">
@@ -164,7 +178,6 @@
                         <field name="sequence"/>
                         <field name="waste_percent" widget="percentage"/>
                     </group>
-
                 </form>
             </field>
         </record>
