@@ -20,7 +20,7 @@ class MrpWorkerGroup(models.Model):
     worker_ids = fields.Many2many('res.users',
                                   string="Worker List")
     bom_id = fields.Many2one('mrp.bom', string='BOM')
-    tech_process_id = fields.Many2one('tech.process', string='Technical Stage')
+    tech_process_id = fields.Many2one('tech.process', string='Technical Process')
 
 
 class ProductProducts(models.Model):
@@ -51,7 +51,7 @@ class TechStage(models.Model):
     waste_percent = fields.Float('Waste Percent')
     sequence = fields.Many2one('tech.sequence', string='Sequence')
     tech_process_id = fields.Many2one('tech.process')
-    consumption = fields.Float(string='Consumption')
+    consumption = fields.Float(string='Consumption in hours')
 
 
 class TechProcess(models.Model):
@@ -91,6 +91,7 @@ class Bom(models.Model):
     time_process = fields.Float('Time Process*',
                                 required=True,
                                 default=0)
+    consumption = fields.Float(string='Consumption Rate')
     waste_percent = fields.Float(string='Waste Percent*')
     ng_percent = fields.Float(string='NG Percent*',
                               required=True,
@@ -99,5 +100,5 @@ class Bom(models.Model):
                                  string='Created By*',
                                  required=True)
     worker_group_ids = fields.One2many('worker.group', 'bom_id', string='Worker Group')
-    quantity = fields.Float(string='Qty*', required=True)
-    uom = fields.Many2one('measure.unit')
+    bom_quantity = fields.Float(string='Qty*', required=True)
+    bom_uom = fields.Char(string='UOM')

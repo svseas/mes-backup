@@ -7,9 +7,13 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='product_id']" position="after">
                     <field name="time_process" widget="float_time"/>
+                    <field name="consumption"/>
                     <field name="waste_percent" widget="percentage"/>
                     <field name="ng_percent" widget="percentage"/>
                     <field name="created_by"/>
+                </xpath>
+                <xpath expr="//field[@name='product_qty']" position="after">
+                    <field name="bom_uom"/>
                 </xpath>
                 <page name="components" position="before">
                     <page string="Technical Process" name="bom_technical_process">
@@ -176,6 +180,7 @@
                     </group>
                     <group>
                         <field name="sequence"/>
+                        <field name="consumption"/>
                         <field name="waste_percent" widget="percentage"/>
                     </group>
                 </form>
