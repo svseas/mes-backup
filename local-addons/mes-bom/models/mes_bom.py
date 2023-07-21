@@ -101,4 +101,4 @@ class Bom(models.Model):
                                  required=True)
     worker_group_ids = fields.One2many('worker.group', 'bom_id', string='Worker Group')
     bom_quantity = fields.Float(string='Qty*', required=True)
-    bom_uom = fields.Char(string='UOM')
+    bom_uom = fields.Char(string='UOM', help="Unit of measurement")
