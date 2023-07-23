@@ -176,10 +176,11 @@
                         <field name="name"/>
                         <field name="code"/>
                         <field name="description"/>
-                        <field name="machine_ids"/>
+                        <field name="sequence"/>
                     </group>
                     <group>
-                        <field name="sequence"/>
+
+                        <field name="machine_ids"/>
                         <field name="consumption"/>
                         <field name="waste_percent" widget="percentage"/>
                     </group>

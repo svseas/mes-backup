@@ -46,12 +46,17 @@ class TechStage(models.Model):
 
     name = fields.Char(string='Stage Name')
     code = fields.Char(sring='Stage Code')
+    sub_stage = fields.Boolean('Sub Stage', default=False)
     machine_ids = fields.Char('Machines')
+    worker_group_id = fields.Many2one('worker.group', 'Worker Group')
     description = fields.Char('Description')
     waste_percent = fields.Float('Waste Percent')
+    consumption_percent = fields.Float('Consumption Percent', help='Only fill this field after select the machine in stage because consumption percent must follow the selected equipment/machine', default=0)
     sequence = fields.Many2one('tech.sequence', string='Sequence')
     tech_process_id = fields.Many2one('tech.process')
     consumption = fields.Float(string='Consumption in hours')
+    sub_stage_ids = fields.One2many('tech.stage', 'parent_stage', string='Sub Stage Lines')
+    parent_stage = fields.Many2one('tech.stage', string='Parent Stage')
 
 
 class TechProcess(models.Model):
