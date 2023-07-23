@@ -12,15 +12,16 @@ class MrpWorkerGroup(models.Model):
 
     name = fields.Char(string='Group Name')
     code = fields.Char(string='Group Code')
-    expertise_level = fields.Selection(selection=[('type_one', 'Type 1'),
-                                                  ('type_two', 'Type 2'),
-                                                  ('type_three', 'Type 3')])
-    capacity = fields.Float(string='Capacity',
-                            help='Capacity is in hours')
+    expertise_level = fields.Selection(selection=[('type_one', '2/7'),
+                                                  ('type_two', '3/7'),
+                                                  ('type_three', '4/7'),
+                                                  ('type_four', '5/7'),
+                                                  ('type_five', '6/7'),
+                                                  ('type_six', '7/7')])
     worker_ids = fields.Many2many('res.users',
                                   string="Worker List")
     bom_id = fields.Many2one('mrp.bom', string='BOM')
-    tech_process_id = fields.Many2one('tech.process', string='Technical Process')
+    tech_process_id = fields.Many2many('tech.process', string='Technical Process')
 
 
 class ProductProducts(models.Model):
@@ -55,12 +56,17 @@ class TechProcess(models.Model):
     output = fields.Many2one('product.product',
                              string='Output')
     sfg = fields.Boolean(string='SFG', default=False)
+    use_material = fields.Boolean(string='Material Use', default=True)
+    use_machine = fields.Boolean(string='Machine Use', default=True)
+    use_man = fields.Boolean(string='Worker Use', default=True)
     image = fields.Image(string='Image')
     documents = fields.Binary(string='Document')
     document_name = fields.Char(string="File Name")
     sequence = fields.Many2one('tech.sequence', string='Sequence')
-    ng_percent = fields.Float(string='NG Percent')
-    worker_group_ids = fields.One2many('worker.group', 'tech_process_id', string='Worker Group')
+    consumption_percent = fields.Float(string='% Consume')
+    ng_percent = fields.Float(string='% NG')
+    worker_group_ids = fields.Many2many('worker.group', string='Worker Group')
+    bom_ids = fields.Many2many('mrp.bom', string='BOM')
 
     parent_process = fields.Many2one('tech.process', string='Parent Process')
     child_process_ids = fields.One2many('tech.process',
@@ -72,7 +78,7 @@ class Bom(models.Model):
     _inherit = ['mrp.bom']
 
     tech_process_ids = fields.Many2many('tech.process',
-                                       string='Technical Process')
+                                        string='Technical Process')
     time_process = fields.Float('Time Process*',
                                 required=True,
                                 default=0)
@@ -85,5 +91,4 @@ class Bom(models.Model):
                                  string='Created By*',
                                  required=True)
     worker_group_ids = fields.One2many('worker.group', 'bom_id', string='Worker Group')
-    bom_quantity = fields.Float(string='Qty*', required=True)
     bom_uom = fields.Char(string='UOM', help="Unit of measurement")

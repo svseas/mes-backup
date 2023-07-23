@@ -33,7 +33,6 @@
                                 <field name="name"/>
                                 <field name="code"/>
                                 <field name="expertise_level"/>
-                                <field name="capacity"/>
                                 <field name="worker_ids"/>
                             </tree>
                         </field>
@@ -71,18 +70,21 @@
                         <field name="name"/>
                         <field name="code"/>
                         <field name="description"/>
+                        <field name="use_material"/>
+                        <field name="use_machine"/>
                     </group>
                     <group>
                         <field name="sequence"/>
                         <field name="parent_process"/>
                         <field name="ng_percent" widget="percentage"/>
-                        <field name="bom_id"/>
+                        <field name="consumption_percent" widget="percentage"/>
+                        <field name="bom_ids" widget="many2many_tags"/>
                         <field name="image" widget="image"/>
                         <field name="documents" filename="document_name"/>
                         <field name="document_name" invisible="1"/>
                     </group>
                     <notebook>
-                        <page string="Input Components" name="input_components">
+                        <page string="Input Components" name="input_components" attrs="{'invisible':[('use_material', '=', False)]}">
                             <group>
                                 <group>
                                     <field name="input_description"/>
@@ -104,13 +106,12 @@
                                 <field name="output_description"/>
                             </group>
                         </page>
-                        <page string="Worker Group" name="worker_group">
-                            <field name="worker_group_ids">
+                        <page string="Worker Group" name="worker_group" attrs="{'invisible':[('use_machine', '=', False)]}">
+                            <field name="worker_group_ids" >
                                 <tree>
                                     <field name="name"/>
                                     <field name="code"/>
                                     <field name="expertise_level"/>
-                                    <field name="capacity" widget="float_time"/>
                                     <field name="name"/>
                                 </tree>
                             </field>
@@ -133,12 +134,11 @@
                     <field name="sequence"/>
                     <field name="image"/>
                     <field name="ng_percent" widget="percentage"/>
-                    <field name="bom_id"/>
+                    <field name="consumption_percent" widget="percentage"/>
+                    <field name="bom_ids" widget="many2many_tags"/>
                 </tree>
             </field>
         </record>
-
-        <!--        TECHNICAL STAGE VIEW (TREE, FORM)-->
 
     </data>
 </odoo>
