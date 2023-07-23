@@ -39,26 +39,6 @@ class TechSequence(models.Model):
     order = fields.Integer(string='Order')
 
 
-class TechStage(models.Model):
-    _name = 'tech.stage'
-    _rec_name = 'name'
-    _order = "sequence"
-
-    name = fields.Char(string='Stage Name')
-    code = fields.Char(sring='Stage Code')
-    sub_stage = fields.Boolean('Sub Stage', default=False)
-    machine_ids = fields.Char('Machines')
-    worker_group_id = fields.Many2one('worker.group', 'Worker Group')
-    description = fields.Char('Description')
-    waste_percent = fields.Float('Waste Percent')
-    consumption_percent = fields.Float('Consumption Percent', help='Only fill this field after select the machine in stage because consumption percent must follow the selected equipment/machine', default=0)
-    sequence = fields.Many2one('tech.sequence', string='Sequence')
-    tech_process_id = fields.Many2one('tech.process')
-    consumption = fields.Float(string='Consumption in hours')
-    sub_stage_ids = fields.One2many('tech.stage', 'parent_stage', string='Sub Stage Lines')
-    parent_stage = fields.Many2one('tech.stage', string='Parent Stage')
-
-
 class TechProcess(models.Model):
     _name = 'tech.process'
     _rec_name = 'name'
@@ -66,9 +46,6 @@ class TechProcess(models.Model):
 
     name = fields.Char(string='Process Name')
     code = fields.Char(string='Process Code')
-    tech_stage_ids = fields.One2many('tech.stage',
-                                     'tech_process_id',
-                                     string='Technical Stages')
     description = fields.Char(string='Process Description')
     input_description = fields.Html(string='Input Description')
     input = fields.One2many('product.product',
@@ -83,15 +60,18 @@ class TechProcess(models.Model):
     document_name = fields.Char(string="File Name")
     sequence = fields.Many2one('tech.sequence', string='Sequence')
     ng_percent = fields.Float(string='NG Percent')
-    bom_id = fields.Many2one('mrp.bom',
-                             string='BOM')
     worker_group_ids = fields.One2many('worker.group', 'tech_process_id', string='Worker Group')
+
+    parent_process = fields.Many2one('tech.process', string='Parent Process')
+    child_process_ids = fields.One2many('tech.process',
+                                        'parent_process',
+                                        string='Child Process', )
 
 
 class Bom(models.Model):
     _inherit = ['mrp.bom']
 
-    tech_process_ids = fields.One2many('tech.process', 'bom_id',
+    tech_process_ids = fields.Many2many('tech.process',
                                        string='Technical Process')
     time_process = fields.Float('Time Process*',
                                 required=True,

@@ -20,7 +20,6 @@
                         <field name="tech_process_ids">
                             <tree>
                                 <field name="name"/>
-                                <field name="tech_stage_ids" widget="many2many_tags"/>
                                 <field name="sequence"/>
                                 <field name="ng_percent" widget="percentage"/>
                             </tree>
@@ -49,29 +48,16 @@
             <field name="res_model">tech.process</field>
             <field name="view_mode">tree,form</field>
         </record>
-        <record id="tech_stage_action" model="ir.actions.act_window">
-            <field name="name">Technological Stage</field>
-            <field name="res_model">tech.stage</field>
-            <field name="view_mode">tree,form</field>
-        </record>
         <record id="tech_sequence_action" model="ir.actions.act_window">
             <field name="name">Sequence</field>
             <field name="res_model">tech.sequence</field>
             <field name="view_mode">tree,form</field>
         </record>
-
-
         <menuitem id="menu_mes_tech_process"
                   parent="mrp.menu_mrp_configuration"
                   name="Technical Process"
                   action="tech_process_action"
                   sequence="30"/>
-
-        <menuitem id="menu_mes_tech_stage"
-                  parent="mrp.menu_mrp_configuration"
-                  name="Technical Stages"
-                  action="tech_stage_action"
-                  sequence="40"/>
 
 
         <!--        TECHNICAL PROCESS VIEW (TREE, FORM)-->
@@ -81,68 +67,55 @@
             <field name="model">tech.process</field>
             <field name="arch" type="xml">
                 <form>
-                    <sheet>
-                        <group>
-                            <field name="name"/>
-                            <field name="code"/>
-                            <field name="description"/>
-                        </group>
-                        <group>
-                            <field name="sequence"/>
-                            <field name="ng_percent" widget="percentage"/>
-                            <field name="bom_id"/>
-                            <field name="image" widget="image"/>
-                            <field name="documents" filename="document_name"/>
-                            <field name="document_name" invisible="1"/>
-                        </group>
-                    </sheet>
-                    <sheet>
-                        <notebook>
-                            <page string="Technical Stages" name="technical_stages">
-                                <field name="tech_stage_ids">
-                                    <tree>
-                                        <field name="name"/>
-                                        <field name="code"/>
-                                        <field name="description"/>
-                                        <field name="machine_ids"/>
-                                        <field name="consumption"/>
-                                        <field name="waste_percent" widget="percentage"/>
-                                        <field name="sequence"/>
-                                    </tree>
-                                </field>
-                            </page>
-                            <page string="Input Components" name="input_components">
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="description"/>
+                    </group>
+                    <group>
+                        <field name="sequence"/>
+                        <field name="parent_process"/>
+                        <field name="ng_percent" widget="percentage"/>
+                        <field name="bom_id"/>
+                        <field name="image" widget="image"/>
+                        <field name="documents" filename="document_name"/>
+                        <field name="document_name" invisible="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Input Components" name="input_components">
+                            <group>
                                 <group>
-                                    <group>
-                                        <field name="input_description"/>
-                                    </group>
+                                    <field name="input_description"/>
                                 </group>
-                                <field name="input">
-                                    <tree>
-                                        <field name="name"/>
-                                    </tree>
-                                </field>
-                            </page>
-                            <page string="Output" name="output">
-                                <group>
-                                    <field name="sfg"/>
-                                    <field name="output"/>
-                                    <field name="output_description"/>
-                                </group>
-                            </page>
-                            <page string="Worker Group" name="worker_group">
-                                <field name="worker_group_ids">
-                                    <tree>
-                                        <field name="name"/>
-                                        <field name="code"/>
-                                        <field name="expertise_level"/>
-                                        <field name="capacity" widget="float_time"/>
-                                        <field name="name"/>
-                                    </tree>
-                                </field>
-                            </page>
-                        </notebook>
-                    </sheet>
+                            </group>
+                            <field name="input">
+                                <tree>
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Child Process" name="child_process">
+                            <field name="child_process_ids"/>
+                        </page>
+                        <page string="Output" name="output">
+                            <group>
+                                <field name="sfg"/>
+                                <field name="output"/>
+                                <field name="output_description"/>
+                            </group>
+                        </page>
+                        <page string="Worker Group" name="worker_group">
+                            <field name="worker_group_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="code"/>
+                                    <field name="expertise_level"/>
+                                    <field name="capacity" widget="float_time"/>
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
                 </form>
             </field>
         </record>
@@ -165,42 +138,7 @@
             </field>
         </record>
 
-
         <!--        TECHNICAL STAGE VIEW (TREE, FORM)-->
-        <record id="tech_stage_view_form" model="ir.ui.view">
-            <field name="name">tech.stage.view.form</field>
-            <field name="model">tech.stage</field>
-            <field name="arch" type="xml">
-                <form>
-                    <group>
-                        <field name="name"/>
-                        <field name="code"/>
-                        <field name="description"/>
-                        <field name="sequence"/>
-                    </group>
-                    <group>
 
-                        <field name="machine_ids"/>
-                        <field name="consumption"/>
-                        <field name="waste_percent" widget="percentage"/>
-                    </group>
-                </form>
-            </field>
-        </record>
-
-        <record id="tech_stage_view_tree" model="ir.ui.view">
-            <field name="name">tech.stage.view.tree</field>
-            <field name="model">tech.stage</field>
-            <field name="arch" type="xml">
-                <tree>
-                    <field name="name"/>
-                    <field name="code"/>
-                    <field name="description"/>
-                    <field name="machine_ids"/>
-                    <field name="sequence"/>
-                    <field name="waste_percent" widget="percentage"/>
-                </tree>
-            </field>
-        </record>
     </data>
 </odoo>
