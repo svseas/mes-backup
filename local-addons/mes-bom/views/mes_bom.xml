@@ -7,7 +7,6 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='product_id']" position="after">
                     <field name="time_process" widget="float_time"/>
-                    <field name="consumption"/>
                     <field name="waste_percent" widget="percentage"/>
                     <field name="ng_percent" widget="percentage"/>
                     <field name="created_by"/>
@@ -15,29 +14,6 @@
                 <xpath expr="//field[@name='product_qty']" position="after">
                     <field name="bom_uom"/>
                 </xpath>
-                <page name="components" position="before">
-                    <page string="Technical Process" name="bom_technical_process">
-                        <field name="tech_process_ids">
-                            <tree>
-                                <field name="name"/>
-                                <field name="sequence"/>
-                                <field name="ng_percent" widget="percentage"/>
-                            </tree>
-                        </field>
-                    </page>
-                </page>
-                <page name="components" position="after">
-                    <page string="Worker Group" name="bom_worker_group">
-                        <field name="worker_group_ids">
-                            <tree>
-                                <field name="name"/>
-                                <field name="code"/>
-                                <field name="expertise_level"/>
-                                <field name="worker_ids"/>
-                            </tree>
-                        </field>
-                    </page>
-                </page>
             </field>
         </record>
 
@@ -66,57 +42,41 @@
             <field name="model">tech.process</field>
             <field name="arch" type="xml">
                 <form>
-                    <group>
+                    <group string="General Information">
                         <field name="name"/>
                         <field name="code"/>
-                        <field name="description"/>
-                        <field name="use_material"/>
-                        <field name="use_machine"/>
-                    </group>
-                    <group>
                         <field name="sequence"/>
-                        <field name="parent_process"/>
-                        <field name="ng_percent" widget="percentage"/>
-                        <field name="consumption_percent" widget="percentage"/>
+                        <field name="description"/>
                         <field name="bom_ids" widget="many2many_tags"/>
-                        <field name="image" widget="image"/>
-                        <field name="documents" filename="document_name"/>
-                        <field name="document_name" invisible="1"/>
+                        <field name="child_process_ids" widget="many2many_tags"/>
                     </group>
-                    <notebook>
-                        <page string="Input Components" name="input_components" attrs="{'invisible':[('use_material', '=', False)]}">
-                            <group>
-                                <group>
-                                    <field name="input_description"/>
-                                </group>
-                            </group>
-                            <field name="input">
-                                <tree>
-                                    <field name="name"/>
-                                </tree>
-                            </field>
-                        </page>
-                        <page string="Child Process" name="child_process">
-                            <field name="child_process_ids"/>
-                        </page>
-                        <page string="Output" name="output">
-                            <group>
-                                <field name="sfg"/>
-                                <field name="output"/>
-                                <field name="output_description"/>
-                            </group>
-                        </page>
-                        <page string="Worker Group" name="worker_group" attrs="{'invisible':[('use_machine', '=', False)]}">
-                            <field name="worker_group_ids" >
-                                <tree>
-                                    <field name="name"/>
-                                    <field name="code"/>
-                                    <field name="expertise_level"/>
-                                    <field name="name"/>
-                                </tree>
-                            </field>
-                        </page>
-                    </notebook>
+                    <group string="Material">
+                        <field name="input" widget="many2many_tags"/>
+                        <field name="input_description"/>
+                    </group>
+                    <group string="Machine">
+                        <field name="machine"/>
+                        <field name="machine_hours" widget="float_time"/>
+                    </group>
+                    <group string="Man">
+                        <field name="worker_group_ids"/>
+                        <field name="worker_hours" widget="float_time"/>
+                    </group>
+                    <group string="Method">
+                        <field name="description"/>
+                    </group>
+                    <group string="Consumption and NG">
+                        <field name="consumption_percent" widget="percentage"/>
+                        <field name="ng_percent" widget="percentage"/>
+                    </group>
+                    <group string="Output Details">
+                        <field name="output"/>
+                        <field name="output_description"/>
+                    </group>
+                    <group string="Documents">
+                        <field name="image"/>
+                        <field name="documents"/>
+                    </group>
                 </form>
             </field>
         </record>
@@ -128,17 +88,17 @@
                 <tree>
                     <field name="name"/>
                     <field name="code"/>
-                    <field name="description"/>
-                    <field name="input_description"/>
-                    <field name="output_description"/>
-                    <field name="sequence"/>
-                    <field name="image"/>
-                    <field name="ng_percent" widget="percentage"/>
+                    <field name="bom_ids"/>
+                    <field name="child_process_ids" widget="many2many_tags"/>
+                    <field name="input" widget="many2many_tags"/>
+                    <field name="machine"/>
+                    <field name="machine_hours"/>
+                    <field name="worker_group_ids"/>
+                    <field name="worker_hours" widget="float_time"/>
                     <field name="consumption_percent" widget="percentage"/>
-                    <field name="bom_ids" widget="many2many_tags"/>
+                    <field name="output"/>
                 </tree>
             </field>
         </record>
-
     </data>
 </odoo>

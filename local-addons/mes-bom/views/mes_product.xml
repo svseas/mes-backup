@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="material_view_form" model="ir.ui.view">
+        <field name="name">material.view.form</field>
+        <field name="model">material.material</field>
+        <field name="arch" type="xml">
+            <form>
+                <group string="General Information">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="description"/>
+                    <field name="electronic_material"/>
+                </group>
+                <group string="Electronic Material Information"
+                       attrs="{'invisible':[('electronic_material','=',False)]}">
+                    <field name="designator"/>
+                    <field name="footprint"/>
+                    <field name="lib_ref"/>
+                    <field name="manufacturer_name"/>
+                    <field name="supplier_name"/>
+                    <field name="supplier_code"/>
+                </group>
+
+            </form>
+        </field>
+    </record>
+</odoo>

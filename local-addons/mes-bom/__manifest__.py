@@ -28,6 +28,7 @@
         'views/templates.xml',
         'views/mes_bom.xml',
         'views/mes_views_menu.xml',
+        'views/mes_product.xml',
         'data/technical_stage_data.xml',
     ],
     # only loaded in demonstration mode
