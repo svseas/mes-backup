@@ -60,6 +60,7 @@ class MaterialLine(models.Model):
     mat_qty = fields.Float(string='Quantity')
     mat_uom = fields.Char(string='UOM')
     mat_waste = fields.Float(string='% Waste')
+    tech_process = fields.Many2many('tech.process', readonly=True)
 
 
 class ProductProducts(models.Model):
@@ -121,14 +122,13 @@ class Bom(models.Model):
 
     tech_process_ids = fields.Many2many('tech.process',
                                         string='Technical Process')
-    time_process = fields.Float('Time Process*',
-                                required=True,
-                                default=0)
-    waste_percent = fields.Float(string='Waste Percent*')
     ng_percent = fields.Float(string='NG Percent*',
                               required=True,
                               default=0)
     created_by = fields.Many2one('res.users',
                                  string='Created By*',
                                  required=True)
+    approved_by = fields.Many2one('res.users',
+                                  string='Approved By*',
+                                  required=True)
     bom_uom = fields.Char(string='UOM', help="Unit of measurement")

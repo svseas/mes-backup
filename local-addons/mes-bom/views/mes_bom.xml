@@ -6,8 +6,6 @@
             <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='product_id']" position="after">
-                    <field name="time_process" widget="float_time"/>
-                    <field name="waste_percent" widget="percentage"/>
                     <field name="ng_percent" widget="percentage"/>
                     <field name="created_by"/>
                 </xpath>
@@ -28,11 +26,23 @@
             <field name="res_model">tech.sequence</field>
             <field name="view_mode">tree,form</field>
         </record>
+        <record id="material_action" model="ir.actions.act_window">
+            <field name="name">Material</field>
+            <field name="res_model">material.line</field>
+            <field name="view_mode">tree,form</field>
+        </record>
         <menuitem id="menu_mes_tech_process"
                   parent="mrp.menu_mrp_configuration"
                   name="Technical Process"
                   action="tech_process_action"
+                  sequence="20"/>
+        <menuitem id="menu_mes_material"
+                  parent="mrp.menu_mrp_configuration"
+                  name="Material"
+                  action="material_action"
                   sequence="30"/>
+
+
 
 
         <!--        TECHNICAL PROCESS VIEW (TREE, FORM)-->
@@ -81,8 +91,9 @@
                         <field name="output_description"/>
                     </group>
                     <group string="Documents">
-                        <field name="image"/>
-                        <field name="documents"/>
+                        <field name="image" widget="image"/>
+                        <field name="documents" filename="document_name"/>
+                        <field name="document_name" invisible="1"/>
                     </group>
                 </form>
             </field>
@@ -102,10 +113,25 @@
                     <field name="machine_hours"/>
                     <field name="worker_group_ids"/>
                     <field name="worker_hours" widget="float_time"/>
-                    <field name="waste_percent" widget="percentage"/>
+<!--                    <field name="waste_percent" widget="percentage"/>-->
                     <field name="output"/>
                 </tree>
             </field>
         </record>
+<!--        MATERIAL VIEW-->
+        <record id="material_view_form" model="ir.ui.view">
+            <field name="name">material.view.form</field>
+            <field name="model">material.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <field name="material"/>
+                    <field name="mat_qty"/>
+                    <field name="mat_uom"/>
+                    <field name="mat_waste"/>
+                    <field name="tech_process"/>
+                </form>
+            </field>
+        </record>
+
     </data>
 </odoo>
