@@ -51,11 +51,22 @@ class MaterialMaterials(models.Model):
     supplier_code = fields.Char(string='Supplier Code')
 
 
+class MaterialLine(models.Model):
+    _name = 'material.line'
+    _description = 'material line for tech process'
+    _rec_name = 'material'
+
+    material = fields.Many2one('material.material', string='Material')
+    mat_qty = fields.Float(string='Quantity')
+    mat_uom = fields.Char(string='UOM')
+
+
 class ProductProducts(models.Model):
     _inherit = 'product.product'
 
     manufacturing_type = fields.Selection(selection=[('sfg', 'SFG'), ('material', 'Material')],
                                           default='sfg')
+
 
 class TechSequence(models.Model):
     """Technological Sequence to be added"""
@@ -87,22 +98,21 @@ class TechProcess(models.Model):
                                         string='Child Process')
 
     # Process Line
-    input = fields.Many2many('material.material',
+    input = fields.Many2many('material.line',
                              string="Input")
     input_description = fields.Html(string='Input Description')
     machine = fields.Many2one('equipment.template', string='Machine')
     machine_hours = fields.Float('Machine Hours')
     worker_group_ids = fields.Many2one('worker.group', string='Worker Type')
     worker_hours = fields.Float('Worker Hours')
-    consumption_percent = fields.Float(string='% Consume')
-    output = fields.Many2one('material.material',
+    waste_percent = fields.Float(string='% Waste')
+    output = fields.Many2one('material.line',
                              string='Output')
     output_description = fields.Html(string='Output Description')
     image = fields.Image(string='Image')
     documents = fields.Binary(string='Document')
     document_name = fields.Char(string="File Name")
     ng_percent = fields.Float(string='% NG')
-
 
 
 class Bom(models.Model):
