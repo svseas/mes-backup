@@ -51,7 +51,14 @@
                         <field name="child_process_ids" widget="many2many_tags"/>
                     </group>
                     <group string="Material">
-                        <field name="input" widget="many2many_tags"/>
+                        <field name="input">
+                            <tree editable="bottom">
+                                <field name="material"/>
+                                <field name="mat_qty"/>
+                                <field name="mat_uom"/>
+                                <field name="mat_waste" widget="percentage"/>
+                            </tree>
+                        </field>
                         <field name="input_description"/>
                     </group>
                     <group string="Machine">
@@ -65,8 +72,8 @@
                     <group string="Method">
                         <field name="description"/>
                     </group>
-                    <group string="Consumption and NG">
-                        <field name="waste_percent" widget="percentage"/>
+                    <group string="NG">
+<!--                        <field name="waste_percent" widget="percentage"/>-->
                         <field name="ng_percent" widget="percentage"/>
                     </group>
                     <group string="Output Details">

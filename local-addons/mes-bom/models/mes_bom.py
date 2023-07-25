@@ -59,6 +59,7 @@ class MaterialLine(models.Model):
     material = fields.Many2one('material.material', string='Material')
     mat_qty = fields.Float(string='Quantity')
     mat_uom = fields.Char(string='UOM')
+    mat_waste = fields.Float(string='% Waste')
 
 
 class ProductProducts(models.Model):
@@ -130,5 +131,4 @@ class Bom(models.Model):
     created_by = fields.Many2one('res.users',
                                  string='Created By*',
                                  required=True)
-    # worker_group_ids = fields.One2many('worker.group', 'bom_id', string='Worker Group')
     bom_uom = fields.Char(string='UOM', help="Unit of measurement")
