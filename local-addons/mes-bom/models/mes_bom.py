@@ -60,7 +60,7 @@ class MaterialLine(models.Model):
     mat_qty = fields.Float(string='Quantity')
     mat_uom = fields.Char(string='UOM')
     mat_waste = fields.Float(string='% Waste')
-    tech_process = fields.Many2many('tech.process', readonly=True)
+    tech_process_id = fields.Many2one('tech.process', readonly=True)
 
 
 class ProductProducts(models.Model):
@@ -100,9 +100,10 @@ class TechProcess(models.Model):
                                         string='Child Process')
 
     # Process Line
-    input = fields.Many2many('material.line',
-                             string="Input")
+    input = fields.One2many('material.line', 'tech_process_id',
+                            string="Input")
     input_description = fields.Html(string='Input Description')
+    input_char = fields.Char(string='Test Input', compute='_propagate_material_to_parent')
     machine = fields.Many2one('equipment.template', string='Machine')
     machine_hours = fields.Float('Machine Hours')
     worker_group_ids = fields.Many2one('worker.group', string='Worker Type')
@@ -115,6 +116,18 @@ class TechProcess(models.Model):
     documents = fields.Binary(string='Document')
     document_name = fields.Char(string="File Name")
     ng_percent = fields.Float(string='% NG')
+
+    @api.onchange('child_process_ids')
+    def _propagate_material_to_parent(self):
+        for record in self:
+            if record.child_process_ids:
+                parent_materials = record.input
+                child_materials = record.child_process_ids.input
+                # add child materials to parent that are not already there
+                materials_to_add = child_materials - parent_materials
+                if materials_to_add:
+                    record.input_char = materials_to_add
+                record.input_char = 'NONE'
 
 
 class Bom(models.Model):

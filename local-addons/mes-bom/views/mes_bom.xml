@@ -69,6 +69,7 @@
                                 <field name="mat_waste" widget="percentage"/>
                             </tree>
                         </field>
+                        <field name="input_char"/>
                         <field name="input_description"/>
                     </group>
                     <group string="Machine">
@@ -132,6 +133,5 @@
                 </form>
             </field>
         </record>
-
     </data>
 </odoo>
