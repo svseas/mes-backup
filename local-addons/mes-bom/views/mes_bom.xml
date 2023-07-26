@@ -55,7 +55,7 @@
                         <field name="combined_machines">
                             <tree>
                                 <field name="machine"/>
-                                <field name="machine_hours"/>
+                                <field name="machine_hours" widget="float_time"/>
                             </tree>
                         </field>
                     </page>
@@ -63,7 +63,7 @@
                         <field name="combined_workers">
                             <tree>
                                 <field name="worker_group_ids"/>
-                                <field name="worker_hours"/>
+                                <field name="worker_hours" widget="float_time"/>
                             </tree>
                         </field>
                     </page>
@@ -176,19 +176,19 @@
                         <field name="machine">
                             <tree>
                                 <field name="machine"/>
-                                <field name="machine_hours"/>
+                                <field name="machine_hours" widget="float_time"/>
                             </tree>
                         </field>
                         <field name="child_process_machines">
                             <tree>
                                 <field name="machine"/>
-                                <field name="machine_hours"/>
+                                <field name="machine_hours" widget="float_time"/>
                             </tree>
                         </field>
                         <field name="combined_machines">
                             <tree>
                                 <field name="machine"/>
-                                <field name="machine_hours"/>
+                                <field name="machine_hours" widget="float_time"/>
                             </tree>
                         </field>
                     </group>
@@ -196,19 +196,19 @@
                         <field name="worker">
                             <tree>
                                 <field name="worker_group_ids"/>
-                                <field name="worker_hours"/>
+                                <field name="worker_hours" widget="float_time"/>
                             </tree>
                         </field>
                         <field name="child_process_workers">
                             <tree>
                                 <field name="worker_group_ids"/>
-                                <field name="worker_hours"/>
+                                <field name="worker_hours" widget="float_time"/>
                             </tree>
                         </field>
                         <field name="combined_workers">
                             <tree>
                                 <field name="worker_group_ids"/>
-                                <field name="worker_hours"/>
+                                <field name="worker_hours" widget="float_time"/>
                             </tree>
                         </field>
                     </group>
