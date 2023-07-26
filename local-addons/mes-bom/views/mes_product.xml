@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
+
+    <!--    MENU ITEMS-->
+    <record id="material_lib_action" model="ir.actions.act_window">
+        <field name="name">Material</field>
+        <field name="res_model">material.material</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem id="menu_mes_material_details"
+              parent="mrp.menu_mrp_configuration"
+              name="Material Library"
+              action="material_lib_action"
+              sequence="20"/>
+
+    <!--    MATERIAL VIEW-->
     <record id="material_view_form" model="ir.ui.view">
         <field name="name">material.view.form</field>
         <field name="model">material.material</field>
@@ -20,8 +34,26 @@
                     <field name="supplier_name"/>
                     <field name="supplier_code"/>
                 </group>
-
             </form>
         </field>
+    </record>
+    <record id="material_view_tree" model="ir.ui.view">
+        <field name="name">material.view.tree</field>
+        <field name="model">material.material</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="description"/>
+                <field name="electronic_material"/>
+                <field name="designator"/>
+                <field name="footprint"/>
+                <field name="lib_ref"/>
+                <field name="manufacturer_name"/>
+                <field name="supplier_name"/>
+                <field name="supplier_code"/>
+            </tree>
+        </field>
+
     </record>
 </odoo>

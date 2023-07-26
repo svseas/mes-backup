@@ -31,18 +31,17 @@
             <field name="res_model">material.line</field>
             <field name="view_mode">tree,form</field>
         </record>
+
         <menuitem id="menu_mes_tech_process"
                   parent="mrp.menu_mrp_configuration"
                   name="Technical Process"
                   action="tech_process_action"
-                  sequence="20"/>
+                  sequence="30"/>
         <menuitem id="menu_mes_material"
                   parent="mrp.menu_mrp_configuration"
-                  name="Material"
+                  name="Material Line"
                   action="material_action"
-                  sequence="30"/>
-
-
+                  sequence="40"/>
 
 
         <!--        TECHNICAL PROCESS VIEW (TREE, FORM)-->
@@ -67,6 +66,16 @@
                                 <field name="mat_qty"/>
                                 <field name="mat_uom"/>
                                 <field name="mat_waste" widget="percentage"/>
+                                <field name="code"/>
+                                <field name="description"/>
+                                <field name="electronic_material"/>
+                                <field name="designator"/>
+                                <field name="footprint"/>
+                                <field name="lib_ref"/>
+                                <field name="manufacturer_name"/>
+                                <field name="supplier_name"/>
+                                <field name="supplier_code"/>
+                                <field name="tech_process_id"/>
                             </tree>
                         </field>
                         <field name="child_process_inputs">
@@ -75,9 +84,37 @@
                                 <field name="mat_qty"/>
                                 <field name="mat_uom"/>
                                 <field name="mat_waste" widget="percentage"/>
+                                <field name="code"/>
+                                <field name="description"/>
+                                <field name="electronic_material"/>
+                                <field name="designator"/>
+                                <field name="footprint"/>
+                                <field name="lib_ref"/>
+                                <field name="manufacturer_name"/>
+                                <field name="supplier_name"/>
+                                <field name="supplier_code"/>
+                                <field name="tech_process_id"/>
                             </tree>
                         </field>
                         <field name="input_description"/>
+                        <field name="combined_inputs">
+                            <tree>
+                                <field name="material"/>
+                                <field name="mat_qty"/>
+                                <field name="mat_uom"/>
+                                <field name="mat_waste" widget="percentage"/>
+                                <field name="code"/>
+                                <field name="description"/>
+                                <field name="electronic_material"/>
+                                <field name="designator"/>
+                                <field name="footprint"/>
+                                <field name="lib_ref"/>
+                                <field name="manufacturer_name"/>
+                                <field name="supplier_name"/>
+                                <field name="supplier_code"/>
+                                <field name="tech_process_id"/>
+                            </tree>
+                        </field>
                     </group>
                     <group string="Machine">
                         <field name="machine"/>
@@ -91,7 +128,6 @@
                         <field name="description"/>
                     </group>
                     <group string="NG">
-<!--                        <field name="waste_percent" widget="percentage"/>-->
                         <field name="ng_percent" widget="percentage"/>
                     </group>
                     <group string="Output Details">
@@ -122,23 +158,59 @@
                     <field name="machine_hours"/>
                     <field name="worker_group_ids"/>
                     <field name="worker_hours" widget="float_time"/>
-<!--                    <field name="waste_percent" widget="percentage"/>-->
                     <field name="output"/>
                 </tree>
             </field>
         </record>
-<!--        MATERIAL VIEW-->
-        <record id="material_view_form" model="ir.ui.view">
-            <field name="name">material.view.form</field>
+        <!--        MATERIAL LINE VIEW -->
+        <record id="material_line_view_form" model="ir.ui.view">
+            <field name="name">material.line.view.form</field>
             <field name="model">material.line</field>
             <field name="arch" type="xml">
                 <form>
+                    <group string="Process Information">
+                        <field name="material"/>
+                        <field name="mat_qty"/>
+                        <field name="mat_uom"/>
+                        <field name="mat_waste"/>
+                        <field name="tech_process_id"/>
+                    </group>
+                    <group string="Related Fields from Material">
+                        <field name="code"/>
+                        <field name="description"/>
+                        <field name="electronic_material"/>
+                        <field name="designator"/>
+                        <field name="footprint"/>
+                        <field name="lib_ref"/>
+                        <field name="manufacturer_name"/>
+                        <field name="supplier_name"/>
+                        <field name="supplier_code"/>
+                        <field name="tech_process_id"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+        <record id="material_line_view_tree" model="ir.ui.view">
+            <field name="name">material.line.view.tree</field>
+            <field name="model">material.line</field>
+            <field name="arch" type="xml">
+                <tree>
                     <field name="material"/>
                     <field name="mat_qty"/>
                     <field name="mat_uom"/>
                     <field name="mat_waste"/>
                     <field name="tech_process_id"/>
-                </form>
+                    <field name="code"/>
+                    <field name="description"/>
+                    <field name="electronic_material"/>
+                    <field name="designator"/>
+                    <field name="footprint"/>
+                    <field name="lib_ref"/>
+                    <field name="manufacturer_name"/>
+                    <field name="supplier_name"/>
+                    <field name="supplier_code"/>
+                    <field name="tech_process_id"/>
+                </tree>
             </field>
         </record>
     </data>

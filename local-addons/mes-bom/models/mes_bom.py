@@ -62,6 +62,19 @@ class MaterialLine(models.Model):
     mat_waste = fields.Float(string='% Waste')
     tech_process_id = fields.Many2one('tech.process', readonly=True)
 
+    # Related fields
+    name = fields.Char(related='material.name', readonly=True, string='Name')
+    code = fields.Char(related='material.code', readonly=True, string='Code')
+    description = fields.Html(related='material.description', readonly=True, string='Description')
+    electronic_material = fields.Boolean(related='material.electronic_material', readonly=True,
+                                         string='Electronic Material')
+    designator = fields.Char(related='material.designator', readonly=True, string='Designator')
+    footprint = fields.Char(related='material.footprint', readonly=True, string='Footprint')
+    lib_ref = fields.Char(related='material.lib_ref', readonly=True, string='Lib Ref')
+    manufacturer_name = fields.Char(related='material.manufacturer_name', readonly=True, string='Manufacturer Name')
+    supplier_name = fields.Char(related='material.supplier_name', readonly=True, string='Supplier Name')
+    supplier_code = fields.Char(related='material.supplier_code', readonly=True, string='Supplier Code')
+
 
 class ProductProducts(models.Model):
     _inherit = 'product.product'
@@ -101,7 +114,7 @@ class TechProcess(models.Model):
 
     # Process Line
     input = fields.One2many('material.line', 'tech_process_id',
-                            string="Input")
+                            string="Parent Input")
     input_description = fields.Html(string='Input Description')
     # input_char = fields.Char(string='Test Input', compute='_propagate_material_to_parent')
     machine = fields.Many2one('equipment.template', string='Machine')
@@ -117,6 +130,7 @@ class TechProcess(models.Model):
     document_name = fields.Char(string="File Name")
     ng_percent = fields.Float(string='% NG')
     child_process_inputs = fields.Many2many('material.line', compute='_compute_child_inputs', string='Child Inputs')
+    combined_inputs = fields.Many2many('material.line', compute='_compute_combined_inputs', string='All Inputs')
 
     @api.depends('child_process_ids', 'child_process_ids.input')
     def _compute_child_inputs(self):
@@ -132,40 +146,11 @@ class TechProcess(models.Model):
             all_inputs = get_child_inputs(record)
             record.child_process_inputs = [(6, 0, all_inputs.ids)]
 
-    # @api.onchange('child_process_ids')
-    # def _propagate_material_to_parent(self):
-    #     for record in self:
-    #         if record.child_process_ids:
-    #             parent_materials = record.input
-    #             child_materials = record.child_process_ids.input
-    #             # add child materials to parent that are not already there
-    #             materials_to_add = child_materials - parent_materials
-    #             if materials_to_add:
-    #                 record.input_char = materials_to_add
-    #             record.input_char = 'NONE'
-
-    # @api.model
-    # def create(self, vals):
-    #     record = super(TechProcess, self).create(vals)
-    #     record.with_context(skip_recursion=True)._add_child_inputs_to_parent()
-    #     return record
-    #
-    # def write(self, vals):
-    #     res = super(TechProcess, self).write(vals)
-    #     # Here, we add a context flag to avoid infinite recursion
-    #     if not self.env.context.get('skip_recursion'):
-    #         self.with_context(skip_recursion=True)._add_child_inputs_to_parent()
-    #     return res
-    #
-    # def _add_child_inputs_to_parent(self):
-    #     for record in self:
-    #         if record.child_process_ids:
-    #             child_inputs = record.mapped('child_process_ids.input')
-    #             parent_inputs = record.input
-    #             # Union of child and parent inputs
-    #             all_inputs = parent_inputs | child_inputs
-    #             # Update the parent process's input field without triggering recursion
-    #             record.with_context(skip_recursion=True).input = [(6, 0, all_inputs.ids)]
+    @api.depends('input', 'child_process_inputs')
+    def _compute_combined_inputs(self):
+        for record in self:
+            combined_inputs = record.input | record.child_process_inputs
+            record.combined_inputs = [(6, 0, combined_inputs.ids)]
 
 
 class Bom(models.Model):
