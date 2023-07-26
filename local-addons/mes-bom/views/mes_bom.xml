@@ -27,7 +27,7 @@
                                 <field name="code"/>
                                 <field name="bom_ids" widget="many2many_tags"/>
                                 <field name="child_process_ids" widget="many2many_tags"/>
-                                <field name="output"/>
+                                <field name="output" widget="many2many_tags"/>
                             </tree>
                         </field>
                     </page>
@@ -56,6 +56,7 @@
                             <tree>
                                 <field name="machine"/>
                                 <field name="machine_hours" widget="float_time"/>
+                                <field name="tech_process_id"/>
                             </tree>
                         </field>
                     </page>
@@ -64,6 +65,7 @@
                             <tree>
                                 <field name="worker_group_ids"/>
                                 <field name="worker_hours" widget="float_time"/>
+                                <field name="tech_process_id"/>
                             </tree>
                         </field>
                     </page>
