@@ -117,6 +117,7 @@
                     <field name="bom_ids"/>
                     <field name="child_process_ids" widget="many2many_tags"/>
                     <field name="input" widget="many2many_tags"/>
+                    <field name="child_process_inputs" widget="many2many_tags"/>
                     <field name="machine"/>
                     <field name="machine_hours"/>
                     <field name="worker_group_ids"/>

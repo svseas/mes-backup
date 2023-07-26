@@ -120,10 +120,12 @@ class TechProcess(models.Model):
 
     @api.depends('child_process_ids', 'child_process_ids.input')
     def _compute_child_inputs(self):
-        def get_child_inputs(process):
-            inputs = process.mapped('input')
+        def get_child_inputs(process, is_root=True):
+            inputs = process.env['material.line']
+            if not is_root:
+                inputs = process.mapped('input')
             for child in process.child_process_ids:
-                inputs |= get_child_inputs(child)
+                inputs |= get_child_inputs(child, is_root=False)
             return inputs
 
         for record in self:
@@ -164,7 +166,6 @@ class TechProcess(models.Model):
     #             all_inputs = parent_inputs | child_inputs
     #             # Update the parent process's input field without triggering recursion
     #             record.with_context(skip_recursion=True).input = [(6, 0, all_inputs.ids)]
-
 
 
 class Bom(models.Model):
