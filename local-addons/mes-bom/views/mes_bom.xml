@@ -25,6 +25,7 @@
                             <tree>
                                 <field name="name"/>
                                 <field name="code"/>
+                                <field name="sequence"/>
                                 <field name="bom_ids" widget="many2many_tags"/>
                                 <field name="child_process_ids" widget="many2many_tags"/>
                                 <field name="output" widget="many2many_tags"/>
