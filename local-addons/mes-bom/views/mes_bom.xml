@@ -251,8 +251,8 @@
                     <field name="input" widget="many2many_tags"/>
                     <field name="child_process_inputs" widget="many2many_tags"/>
                     <field name="machine" widget="many2many_tags"/>
-                    <field name="combined_workers"/>
-                    <field name="output"/>
+                    <field name="combined_workers" widget="many2many_tags"/>
+                    <field name="output" widget="many2many_tags"/>
                 </tree>
             </field>
         </record>
