@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="material_one" model="material.material">
+            <field name="name">Material 1</field>
+            <field name="code">MAT1</field>
+            <field name="description">Material Description</field>
+            <field name="electronic_material">1</field>
+            <field name="designator"></field>
+            <field name="footprint"></field>
+            <field name="lib_ref"></field>
+            <field name="manufacturer_name">Panasonic</field>
+            <field name="supplier_name">Panasonic</field>
+            <field name="supplier_code">PANA</field>
+        </record>
+        <record id="stage_two" model="tech.sequence">
+            <field name="order">2</field>
+        </record>
+        <record id="stage_three" model="tech.sequence">
+            <field name="order">3</field>
+        </record>
+        <record id="stage_four" model="tech.sequence">
+            <field name="order">4</field>
+        </record>
+        <record id="stage_five" model="tech.sequence">
+            <field name="order">5</field>
+        </record>
+        <record id="stage_six" model="tech.sequence">
+            <field name="order">6</field>
+        </record>
+    </data>
+</odoo>
