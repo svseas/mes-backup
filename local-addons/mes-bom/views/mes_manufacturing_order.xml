@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="manufacturing_order_action" model="ir.actions.act_window">
+        <field name="name">Material</field>
+        <field name="res_model">mes.manufacturing.order</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="manufacturing_order_menu" model="ir.ui.menu">
+        <field name="name">Manufacturing Order</field>
+        <field name="parent_id" ref="mrp.menu_mrp_root"/>
+        <field name="action" ref="manufacturing_order_action"/>
+        <field name="sequence" type="int">20</field>
+    </record>
+
+    <record id="manufacturing_order_view" model="ir.ui.view">
+        <field name="name">manufacturing.order.view.form</field>
+        <field name="model">mes.manufacturing.order</field>
+        <field name="arch"  type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="name"/>
+                        <field name="code"/>
+                        <field name="product"/>
+                        <field name="bom"/>
+                        <field name="quantity"/>
+                        <div>Additional Information</div>
+                        <field name="uom"/>
+                        <field name="created_by"/>
+                        <field name="approved_by"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                    <field name="contract_id"/>
+                    <field name="customer_id"/>
+                    <field name="document"/>
+                </group>
+                <notebook>
+                    <page string="Process">
+                        <field name="combined_"
+                    </page>
+                </notebook>
+            </form>
+        </field>
+    </record>
+</odoo>
