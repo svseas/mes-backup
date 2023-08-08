@@ -19,6 +19,7 @@ class ManufacturingOrder(models.Model):
     contract_id = fields.Char(string='Contract ID')
     customer_id = fields.Many2one('res.partner', string='Customer')
     document = fields.Binary(string='Document')
+    bom_tech_process_ids = fields.Many2many(related='bom.tech_process_ids', string='BOM Tech Processes')
 
     combined_inputs = fields.Many2many('material.line', compute='_compute_combined_inputs', string='Combined Inputs')
     combined_machines = fields.Many2many('equipment.usage', compute='_compute_combined_machines',
@@ -28,12 +29,11 @@ class ManufacturingOrder(models.Model):
     combined_processes = fields.Many2many('tech.process', compute='_compute_combined_processes',
                                           string='Combined Processes')
 
-    @api.depends('bom', 'bom.tech_process_ids')
+    @api.depends('bom_tech_process_ids')
     def _compute_combined_processes(self):
         for record in self:
-            if record.bom:
-                combined_processes = record.bom.tech_process_ids
-                record.combined_processes = combined_processes
+            combined_processes = record.bom_tech_process_ids
+            record.combined_processes = combined_processes
 
     @api.depends('bom', 'bom.combined_inputs')
     def _compute_combined_inputs(self):
