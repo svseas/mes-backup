@@ -44,7 +44,7 @@
                 </group>
                 <notebook>
                     <page string="Process">
-                        <field name="combined_processes">
+                        <field name="bom_tech_process_ids">
                             <tree>
                                 <field name="name"/>
                                 <field name="code"/>
