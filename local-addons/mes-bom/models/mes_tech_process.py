@@ -148,3 +148,5 @@ class TechProcess(models.Model):
     documents = fields.Binary(string='Document')
     document_name = fields.Char(string="File Name")
     ng_percent = fields.Float(string='% NG')
+
+

@@ -22,12 +22,13 @@ class ManufacturingOrder(models.Model):
     bom_tech_process_ids = fields.Many2many(related='bom.tech_process_ids', string='BOM Tech Processes')
 
     combined_inputs = fields.Many2many('material.line', compute='_compute_combined_inputs', string='Combined Inputs')
-    combined_machines = fields.Many2many('equipment.usage', compute='_compute_combined_machines',
-                                         string='Combined Machines')
-    combined_workers = fields.Many2many('worker.type.usage', compute='_compute_combined_workers',
-                                        string='Combined Workers')
-    combined_processes = fields.Many2many('tech.process', compute='_compute_combined_processes',
-                                          string='Combined Processes')
+
+    def get_combined_inputs(self, bom):
+        # Compute combined inputs for the given BOM
+        # Return the combined inputs as a Many2many recordset
+        combined_inputs = self.combined_inputs
+        # Implement the logic to compute combined inputs based on the BOM
+        return combined_inputs
 
     @api.depends('bom_tech_process_ids')
     def _compute_combined_processes(self):
@@ -35,20 +36,10 @@ class ManufacturingOrder(models.Model):
             combined_processes = record.bom_tech_process_ids
             record.combined_processes = combined_processes
 
-    @api.depends('bom', 'bom.combined_inputs')
+    @api.depends('bom')
     def _compute_combined_inputs(self):
         for record in self:
             if record.bom:
-                record.combined_inputs = record.bom.combined_inputs
+                combined_inputs = record.bom.tech_process_id.get_combined_inputs(record.bom)
+                record.combined_inputs = combined_inputs
 
-    @api.depends('bom', 'bom.combined_machines')
-    def _compute_combined_machines(self):
-        for record in self:
-            if record.bom:
-                record.combined_machines = record.bom.combined_machines
-
-    @api.depends('bom', 'bom.combined_workers')
-    def _compute_combined_workers(self):
-        for record in self:
-            if record.bom:
-                record.combined_workers = record.bom.combined_workers
