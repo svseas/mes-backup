@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
+    #MANUFACTURING ORDER MENU ITEMS AND VIEWS
     <record id="manufacturing_order_action" model="ir.actions.act_window">
         <field name="name">Material</field>
         <field name="res_model">mes.manufacturing.order</field>
