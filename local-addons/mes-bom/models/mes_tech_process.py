@@ -38,7 +38,7 @@ class TechProcess(models.Model):
     # Child Process Inputs and Combined Inputs
     child_process_inputs = fields.Many2many('material.line', compute='_compute_child_inputs', string='Child Inputs')
     combined_inputs = fields.Many2many('material.line', compute='_compute_combined_inputs', string='All Inputs')
-
+    test_field = fields.Char('Test Field')
     @api.depends('child_process_ids', 'child_process_ids.input')
     def _compute_child_inputs(self):
         def get_child_inputs(process, is_root=True):
