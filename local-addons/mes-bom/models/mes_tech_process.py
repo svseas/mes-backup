@@ -39,6 +39,7 @@ class TechProcess(models.Model):
     child_process_inputs = fields.Many2many('material.line', compute='_compute_child_inputs', string='Child Inputs')
     combined_inputs = fields.Many2many('material.line', compute='_compute_combined_inputs', string='All Inputs')
     test_field = fields.Char('Test Field')
+
     @api.depends('child_process_ids', 'child_process_ids.input')
     def _compute_child_inputs(self):
         def get_child_inputs(process, is_root=True):
@@ -97,6 +98,7 @@ class TechProcess(models.Model):
 
     @api.depends('child_process_ids', 'child_process_ids.worker')
     def _compute_child_workers(self):
+        """Compute child worker in child process"""
         def get_child_workers(process, is_root=True):
             workers = process.env['worker.type.usage']
             if not is_root:
@@ -111,6 +113,7 @@ class TechProcess(models.Model):
 
     @api.depends('worker', 'child_process_workers')
     def _compute_combined_workers(self):
+        """Process Worker Combined with Child Process Worker"""
         for record in self:
             combined_workers = record.worker | record.child_process_workers
             record.combined_workers = [(6, 0, combined_workers.ids)]
@@ -125,6 +128,8 @@ class TechProcess(models.Model):
 
     @api.depends('child_process_ids', 'child_process_ids.output')
     def _compute_child_outputs(self):
+        """Process Output Combined with Child Process Output"""
+
         def get_child_outputs(process, is_root=True):
             outputs = process.env['output.line']
             if not is_root:
@@ -139,6 +144,7 @@ class TechProcess(models.Model):
 
     @api.depends('output', 'child_process_outputs')
     def _compute_combined_outputs(self):
+        """Process Output Combined with Child Process Output"""
         for record in self:
             combined_outputs = record.output | record.child_process_outputs
             record.combined_outputs = [(6, 0, combined_outputs.ids)]
@@ -148,5 +154,3 @@ class TechProcess(models.Model):
     documents = fields.Binary(string='Document')
     document_name = fields.Char(string="File Name")
     ng_percent = fields.Float(string='% NG')
-
-
