@@ -11,7 +11,7 @@ class MaterialMaterials(models.Model):
     _rec_name = 'name'
 
     name = fields.Char(string='Name*')
-    code = fields.Char(sring='Code*')
+    code = fields.Char(string='Code*')
     description = fields.Html(string='Description')
     electronic_material = fields.Boolean(string='Electronic Material', default=False)
     designator = fields.Char(string='Designator', help='Electronic Material')
