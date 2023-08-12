@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="stage_1" model="tech.sequence">
+            <field name="order">1</field>
+        </record>
+        <record id="stage_2" model="tech.sequence">
+            <field name="order">2</field>
+        </record>
+        <record id="stage_3" model="tech.sequence">
+            <field name="order">3</field>
+        </record>
+        <record id="stage_4" model="tech.sequence">
+            <field name="order">4</field>
+        </record>
+        <record id="stage_5" model="tech.sequence">
+            <field name="order">5</field>
+        </record>
+        <record id="stage_6" model="tech.sequence">
+            <field name="order">6</field>
+        </record>
+        <!--Sample Product Template Data-->
+        <record model="product.template" id="sample_product_template_1">
+            <field name="name">Mạch PCB0011</field>            
+            <field name="default_code"></field>
+        </record>        
+        <!--Sample Product Template Data - END-->
+        <!--Sample Material Data-->
+        <record model="material.material" id="sample_material_1">
+        <field name="name">Sản phẩm đặt trong hộp</field>
+        <field name="code">BMVH</field>
+        <field name="electronic_material">False</field>
+        </record>
+        <record model="material.material" id="sample_material_2">
+        <field name="name">IC điều khiển</field>
+        <field name="code">IC01</field>
+        <field name="description">&lt;table class=&quot;table table-bordered&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&quot;color:rgb(0, 0, 0)&quot;&gt;IC điều khiển STM8S103K3T6C&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;
+
+    &lt;br&gt;&lt;/p&gt;</field>
+        <field name="electronic_material">True</field>
+        <field name="designator">U1</field>
+        <field name="footprint">LQFP - 32PIN</field>
+        <field name="manufacturer_name">Panasonic</field>
+        </record>
+        <record model="material.material" id="sample_material_3">
+        <field name="name">IC Voltage supervisory</field>
+        <field name="code">IC02</field>
+        <field name="description">&lt;table class=&quot;table table-bordered&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&quot;color:rgb(0, 0, 0)&quot;&gt;IC Voltage Supervisory MAX6818EAP &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;
+
+    &lt;br&gt;&lt;/p&gt;</field>
+        <field name="electronic_material">True</field>
+        <field name="designator">U2</field>
+        <field name="footprint">TSSOP20</field>
+        <field name="manufacturer_name">Panasonic</field>
+        </record>
+        <record model="material.material" id="sample_material_4">
+        <field name="name">IC ethernet</field>
+        <field name="code">IC03</field>
+        <field name="description">&lt;table class=&quot;table table-bordered&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&quot;color:rgb(0, 0, 0)&quot;&gt;IC ethernet ENC624J600-I/PT&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;
+
+    &lt;br&gt;&lt;/p&gt;</field>
+        <field name="electronic_material">True</field>
+        <field name="designator">U3</field>
+        <field name="footprint">64-TQFP</field>
+        <field name="manufacturer_name">Panasonic</field>
+        </record>
+        <record model="material.material" id="sample_material_5">
+        <field name="name">IC gắn khung</field>
+        <field name="code">ICGK01</field>
+        <field name="electronic_material">False</field>
+        </record>
+        <record model="material.material" id="sample_material_6">
+        <field name="name">Tụ Tantalum</field>
+        <field name="code">TU01</field>
+        <field name="description">&lt;p&gt;Tụ Tantalum 47uF 10% 10V 3528 SMD&lt;br&gt;&lt;/p&gt;</field>
+        <field name="electronic_material">True</field>
+        <field name="designator">C1,C2</field>
+        <field name="footprint">SMD 3528</field>
+        <field name="manufacturer_name">SMD</field>
+        </record>
+        <record model="material.material" id="sample_material_7">
+        <field name="name">Tụ ceramic 33pF</field>
+        <field name="code">TU02</field>
+        <field name="description">&lt;table class=&quot;table table-bordered&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&quot;color:rgb(0, 0, 0)&quot;&gt;Tụ ceramic 33pF 5% 10V 0603 X7R&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;
+
+    &lt;br&gt;&lt;/p&gt;</field>
+        <field name="electronic_material">True</field>
+        <field name="designator">C3,C4,C5,C6</field>
+        <field name="footprint">SMD 0603</field>
+        <field name="manufacturer_name">SMD</field>
+        </record>
+        <record model="material.material" id="sample_material_8">
+        <field name="name">Tụ ceramic 22pF</field>
+        <field name="code">TU03</field>
+        <field name="description">&lt;table class=&quot;table table-bordered&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&quot;color:rgb(0, 0, 0)&quot;&gt;Tụ ceramic 22pF 5% 10V 0603 X7R&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;
+
+    &lt;br&gt;&lt;/p&gt;</field>
+        <field name="electronic_material">True</field>
+        <field name="designator">C7,C8,C9,C10,C11,C12</field>
+        <field name="footprint">SMD 0603</field>
+        <field name="manufacturer_name">SMD</field>
+        </record>
+        <record model="material.material" id="sample_material_9">
+        <field name="name">Tụ gắn khung</field>
+        <field name="code">TGK01</field>
+        <field name="electronic_material">False</field>
+        </record>
+        <record model="material.material" id="sample_material_10">
+        <field name="name">Điện trở 27Ω</field>
+        <field name="code">DT01</field>
+        <field name="description">&lt;table class=&quot;table table-bordered&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&quot;color:rgb(0, 0, 0)&quot;&gt;Điện trở 27Ω 1% 0603 SMD&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;
+
+    &lt;br&gt;&lt;/p&gt;</field>
+        <field name="electronic_material">True</field>
+        <field name="designator">R1,R2</field>
+        <field name="footprint">SMD 0603</field>
+        <field name="manufacturer_name">Lord</field>
+        </record>
+        <record model="material.material" id="sample_material_11">
+        <field name="name">Điện trở 470Ω</field>
+        <field name="code">DT02</field>
+        <field name="description">&lt;p&gt;Điện trở 470Ω 1% 0603 SMD&lt;br&gt;&lt;/p&gt;</field>
+        <field name="electronic_material">True</field>
+        <field name="designator">R3,R4,R5,R6,R7</field>
+        <field name="footprint">SMD 0603</field>
+        <field name="manufacturer_name">Lord</field>
+        </record>
+        <record model="material.material" id="sample_material_12">
+        <field name="name">Điện trở gắn khung</field>
+        <field name="code">DTGK01</field>
+        <field name="electronic_material">False</field>
+        </record>
+        <record model="material.material" id="sample_material_13">
+        <field name="name">Led đỏ</field>
+        <field name="code">LE01</field>
+        <field name="description">&lt;table class=&quot;table table-bordered&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&quot;color:rgb(0, 0, 0)&quot;&gt;Led đỏ 0805 SMD &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;
+
+    &lt;br&gt;&lt;/p&gt;</field>
+        <field name="electronic_material">True</field>
+        <field name="designator">D1</field>
+        <field name="footprint">SMD 0805</field>
+        <field name="manufacturer_name">Misc</field>
+        </record>
+        <record model="material.material" id="sample_material_14">
+        <field name="name">Thiếc hàn</field>
+        <field name="code">HA02</field>
+        <field name="description">&lt;p&gt;
+    &lt;span style=&quot;color: rgb(0, 0, 0);font-size: 13px;font-style: normal;font-weight: 400;background-color: rgb(255, 255, 255)&quot;&gt;Thiếc &amp;amp; nhựa thông&lt;/span&gt;
+
+    &lt;br&gt;&lt;/p&gt;</field>
+        <field name="electronic_material">False</field>
+        </record>
+        <record model="material.material" id="sample_material_15">
+        <field name="name">Led xanh</field>
+        <field name="code">LE02</field>
+        <field name="description">&lt;table class=&quot;table table-bordered&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&quot;color:rgb(0, 0, 0)&quot;&gt;Led xanh 0805 SMD &lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;
+
+    &lt;br&gt;&lt;/p&gt;</field>
+        <field name="electronic_material">True</field>
+        <field name="designator">D2</field>
+        <field name="footprint">SMD 0805</field>
+        <field name="manufacturer_name">Misc</field>
+        </record>
+        <record model="material.material" id="sample_material_16">
+        <field name="name">Led gắn khung</field>
+        <field name="code">LGK01</field>
+        <field name="electronic_material">False</field>
+        </record>
+        <record model="material.material" id="sample_material_17">
+        <field name="name">Bo mạch</field>
+        <field name="code">BM01</field>
+        <field name="electronic_material">False</field>
+        </record>
+        <record model="material.material" id="sample_material_18">
+        <field name="name">Thép tấm</field>
+        <field name="code">TT01</field>
+        <field name="description">&lt;table class=&quot;table table-bordered&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&quot;color:rgb(0, 0, 0)&quot;&gt;Thép tấm 1200 x 800 cắt CNC&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;
+
+    &lt;br&gt;&lt;/p&gt;</field>
+        <field name="electronic_material">False</field>
+        </record>
+        <record model="material.material" id="sample_material_19">
+        <field name="name">Sản phẩm có phần mềm</field>
+        <field name="code">BMVHT</field>
+        <field name="electronic_material">False</field>
+        </record>
+        <record model="material.material" id="sample_material_20">
+        <field name="name">Phôi thép</field>
+        <field name="code">PT01</field>
+        <field name="electronic_material">False</field>
+        </record>
+        <record model="material.material" id="sample_material_21">
+        <field name="name">Vật liệu hàn</field>
+        <field name="code">HA01</field>
+        <field name="description">&lt;table class=&quot;table table-bordered&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td style=&quot;color:rgb(0, 0, 0)&quot;&gt;Que/ dây hàn&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;p&gt;
+
+    &lt;br&gt;&lt;/p&gt;</field>
+        <field name="electronic_material">False</field>
+        </record>
+        <record model="material.material" id="sample_material_22">
+        <field name="name">Mạch PCB0011</field>
+        <field name="code">PCB0011</field>
+        <field name="electronic_material">False</field>
+        </record>
+        <record model="material.material" id="sample_material_23">
+        <field name="name">Vỏ hộp thô</field>
+        <field name="code">VHT01</field>
+        <field name="electronic_material">False</field>
+        </record>
+        <record model="material.material" id="sample_material_24">
+        <field name="name">Băng dính</field>
+        <field name="code">BD01</field>
+        <field name="electronic_material">True</field>
+        <field name="manufacturer_name">Manufacturer Name</field>
+        </record>
+        <record model="material.material" id="sample_material_25">
+        <field name="name">Hộp giấy</field>
+        <field name="code">HN01</field>
+        <field name="electronic_material">True</field>
+        <field name="manufacturer_name">Mics</field>
+        </record>
+        <record model="material.material" id="sample_material_26">
+        <field name="name">Vỏ hộp đã xong bề mặt</field>
+        <field name="code">VHX01</field>
+        <field name="electronic_material">False</field>
+        </record>
+        <record model="material.material" id="sample_material_27">
+        <field name="name">Vật liệu mạ</field>
+        <field name="code">MA04</field>
+        <field name="electronic_material">False</field>
+        </record>
+        <record model="material.material" id="sample_material_28">
+        <field name="name">Tem kiểm định</field>
+        <field name="code">TM01</field>
+        <field name="description">&lt;p&gt;
+    &lt;span style=&quot;color: rgb(0, 0, 0);font-size: 13px;font-style: normal;font-weight: 400;background-color: rgb(255, 255, 255)&quot;&gt;Tem in theo yêu cầu&lt;/span&gt;
+
+    &lt;br&gt;&lt;/p&gt;</field>
+        <field name="electronic_material">True</field>
+        <field name="manufacturer_name">A3</field>
+        </record>
+        <record model="material.material" id="sample_material_29">
+        <field name="name">Thùng carton</field>
+        <field name="code">HT01</field>
+        <field name="description">&lt;p&gt;
+    &lt;span style=&quot;color: rgb(0, 0, 0);font-size: 13px;font-style: normal;font-weight: 400;background-color: rgb(255, 255, 255)&quot;&gt;Thùng 200 x 400 x400 dành cho 10 hộp&lt;/span&gt;
+
+    &lt;br&gt;&lt;/p&gt;</field>
+        <field name="electronic_material">True</field>
+        <field name="manufacturer_name">Mics</field>
+        </record>
+        <record model="material.material" id="sample_material_30">
+        <field name="name">Vỏ hộp mạ, chống từ trường</field>
+        <field name="code">VHMTT01</field>
+        <field name="electronic_material">False</field>
+        </record>
+        <record model="material.material" id="sample_material_31">
+        <field name="name">Vỏ hộp mạ bóng</field>
+        <field name="code">VHMB01</field>
+        <field name="electronic_material">False</field>
+        </record>
+        <!--Sample Material Data - END-->
+        <!--Sample Material Line Data-->
+        <record model="material.line" id="sample_material_line_1">
+            <field name="material" ref="sample_material_2"/>
+            <field name="mat_qty">1.00</field>
+            <field name="mat_uom">chiếc</field>
+            <field name="mat_waste">0.005</field>
+        </record>
+        <record model="material.line" id="sample_material_line_2">
+            <field name="material" ref="sample_material_3"/>
+            <field name="mat_qty">1.00</field>
+            <field name="mat_uom">chiếc</field>
+            <field name="mat_waste">0.005</field>
+        </record>
+        <record model="material.line" id="sample_material_line_3">
+            <field name="material" ref="sample_material_4"/>
+            <field name="mat_qty">1.00</field>
+            <field name="mat_uom">chiếc</field>
+            <field name="mat_waste">0.005</field>
+        </record>
+        <record model="material.line" id="sample_material_line_4">
+            <field name="material" ref="sample_material_6"/>
+            <field name="mat_qty">2.00</field>
+            <field name="mat_uom">chiếc</field>
+            <field name="mat_waste">0.005</field>
+        </record>
+        <record model="material.line" id="sample_material_line_5">
+            <field name="material" ref="sample_material_7"/>
+            <field name="mat_qty">4.00</field>
+            <field name="mat_uom">chiếc</field>
+            <field name="mat_waste">0.005</field>
+        </record>
+        <record model="material.line" id="sample_material_line_6">
+            <field name="material" ref="sample_material_8"/>
+            <field name="mat_qty">6.00</field>
+            <field name="mat_uom">chiếc</field>
+            <field name="mat_waste">0.005</field>
+        </record>
+        <record model="material.line" id="sample_material_line_7">
+            <!-- <field name="material" ref="sample_material_1"/> -->
+            <field name="mat_qty">0.40</field>
+            <field name="mat_uom">m2</field>
+            <field name="mat_waste">0.005</field>
+        </record>
+        <record model="material.line" id="sample_material_line_8">
+            <field name="material" ref="sample_material_10"/>
+            <field name="mat_qty">2.00</field>
+            <field name="mat_uom">chiếc</field>
+            <field name="mat_waste">0.01</field>
+        </record>
+        <record model="material.line" id="sample_material_line_9">
+            <field name="material" ref="sample_material_11"/>
+            <field name="mat_qty">5.0</field>
+            <field name="mat_uom">chiếc</field>
+            <field name="mat_waste">0.01</field>
+        </record>
+        <record model="material.line" id="sample_material_line_10">
+            <field name="material" ref="sample_material_13"/>
+            <field name="mat_qty">1.0</field>
+            <field name="mat_uom">chiếc</field>
+            <field name="mat_waste">0.003</field>
+        </record>
+        <record model="material.line" id="sample_material_line_11">
+            <field name="material" ref="sample_material_15"/>
+            <field name="mat_qty">1.0</field>
+            <field name="mat_uom">chiếc</field>
+            <field name="mat_waste">0.003</field>
+        </record>
+        <record model="material.line" id="sample_material_line_12">
+            <field name="material" ref="sample_material_14"/>
+            <field name="mat_qty">0.3</field>
+            <field name="mat_uom">Kg</field>
+            <field name="mat_waste">0.005</field>
+        </record>
+        <record model="material.line" id="sample_material_line_13">
+            <field name="material" ref="sample_material_18"/>
+            <field name="mat_qty">0.4</field>
+            <field name="mat_uom">m2</field>
+            <field name="mat_waste">0.005</field>
+        </record>
+        <record model="material.line" id="sample_material_line_14">
+            <field name="material" ref="sample_material_21"/>
+            <field name="mat_qty">0.1</field>
+            <field name="mat_uom">kg</field>
+            <field name="mat_waste">0.005</field>
+        </record>
+        <record model="material.line" id="sample_material_line_15">
+            <field name="material" ref="sample_material_24"/>
+            <field name="mat_qty">50.0</field>
+            <field name="mat_uom">cm</field>
+            <field name="mat_waste">0.0</field>
+        </record>
+        <record model="material.line" id="sample_material_line_16">
+            <field name="material" ref="sample_material_23"/>
+            <field name="mat_qty">1.0</field>
+            <field name="mat_uom">chiếc</field>
+            <field name="mat_waste">0.0</field>
+        </record>
+        <record model="material.line" id="sample_material_line_17">
+            <field name="material" ref="sample_material_25"/>
+            <field name="mat_qty">1.0</field>
+            <field name="mat_uom">Chiếc</field>
+            <field name="mat_waste">0.0</field>
+        </record>
+        <record model="material.line" id="sample_material_line_18">
+            <field name="material" ref="sample_material_28"/>
+            <field name="mat_qty">1.0</field>
+            <field name="mat_uom">Chiếc</field>
+            <field name="mat_waste">0.0</field>
+        </record>
+        <record model="material.line" id="sample_material_line_19">
+            <field name="material" ref="sample_material_27"/>
+            <field name="mat_qty">0.05</field>
+            <field name="mat_uom">kg</field>
+            <field name="mat_waste">0.003</field>
+        </record>
+        <record model="material.line" id="sample_material_line_20">
+            <field name="material" ref="sample_material_29"/>
+            <field name="mat_qty">1.0</field>
+            <field name="mat_uom">Chiếc</field>
+            <field name="mat_waste">0.0</field>
+        </record>
+        <!--Sample Material Line Data - END-->
+        <!--Sample Output Line Data-->
+        <record model="output.line" id="sample_output_line_1_1">
+            <field name="output" ref="sample_material_5"/>
+        </record>
+        <record model="output.line" id="sample_output_line_1_2">
+            <field name="output" ref="sample_material_9"/>
+        </record>
+        <record model="output.line" id="sample_output_line_1_3">
+            <field name="output" ref="sample_material_12"/>
+        </record>
+        <record model="output.line" id="sample_output_line_1_4">
+            <field name="output" ref="sample_material_16"/>
+        </record>
+        <record model="output.line" id="sample_output_line_1">
+            <field name="output" ref="sample_material_17"/>
+        </record>
+        <record model="output.line" id="sample_output_line_2_1">
+            <field name="output" ref="sample_material_20"/>
+        </record>
+        <record model="output.line" id="sample_output_line_2_2">
+            <field name="output" ref="sample_material_23"/>
+        </record>
+        <record model="output.line" id="sample_output_line_2_3">
+            <field name="output" ref="sample_material_26"/>
+        </record>
+        <record model="output.line" id="sample_output_line_2_4">
+            <field name="output" ref="sample_material_30"/>
+        </record>
+        <record model="output.line" id="sample_output_line_2">
+            <field name="output" ref="sample_material_31"/>
+        </record>
+        <record model="output.line" id="sample_output_line_3">
+            <field name="output" ref="sample_material_1"/>
+        </record>
+        <record model="output.line" id="sample_output_line_4">
+            <field name="output" ref="sample_material_19"/>
+        </record>
+        <record model="output.line" id="sample_output_line_5">
+            <field name="output" ref="sample_material_22"/>
+        </record>
+        <!--Sample Output Line Data - END-->
+        <!--Sample Equipment Templates Date-->
+        <record model="equipment.template" id="sample_equipment_1">
+            <field name="name">Machine A</field>
+            <field name="code">MA001</field>
+            <field name="position">Factory Floor</field>
+        </record>
+        
+        <record model="equipment.template" id="sample_equipment_2">
+            <field name="name">Machine B</field>
+            <field name="code">MB002</field>
+            <field name="position">Production Line</field>
+        </record>
+        <!--Sample Equipment Templates Date - END-->
+
+        <!--Sample Equipment Usage Date-->
+        <record model="equipment.usage" id="sample_equipment_usage_1">
+            <field name="machine" ref="sample_equipment_1"/>
+            <field name="machine_hours">5.0</field>
+            <!-- <field name="tech_process_id" ref="sample_process_1"/> -->
+        </record>
+
+        <record model="equipment.usage" id="sample_equipment_usage_2">
+            <field name="machine" ref="sample_equipment_2"/>
+            <field name="machine_hours">3.5</field>
+            <!-- <field name="tech_process_id" ref="sample_process_2"/> -->
+        </record>
+        <!--Sample Equipment Usage Date - END-->
+
+        <!-- Sample Worker Groups -->
+        <record model="worker.group" id="sample_worker_group_1">
+            <field name="name">Assembly Team</field>
+            <field name="code">AT</field>
+            <field name="expertise_level">type_three</field>
+            <!-- <field name="worker_ids" eval="[(4, ref('sample_worker_1')), (4, ref('sample_worker_2'))]"/> -->
+        </record>
+
+        <record model="worker.group" id="sample_worker_group_2">
+            <field name="name">Testing Team</field>
+            <field name="code">TT</field>
+            <field name="expertise_level">type_four</field>
+            <!-- <field name="worker_ids" eval="[(4, ref('sample_worker_3'))]"/> -->
+        </record>
+
+        <!-- Sample Worker Type Usage -->
+        <record model="worker.type.usage" id="sample_worker_type_usage_1">
+            <field name="worker_group_ids" ref="sample_worker_group_1"/>
+            <field name="worker_hours">8.0</field>
+            <!-- <field name="tech_process_id" ref="sample_process_1"/> -->
+        </record>
+
+        <record model="worker.type.usage" id="sample_worker_type_usage_2">
+            <field name="worker_group_ids" ref="sample_worker_group_2"/>
+            <field name="worker_hours">6.5</field>
+            <!-- <field name="tech_process_id" ref="sample_process_2"/> -->
+        </record>
+
+        <!--Sample Tech Process Data-->        
+        <record model="tech.process" id="sample_process_1_1">
+            <field name="name">Lắp ráp IC</field>
+            <field name="code">LRIC01</field>
+            <field name="sequence" ref="stage_1"/>
+            <field name="description"></field>
+            <field name="input" eval="[(6, 0, [ref('sample_material_line_1'), ref('sample_material_line_2'), ref('sample_material_line_3')])]"/>
+            <field name="output" eval="[(6, 0, [ref('sample_output_line_1_1')])]"/>
+            <field name="ng_percent">0.01</field>
+        </record>
+        <record model="tech.process" id="sample_process_1_2">
+            <field name="name">Lắp ráp tụ</field>
+            <field name="code">LRT01</field>
+            <field name="sequence" ref="stage_2"/>
+            <field name="description"></field>
+            <field name="input" eval="[(6, 0, [ref('sample_material_line_4'), ref('sample_material_line_5'), ref('sample_material_line_6')])]"/>
+            <field name="output" eval="[(6, 0, [ref('sample_output_line_1_2')])]"/>
+            <field name="ng_percent">0.01</field>
+        </record>
+        <record model="tech.process" id="sample_process_1_3">
+            <field name="name">Lắp ráp điện trở</field>
+            <field name="code">LRDT01</field>
+            <field name="sequence" ref="stage_3"/>
+            <field name="description"></field>
+            <field name="input" eval="[(6, 0, [ref('sample_material_line_8'), ref('sample_material_line_9')])]"/>
+            <field name="output" eval="[(6, 0, [ref('sample_output_line_1_3')])]"/>
+            <field name="ng_percent">0.01</field>
+        </record>
+        <record model="tech.process" id="sample_process_1_4">
+            <field name="name">Lắp ráp led</field>
+            <field name="code">LRL01</field>
+            <field name="sequence" ref="stage_4"/>
+            <field name="description"></field>
+            <field name="input" eval="[(6, 0, [ref('sample_material_line_10'), ref('sample_material_line_11')])]"/>
+            <field name="output" eval="[(6, 0, [ref('sample_output_line_1_4')])]"/>
+            <field name="ng_percent">0.01</field>
+        </record>
+        <record model="tech.process" id="sample_process_1">
+            <field name="name">Lắp ráp linh kiện</field>
+            <field name="code">LR01</field>
+            <field name="sequence" ref="stage_1"/>
+            <field name="description"></field>
+            <field name="child_process_ids" eval="[(6, 0, [ref('sample_process_1_1'), ref('sample_process_1_2'), ref('sample_process_1_3'), ref('sample_process_1_4')])]"/>
+            <field name="output" eval="[(6, 0, [ref('sample_output_line_1')])]"/>
+            <field name="ng_percent">0.01</field>
+        </record>
+        <record model="tech.process" id="sample_process_2_1">
+            <field name="name">Cắt phôi</field>
+            <field name="code">CP01</field>
+            <field name="sequence" ref="stage_1"/>
+            <field name="description"></field>
+            <field name="input" eval="[(6, 0, [ref('sample_material_line_13')])]"/>
+            <field name="output" eval="[(6, 0, [ref('sample_output_line_2_1')])]"/>
+            <field name="ng_percent">0.01</field>
+        </record>
+        <record model="tech.process" id="sample_process_2_2">
+            <field name="name">Hàn hộp</field>
+            <field name="code">HH01</field>
+            <field name="sequence" ref="stage_2"/>
+            <field name="description"></field>
+            <field name="input" eval="[(6, 0, [ref('sample_material_line_14')])]"/>
+            <field name="output" eval="[(6, 0, [ref('sample_output_line_2_2')])]"/>
+            <field name="ng_percent">0.01</field>
+        </record>
+        <record model="tech.process" id="sample_process_2_3">
+            <field name="name">Vệ sinh bề mặt</field>
+            <field name="code">VS01</field>
+            <field name="sequence" ref="stage_3"/>
+            <field name="description"></field>
+            <field name="input" eval="[(6, 0, [ref('sample_material_line_16')])]"/>
+            <field name="output" eval="[(6, 0, [ref('sample_output_line_2_3')])]"/>
+            <field name="ng_percent">0.01</field>
+        </record>
+        <record model="tech.process" id="sample_process_2_4">
+            <field name="name">Mạ</field>
+            <field name="code">M01</field>
+            <field name="sequence" ref="stage_4"/>
+            <field name="description"></field>
+            <field name="input" eval="[(6, 0, [ref('sample_material_line_19')])]"/>
+            <field name="output" eval="[(6, 0, [ref('sample_output_line_2_4')])]"/>
+            <field name="ng_percent">0.01</field>
+        </record>
+        <record model="tech.process" id="sample_process_2">
+            <field name="name">Làm vỏ hộp</field>
+            <field name="code">VHH01</field>
+            <field name="sequence" ref="stage_2"/>
+            <field name="description"></field>
+            <field name="child_process_ids" eval="[(6, 0, [ref('sample_process_2_1'), ref('sample_process_2_2'), ref('sample_process_2_3'), ref('sample_process_2_4')])]"/>
+            <field name="output" eval="[(6, 0, [ref('sample_output_line_2')])]"/>
+            <field name="ng_percent">0.01</field>
+        </record>
+        <record model="tech.process" id="sample_process_3_1">
+            <field name="name">Đặt bo mạch vào khuôn</field>
+            <field name="code">DBM01</field>
+            <field name="sequence" ref="stage_1"/>
+            <field name="description">Đặt bo mạch vào khuôn</field>
+            <field name="ng_percent">0.01</field>
+        </record>
+        <record model="tech.process" id="sample_process_3_2">
+            <field name="name">Hàn gá vào hộp</field>
+            <field name="code">HG01</field>
+            <field name="sequence" ref="stage_2"/>
+            <field name="description">Hàn gá vào hộp</field>
+            <field name="input" eval="[(6, 0, [ref('sample_material_line_12')])]"/>
+            <field name="ng_percent">0.01</field>
+        </record>
+        <record model="tech.process" id="sample_process_3">
+            <field name="name">Vào hộp</field>
+            <field name="code">VH01</field>
+            <field name="sequence" ref="stage_3"/>
+            <field name="description">Gá bo mạch vào hộp</field>
+            <field name="child_process_ids" eval="[(6, 0, [ref('sample_process_3_1'), ref('sample_process_3_2')])]"/>
+            <field name="output" eval="[(6, 0, [ref('sample_output_line_3')])]"/>
+            <field name="ng_percent">0.01</field>
+        </record>
+        <record model="tech.process" id="sample_process_4">
+            <field name="name">Nạp test</field>
+            <field name="code">NT01</field>
+            <field name="sequence" ref="stage_4"/>
+            <field name="description">Nạp phần mềm</field>
+            <field name="output" eval="[(6, 0, [ref('sample_output_line_4')])]"/>
+            <field name="ng_percent">0.01</field>
+        </record>
+        <record model="tech.process" id="sample_process_5_1">
+            <field name="name">Đóng hộp</field>
+            <field name="code">DH01</field>
+            <field name="sequence" ref="stage_1"/>
+            <field name="description"></field>
+            <field name="input" eval="[(6, 0, [ref('sample_material_line_15')])]"/>
+            <field name="ng_percent">0.01</field>
+        </record>
+        <record model="tech.process" id="sample_process_5_2">
+            <field name="name">Đặt tem kiểm định &amp; tài liệu hướng dẫn</field>
+            <field name="code">DTT01</field>
+            <field name="sequence" ref="stage_2"/>
+            <field name="description">Đặt tem kiểm định &amp; tài liệu hướng dẫn</field>
+            <field name="input" eval="[(6, 0, [ref('sample_material_line_17'), ref('sample_material_line_18')])]"/>
+            <field name="ng_percent">0.01</field>
+        </record>
+        <record model="tech.process" id="sample_process_5_3">
+            <field name="name">Đóng thùng</field>
+            <field name="code">DT01</field>
+            <field name="sequence" ref="stage_3"/>
+            <field name="description"></field>
+            <field name="input" eval="[(6, 0, [ref('sample_material_line_20')])]"/>
+            <field name="ng_percent">0.01</field>
+        </record>
+        <record model="tech.process" id="sample_process_5">
+            <field name="name">Hoàn thiện</field>
+            <field name="code">HT01</field>
+            <field name="sequence" ref="stage_5"/>
+            <field name="description">Đóng gói sản phẩm</field>
+            <field name="child_process_ids" eval="[(6, 0, [ref('sample_process_5_1'), ref('sample_process_5_2'), ref('sample_process_5_3')])]"/>
+            <field name="output" eval="[(6, 0, [ref('sample_output_line_5')])]"/>
+            <field name="ng_percent">0.01</field>
+        </record>
+        <!--Sample Tech Process Data - END-->        
+        <!--Sample BOM Data-->
+        <record model="mrp.bom" id="sample_bom_1">
+            <field name="product_tmpl_id" ref="sample_product_template_1"/>
+            <field name="tech_process_ids" eval="[(6, 0, [ref('sample_process_1'), ref('sample_process_2'), ref('sample_process_3'), ref('sample_process_4'), ref('sample_process_5')])]"/>
+            <field name="ng_percent">0.01</field>
+            <field name="created_by" ref="base.user_admin"/>
+            <field name="approved_by" ref="base.user_admin"/>
+            <field name="bom_uom"></field>
+        </record>        
+        <!--Sample BOM Data - END-->        
+    </data>
+</odoo>
