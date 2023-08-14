@@ -10,6 +10,15 @@ class ManufacturingOrder(models.Model):
     code = fields.Char(string='Code', required=True)
     product = fields.Many2one('product.product', string='Product', required=True)
     bom = fields.Many2one('mrp.bom', string='BOM', required=True)
+
+    @api.onchange('product')
+    def _onchange_product(self):
+        if self.product:
+            domain = [('product_tmpl_id', '=', self.product.product_tmpl_id.id)]
+            boms = self.env['mrp.bom'].search(domain)
+            self.bom = False  # Clear the bom field
+            return {'domain': {'bom': [('id', 'in', boms.ids)]}}
+
     quantity = fields.Float(string='Quantity*', required=True, default=1.0)
     uom = fields.Char(string='UOM', required=True)
     created_by = fields.Many2one('res.users', string='Created By', default=lambda self: self.env.user)
