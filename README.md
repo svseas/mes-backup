@@ -1,4 +1,4 @@
-# Docker Odoo Production
+# Production Docs
 ## All services
 - odoo 16 - Change version in docker-compose if you want. Example: odoo:14
 - postgres 13
