@@ -19,9 +19,9 @@ class ManufacturingOrder(models.Model):
     contract_id = fields.Char(string='Contract ID')
     customer_id = fields.Many2one('res.partner', string='Customer')
     document = fields.Binary(string='Document')
-    bom_tech_process_ids = fields.Many2many(related='bom.tech_process_ids', string='BOM Tech Processes')
-
-    combined_inputs = fields.Many2many(related='bom.combined_inputs', string='Combined Inputs')
+    # bom_tech_process_ids = fields.Many2many(related='bom.tech_process_ids', string='BOM Tech Processes')
+    #
+    # combined_inputs = fields.Many2many(related='bom.combined_inputs', string='Combined Inputs')
 
 
 

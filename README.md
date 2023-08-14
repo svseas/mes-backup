@@ -43,27 +43,94 @@ password: odoo \
 ## MES Project Coding Conventions
 
 
-1. **Use Meaningful Class and Field Names:**
-   Choose descriptive names for your classes and fields. Names should accurately reflect the purpose and functionality of the entities they represent.
+## 1. Use Meaningful Class and Field Names
 
-2. **Keep Indentation Consistent (4 Spaces):**
-   Use 4 spaces for indentation to improve code readability and maintain a clear structure.
+Choose descriptive and meaningful names for classes and fields that accurately reflect their purpose and functionality. This enhances code readability and understanding.
+
+Example:
+```python
+class TechProcess(models.Model):
+    _name = 'tech.process'
+    _rec_name = 'name'
+```
+
+## 2. Keep Indentation Consistent (4 Spaces)
+
+Indentation in Python is crucial for code readability. Consistently using 4 spaces for indentation improves code readability and maintains a clear structure. Inconsistent indentation can lead to confusion and errors. Make sure to use spaces rather than tabs for indentation.
+
+Example:
+
+```python
+class TechProcess(models.Model):
+    """TECHNICAL PROCESS"""
+    _name = 'tech.process'
+    _rec_name = 'name'
+    _order = "sequence"
+    
+    # ...
+    
+    @api.depends('child_process_ids', 'child_process_ids.input')
+    def _compute_child_inputs(self):
+        for record in self:
+            all_inputs = get_child_inputs(record)
+            record.child_process_inputs = [(6, 0, all_inputs.ids)]
+``` 
 
 3. **Add Docstrings to Classes and Methods:**
    Document your classes, methods, and functions with clear docstrings. Explain their purpose, inputs, outputs, and usage.
 
+Example: 
+
+```python
+class TechProcess(models.Model):
+    """TECHNICAL PROCESS"""
+    _name = 'tech.process'
+    _rec_name = 'name'
+```
+
 4. **Use Underscore Naming Convention for Method Names:**
    Follow the underscore naming convention (`_compute_child_inputs`, `_get_child_process_machines`, etc.) for more readable method names.
 
+Example: 
+```python
+@api.depends('child_process_ids', 'child_process_ids.input')
+def _compute_child_inputs(self):
+    # Method implementation
+
+```
 5. **Separate Sections with Clear Comments:**
    Use comments to group related fields, methods, and logical sections together. Clear comments enhance code navigation.
+Example: 
+```python
+# ------------------------------
+# Child Process Inputs
+# ------------------------------
+
+@api.depends('child_process_ids', 'child_process_ids.input')
+def _compute_child_inputs(self):
+    # Method implementation
+
+```
 
 6. **Follow PEP8 Guidelines for Import Order:**
    Import modules in the recommended order: standard library modules, third-party library modules, and local project modules.
+Example: 
+
+```python
+from odoo import models, fields, api
+```
 
 7. **Add Comments to Describe Complex Calculations or Logic:**
    Explain complex calculations or logic in methods with comments to help other developers understand the code.
 
+Example:
+```python
+@api.depends('child_process_ids', 'child_process_ids.worker')
+def _compute_child_workers(self):
+    """Compute child worker in child process"""
+    # Method implementation
+
+```
 By adhering to these conventions, you ensure that your Odoo project's code is readable, understandable, and maintainable.
 
 # Gitflow Convention for MES Project
@@ -74,12 +141,82 @@ By adhering to these conventions, you ensure that your Odoo project's code is re
    - `bugfix/issue-number`: For fixing bugs or issues.
    - `hotfix/issue-number`: For urgent fixes on the production codebase.
    - `release/version-number`: For preparing a new release.
+
+## Branch Naming Convention and Git Commands
+
+1. **Branch Naming:**
+   - `main`: Represents the production-ready codebase.
+   - `feature/feature-name`: Used for developing new features.
+   - `bugfix/issue-number`: For fixing bugs or issues.
+   - `hotfix/issue-number`: For urgent fixes on the production codebase.
+   - `release/version-number`: For preparing a new release.
+
+**Example 1: Creating a Feature Branch**
+Suppose you want to create a new feature branch named `feature/user-authentication`.
+
+```bash
+# Checkout main branch and pull latest changes
+git checkout main
+git pull
+
+# Create a new feature branch and switch to it
+git checkout -b feature/user-authentication
+
+# You are now on the 'feature/user-authentication' branch
+```
+
+**Example 2: Creating a Bugfix Branch**
+Suppose you want to create a new bugfix branch named `bugfix/issue-123`.
+
+```bash
+# Checkout main branch and pull latest changes
+git checkout main
+git pull
+
+# Create a new bugfix branch and switch to it
+git checkout -b bugfix/bug-123
+
+# You are now on the 'bugfix/bug-123' branch
+
+```
+
    
 2. **Feature Development Workflow:**
    - Create a new branch from `main` named `feature/feature-name`.
    - Develop the feature in this branch.
    - Regularly commit and push changes to the remote repository.
    - Once the feature is complete, create a pull request to merge it into `main`.
+
+**Example: Developing a User Authentication Feature**
+
+- Create a new branch for the feature and switch to it:
+```bash
+git checkout main
+git pull
+git checkout -b feature/user-authentication
+```
+
+- Regularly Commit your changes:
+```bash
+git add .
+git commit -m "Implemented user authentication feature"
+```
+
+- Push the changes to the remote repository:
+```bash
+git push origin feature/user-authentication
+```
+
+- Once the feature is complete, create a pull request (PR) on your Git platform (e.g., GitHub) to merge the feature/user-authentication branch into main.
+
+- Review the PR, address feedback if any, and once approved, merge the feature branch into main.
+
+- Delete the feature branch (optional) after merging the changes:
+```bash
+git checkout main
+git pull
+git branch -d feature/user-authentication
+```
 
 3. **Bugfix Workflow:**
    - Create a new branch from `main` named `bugfix/issue-number`.
@@ -103,6 +240,30 @@ By adhering to these conventions, you ensure that your Odoo project's code is re
    - Use pull requests for all merges into `main`, `develop`, and other long-lived branches.
    - Require code reviews for all pull requests.
    - Avoid direct pushes to `main` and `develop` to maintain code quality.
+
+**Example: Pull Request and Merging Workflow**
+
+1. After developing a feature or fixing a bug, push your changes to the respective branch on the remote repository (e.g., `feature/user-authentication`).
+
+2. Create a pull request (PR) on your Git platform to merge your feature or bugfix branch into the target branch (e.g., `main` or `develop`).
+
+3. Reviewers will be notified and can review your code changes in the PR.
+
+4. Address any feedback and make necessary changes to your code based on the code review.
+
+5. Once the PR is approved by reviewers, merge the PR through the Git platform's interface.
+
+6. Alternatively, you can use Git commands to merge the PR if you have permissions:
+```bash
+# Fetch latest changes from the remote repository
+git fetch origin
+
+# Checkout the target branch (e.g., main)
+git checkout main
+
+# Merge the PR into the target branch
+git merge origin/feature/user-authentication
+```
 
 7. **Keep the Repository Clean:**
    - Regularly delete merged feature and bugfix branches to keep the repository clean.
@@ -171,8 +332,41 @@ By following this CI/CD convention, you ensure a streamlined and automated proce
 
 # Odoo Repository Pattern Best Practices for MES Project
 
+Current Pattern: 
+
+Current Pattern:
+mes/
+├── addons/
+│ ├── module_1/
+│ │ ├── init.py
+│ │ ├── controllers/
+│ │ ├── models/
+│ │ ├── views/
+│ │ ├── security/
+│ │ ├── data/
+│ │ ├── ...
+│ ├── module_2/
+│ │ ├── init.py
+│ │ ├── controllers/
+│ │ ├── models/
+│ │ ├── views/
+│ │ ├── security/
+│ │ ├── data/
+│ │ ├── ...
+│ ├── ...
+├── config/
+│ ├── odoo.conf
+├── local-addons/
+│ ├── custom_module_1/
+│ ├── custom_module_2/
+├── Dockerfile
+├── Dockerfile-nginx
+├── docker-compose.yml
+└── README.md
+
 1. **Modular Structure:**
    - Organize your Odoo project into separate modules representing different components or features of the MES system.
+
 
 2. **Module Naming Convention:**
    - Use meaningful and consistent names for modules, reflecting their purpose.
