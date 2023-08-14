@@ -3,12 +3,14 @@ from datetime import date
 from odoo.tests import tagged
 from odoo.exceptions import ValidationError
 from psycopg2 import IntegrityError
-@tagged('test-mo')
+
+
 class TestManufacturingOrder(TransactionCase):
     # Class variable to count the number of tests passed
     tests_passed = 0
     test_failed = False  # A flag to indicate if a test failed
     total_tests = 0
+
     def setUp(self):
         super(TestManufacturingOrder, self).setUp()
 
