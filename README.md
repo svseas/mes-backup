@@ -333,36 +333,36 @@ By following this CI/CD convention, you ensure a streamlined and automated proce
 # Odoo Repository Pattern Best Practices for MES Project
 
 Current Pattern: 
-
-Current Pattern:
-mes/
+```mes/
 ├── addons/
-│ ├── module_1/
-│ │ ├── init.py
-│ │ ├── controllers/
-│ │ ├── models/
-│ │ ├── views/
-│ │ ├── security/
-│ │ ├── data/
-│ │ ├── ...
-│ ├── module_2/
-│ │ ├── init.py
-│ │ ├── controllers/
-│ │ ├── models/
-│ │ ├── views/
-│ │ ├── security/
-│ │ ├── data/
-│ │ ├── ...
-│ ├── ...
+│   ├── module_1/
+│   │   ├── __init__.py
+│   │   ├── controllers/
+│   │   ├── models/
+│   │   ├── views/
+│   │   ├── security/
+│   │   ├── data/
+│   │   ├── ...
+│   ├── module_2/
+│   │   ├── __init__.py
+│   │   ├── controllers/
+│   │   ├── models/
+│   │   ├── views/
+│   │   ├── security/
+│   │   ├── data/
+│   │   ├── ...
+│   ├── ...
 ├── config/
-│ ├── odoo.conf
+│   ├── odoo.conf
 ├── local-addons/
-│ ├── custom_module_1/
-│ ├── custom_module_2/
+│   ├── custom_module_1/
+│   ├── custom_module_2/
 ├── Dockerfile
 ├── Dockerfile-nginx
 ├── docker-compose.yml
 └── README.md
+```
+
 
 1. **Modular Structure:**
    - Organize your Odoo project into separate modules representing different components or features of the MES system.
