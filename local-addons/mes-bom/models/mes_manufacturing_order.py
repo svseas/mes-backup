@@ -113,6 +113,16 @@ class WorkTransition(models.Model):
     workshop = fields.Many2one('mes.workshop', string="Workshop", required=True)
     manufacturing_order = fields.Many2one('mes.manufacturing.order', string="Manufacturing Order", required=True)
     product = fields.Many2one('product.product', string="Product", required=True)
+
+    @api.onchange('manufacturing_order')
+    def _onchange_product(self):
+        """Update Product when manufacturing order is changed"""
+        if self.manufacturing_order:
+            domain = [('product_tmpl_id', '=', self.manufacturing_order.product.product_tmpl_id.id)]
+            products = self.env['product.product'].search(domain)
+            self.product = False  # Clear the product field
+            return {'domain': {'product': [('id', 'in', products.ids)]}}
+
     bom = fields.Many2one('mrp.bom', string="BOM", required=True)
 
     @api.onchange('product')
@@ -122,10 +132,10 @@ class WorkTransition(models.Model):
             domain = [('product_tmpl_id', '=', self.product.product_tmpl_id.id)]
             boms = self.env['mrp.bom'].search(domain)
             self.bom = False
-
             return {'domain': {'bom': [('id', 'in', boms.ids)]}}
 
-    shift = fields.Selection(selection=[('morning', 'Morning'), ('afternoon', 'Afternoon'), ('night', 'Night')],string="Shift", required=True)
+    shift = fields.Selection(selection=[('morning', 'Morning'), ('afternoon', 'Afternoon'), ('night', 'Night')],
+                             string="Shift", required=True)
 
     approved_by = fields.Many2one('res.users', string="Approved By", default=lambda self: self.env.user)
     transition_process = fields.Many2one('tech.process', string="Transition Process", required=True)
@@ -136,7 +146,7 @@ class WorkTransition(models.Model):
         if self.bom:
             domain = [('bom_ids', '=', self.bom.id)]
             processes = self.env['tech.process'].search(domain)
-            self.process = False  # Clear the process field
+            self.transition_process = False  # Clear the process field
             return {'domain': {'transition_process': [('id', 'in', processes.ids)]}}
 
     transition_quantity = fields.Float(string="Transition Quantity", required=True)

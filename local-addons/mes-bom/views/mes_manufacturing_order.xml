@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    #MANUFACTURING ORDER MENU ITEMS AND VIEWS
-    <record id="manufacturing_order_action" model="ir.actions.act_window">
+<!--    MANUFACTURING ORDER MENU ITEMS AND VIEWS-->
+    <record id="mes_manufacturing_order_action" model="ir.actions.act_window">
         <field name="name">Manufacturing Order</field>
         <field name="res_model">mes.manufacturing.order</field>
         <field name="view_mode">tree,form</field>
     </record>
 
-    <record id="manufacturing_order_menu" model="ir.ui.menu">
+    <record id="mes_manufacturing_order_menu_root" model="ir.ui.menu">
         <field name="name">Manufacturing Order</field>
         <field name="parent_id" ref="mrp.menu_mrp_root"/>
-        <field name="action" ref="manufacturing_order_action"/>
         <field name="sequence" type="int">20</field>
+    </record>
+
+    <record id="manufacturing_order_menu" model="ir.ui.menu">
+        <field name="name">Manufacturing Order</field>
+        <field name="parent_id" ref="mes_manufacturing_order_menu_root"/>
+        <field name="action" ref="mes_manufacturing_order_action"/>
+        <field name="sequence" type="int">10</field>
     </record>
 
     <record id="manufacturing_order_view_form" model="ir.ui.view">
@@ -111,7 +117,7 @@
 
     <record id="work_order_menu" model="ir.ui.menu">
         <field name="name">Work Order</field>
-        <field name="parent_id" ref="manufacturing_order_menu"/>
+        <field name="parent_id" ref="mes_manufacturing_order_menu_root"/>
         <field name="action" ref="work_order_action"/>
         <field name="sequence" type="int">10</field>
     </record>
@@ -200,87 +206,89 @@
     </record>
 
     <!-- Work Transition Menu Items and Views -->
-<record id="work_transition_action" model="ir.actions.act_window">
-    <field name="name">Work Transition</field>
-    <field name="res_model">mes.work.transition</field>
-    <field name="view_mode">tree,form</field>
-</record>
+    <record id="work_transition_action" model="ir.actions.act_window">
+        <field name="name">Work Transition</field>
+        <field name="res_model">mes.work.transition</field>
+        <field name="view_mode">tree,form</field>
+    </record>
 
-<record id="work_transition_menu" model="ir.ui.menu">
-    <field name="name">Work Transition</field>
-    <field name="parent_id" ref="manufacturing_order_menu"/>
-    <field name="action" ref="work_transition_action"/>
-    <field name="sequence" type="int">40</field>
-</record>
+    <record id="work_transition_menu" model="ir.ui.menu">
+        <field name="name">Work Transition</field>
+        <field name="parent_id" ref="mes_manufacturing_order_menu_root"/>
+        <field name="action" ref="work_transition_action"/>
+        <field name="sequence" type="int">40</field>
+    </record>
 
-<record id="work_transition_view_form" model="ir.ui.view">
-    <field name="name">work.transition.view.form</field>
-    <field name="model">mes.work.transition</field>
-    <field name="arch" type="xml">
-        <form>
-            <group>
+    <!--    Work Transition Form View-->
+
+    <record id="work_transition_view_form" model="ir.ui.view">
+        <field name="name">work.transition.view.form</field>
+        <field name="model">mes.work.transition</field>
+        <field name="arch" type="xml">
+            <form>
                 <group>
-                    <field name="code"/>
-                    <field name="workshop"/>
-                    <field name="manufacturing_order"/>
-                    <field name="product"/>
-                    <field name="bom"/>
-                    <field name="shift"/>
-                    <field name="approved_by"/>
-                    <field name="transition_process"/>
-                    <label for="transition_quantity" string="Transition Quantity"/>
-                    <div class="o_row">
-                        <field name="transition_quantity"/>
-                        <field name="uom"/>
-                    </div>
-                    <field name="reception_process"/>
-                    <field name="receptionist"/>
-                    <label for="reception_quantity" string="Reception Quantity"/>
-                    <div class="o_row">
-                        <field name="reception_quantity"/>
-                        <field name="uom"/>
-                    </div>
-                    <label for="ng_redo" string="NG Redo"/>
-                    <div class="o_row">
-                        <field name="ng_redo"/>
-                        <field name="uom"/>
-                    </div>
-                    <label for="ng_not_redo" string="NG Not Redo"/>
-                    <div class="o_row">
-                        <field name="ng_not_redo"/>
-                        <field name="uom"/>
-                    </div>
-                    <field name="documents"/>
-                    <field name="document_name"/>
+                    <group>
+                        <field name="code"/>
+                        <field name="workshop"/>
+                        <field name="manufacturing_order"/>
+                        <field name="product"/>
+                        <field name="bom"/>
+                        <field name="shift"/>
+                        <field name="approved_by"/>
+                        <field name="transition_process"/>
+                        <label for="transition_quantity" string="Transition Quantity"/>
+                        <div class="o_row">
+                            <field name="transition_quantity"/>
+                            <field name="uom"/>
+                        </div>
+                        <field name="reception_process"/>
+                        <field name="receptionist"/>
+                        <label for="reception_quantity" string="Reception Quantity"/>
+                        <div class="o_row">
+                            <field name="reception_quantity"/>
+                            <field name="uom"/>
+                        </div>
+                        <label for="ng_redo" string="NG Redo"/>
+                        <div class="o_row">
+                            <field name="ng_redo"/>
+                            <field name="uom"/>
+                        </div>
+                        <label for="ng_not_redo" string="NG Not Redo"/>
+                        <div class="o_row">
+                            <field name="ng_not_redo"/>
+                            <field name="uom"/>
+                        </div>
+                        <field name="documents"/>
+                        <field name="document_name"/>
+                    </group>
                 </group>
-            </group>
-        </form>
-    </field>
-</record>
+            </form>
+        </field>
+    </record>
 
-<record id="work_transition_view_tree" model="ir.ui.view">
-    <field name="name">work.transition.view.tree</field>
-    <field name="model">mes.work.transition</field>
-    <field name="arch" type="xml">
-        <tree>
-            <field name="code"/>
-            <field name="workshop"/>
-            <field name="manufacturing_order"/>
-            <field name="product"/>
-            <field name="bom"/>
-            <field name="shift"/>
-            <field name="approved_by"/>
-            <field name="transition_process"/>
-            <field name="transition_quantity"/>
-            <field name="reception_process"/>
-            <field name="receptionist"/>
-            <field name="reception_quantity"/>
-            <field name="ng_redo"/>
-            <field name="ng_not_redo"/>
-        </tree>
-    </field>
-</record>
-
+    <!--    Work Transition Tree View-->
+    <record id="work_transition_view_tree" model="ir.ui.view">
+        <field name="name">work.transition.view.tree</field>
+        <field name="model">mes.work.transition</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="code"/>
+                <field name="workshop"/>
+                <field name="manufacturing_order"/>
+                <field name="product"/>
+                <field name="bom"/>
+                <field name="shift"/>
+                <field name="approved_by"/>
+                <field name="transition_process"/>
+                <field name="transition_quantity"/>
+                <field name="reception_process"/>
+                <field name="receptionist"/>
+                <field name="reception_quantity"/>
+                <field name="ng_redo"/>
+                <field name="ng_not_redo"/>
+            </tree>
+        </field>
+    </record>
 
 
 </odoo>
