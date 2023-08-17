@@ -115,7 +115,7 @@ class WorkTransition(models.Model):
     product = fields.Many2one('product.product', string="Product", required=True)
 
     @api.onchange('manufacturing_order')
-    def _onchange_product(self):
+    def _onchange_manufacturing_order(self):
         """Update Product when manufacturing order is changed"""
         if self.manufacturing_order:
             domain = [('product_tmpl_id', '=', self.manufacturing_order.product.product_tmpl_id.id)]
@@ -156,13 +156,17 @@ class WorkTransition(models.Model):
     @api.onchange('transition_process')
     def _onchange_transition_process(self):
         """Select Reception Process based on Transition Process"""
-        if self.transition_process:
-            next_sequence = self.transition_process.sequence.sequence + 1
-            next_process = self.env['tech.process'].search([('sequence', '=', next_sequence)], limit=1)
+        if self.transition_process and self.bom:
+            next_order = self.transition_process.sequence.order + 1
+            next_process = self.env['tech.process'].search([
+                ('sequence.order', '=', next_order),
+                ('bom_ids', '=', self.bom.id)
+            ], limit=1)
             if next_process:
                 self.reception_process = next_process.id
             else:
                 self.reception_process = False
+            return {'domain': {'reception_process': [('id', '=', self.reception_process.id)]}}
 
     receptionist = fields.Many2one('res.users', string="Receptionist", default=lambda self: self.env.user)
     reception_quantity = fields.Float(string="Reception Quantity", required=True)
