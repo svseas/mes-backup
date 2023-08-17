@@ -1,4 +1,4 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, exceptions
 
 
 class ManufacturingOrder(models.Model):
@@ -28,9 +28,6 @@ class ManufacturingOrder(models.Model):
     contract_id = fields.Char(string='Contract ID')
     customer_id = fields.Many2one('res.partner', string='Customer')
     document = fields.Binary(string='Document')
-    # bom_tech_process_ids = fields.Many2many(related='bom.tech_process_ids', string='BOM Tech Processes')
-    #
-    # combined_inputs = fields.Many2many(related='bom.combined_inputs', string='Combined Inputs')
 
 
 class WorkShop(models.Model):
@@ -74,7 +71,17 @@ class WorkOrder(models.Model):
             self.process = False  # Clear the process field
             return {'domain': {'process': [('id', 'in', processes.ids)]}}
 
-    sfg = fields.Many2one('material.material', string="Semi-Finished Goods", required=True)
+    sfg = fields.Many2one('output.line', string="Semi-Finished Goods", required=True)
+
+    @api.onchange('process')
+    def _onchange_process(self):
+        """Select SFG based on process"""
+        if self.process:
+            domain = [('tech_process_id', '=', self.process.id)]
+            sfgs = self.env['output.line'].search(domain)
+            self.sfg = False
+            return {'domain': {'sfg': [('id', 'in', sfgs.ids)]}}
+
     created_by = fields.Many2one('res.users', string="Created By", default=lambda self: self.env.user)
     approved_by = fields.Many2one('res.users', string="Approved By", default=lambda self: self.env.user)
     documents = fields.Binary(string="Documents")
@@ -94,6 +101,29 @@ class WorkOrder(models.Model):
     date_created = fields.Date(string="Date Created", required=True)
     time_start = fields.Datetime(string="Time Start", required=True)
     time_end = fields.Datetime(string="Time End", required=True)
+
+    @api.onchange('date_created')
+    def _onchange_date_created(self):
+        for rec in self:
+            if rec.date_created:
+                date_created = fields.Date.from_string(rec.date_created)
+                if rec.time_start:
+                    time_start = fields.Datetime.from_string(rec.time_start)
+                    rec.time_start = fields.Datetime.to_string(
+                        datetime.datetime.combine(date_created, time_start.time())
+                    )
+                if rec.time_end:
+                    time_end = fields.Datetime.from_string(rec.time_end)
+                    rec.time_end = fields.Datetime.to_string(
+                        datetime.datetime.combine(date_created, time_end.time())
+                    )
+
+    _sql_constraints = [
+        ('time_check',
+         'CHECK((time_end > time_start))',
+         'The end time must be after the start time.')
+    ]
+
     quantity = fields.Float(string="Quantity", required=True)
     quantity_new = fields.Float(string="Quantity New", required=True)
     quantity_redo = fields.Float(string="Quantity Redo", required=True)
@@ -134,8 +164,13 @@ class WorkTransition(models.Model):
             self.bom = False
             return {'domain': {'bom': [('id', 'in', boms.ids)]}}
 
-    shift = fields.Selection(selection=[('morning', 'Morning'), ('afternoon', 'Afternoon'), ('night', 'Night')],
-                             string="Shift", required=True)
+    # DEMO DATA: SHIFT 1, SHIFT 2, SHIFT 3, SHIFT 4
+    shift = fields.Selection(
+        selection=[('shift_1', 'Shift 1'),
+                   ('shift_2', 'Shift 2'),
+                   ('shift_3', 'Shift 3'),
+                   ('shift_4', 'Shift 4')],
+        string="Shift", required=True)
 
     approved_by = fields.Many2one('res.users', string="Approved By", default=lambda self: self.env.user)
     transition_process = fields.Many2one('tech.process', string="Transition Process", required=True)
