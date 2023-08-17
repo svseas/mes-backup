@@ -40,6 +40,19 @@ class WorkShop(models.Model):
     code = fields.Char(string="Code", required=True)
 
 
+class ProductivityReport(models.Model):
+    _name = 'productivity.report'
+    _rec_name = 'work_order_id'
+
+    shift = fields.Selection(
+        selection=[('shift_1', 'Shift 1'),
+                   ('shift_2', 'Shift 2'),
+                   ('shift_3', 'Shift 3'),
+                   ('shift_4', 'Shift 4')],
+        string="Shift", required=True)
+    quantity = fields.Float(string='Quantity')
+    work_order_id = fields.Many2one('mes.work.order', string='Work Order')
+
 class WorkOrder(models.Model):
     """Work Order - Phiếu giao việc"""
 
@@ -132,6 +145,7 @@ class WorkOrder(models.Model):
         selection=[('draft', 'Draft'), ('confirmed', 'Confirmed'), ('in_progress', 'In Progress'), ('done', 'Done')],
         default='draft')
 
+    productivity_report = fields.One2many('productivity.report', 'work_order_id', string='Productivity Report')
 
 class WorkTransition(models.Model):
     """Work Transition - Phiếu chuyển tiếp"""
@@ -155,6 +169,13 @@ class WorkTransition(models.Model):
 
     bom = fields.Many2one('mrp.bom', string="BOM", required=True)
 
+    shift = fields.Selection(
+        selection=[('shift_1', 'Shift 1'),
+                   ('shift_2', 'Shift 2'),
+                   ('shift_3', 'Shift 3'),
+                   ('shift_4', 'Shift 4')],
+        string="Shift", required=True)
+
     @api.onchange('product')
     def _onchange_product(self):
         """Update bom domain when product is changed to show only boms related to the product"""
@@ -163,14 +184,6 @@ class WorkTransition(models.Model):
             boms = self.env['mrp.bom'].search(domain)
             self.bom = False
             return {'domain': {'bom': [('id', 'in', boms.ids)]}}
-
-    # DEMO DATA: SHIFT 1, SHIFT 2, SHIFT 3, SHIFT 4
-    shift = fields.Selection(
-        selection=[('shift_1', 'Shift 1'),
-                   ('shift_2', 'Shift 2'),
-                   ('shift_3', 'Shift 3'),
-                   ('shift_4', 'Shift 4')],
-        string="Shift", required=True)
 
     approved_by = fields.Many2one('res.users', string="Approved By", default=lambda self: self.env.user)
     transition_process = fields.Many2one('tech.process', string="Transition Process", required=True)
@@ -209,3 +222,13 @@ class WorkTransition(models.Model):
     ng_not_redo = fields.Float(string="NG Not Redo", required=True)
     documents = fields.Binary(string="Documents")
     document_name = fields.Char(string="Document Name")
+    activity_log_ids = fields.One2many('mes.work.transition.activity.log', 'work_transition_id', string="Activity Log")
+    class WorkTransitionActivityLog(models.Model):
+        _name = "mes.work.transition.activity.log"
+        _description = "Work Transition Activity Log"
+        _rec_name = "activity_date"
+
+        activity_date = fields.Datetime(string="Activity Date", default=fields.Datetime.now, required=True)
+        user_id = fields.Many2one('res.users', string="User", default=lambda self: self.env.user, required=True)
+        description = fields.Text(string="Description", required=True)
+        work_transition_id = fields.Many2one('mes.work.transition', string="Work Transition", ondelete='cascade')

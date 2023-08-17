@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-<!--    MANUFACTURING ORDER MENU ITEMS AND VIEWS-->
+    <!--    MANUFACTURING ORDER MENU ITEMS AND VIEWS-->
     <record id="mes_manufacturing_order_action" model="ir.actions.act_window">
         <field name="name">Manufacturing Order</field>
         <field name="res_model">mes.manufacturing.order</field>
@@ -169,6 +169,17 @@
                         </group>
                     </group>
                 </group>
+                <notebook>
+                    <page string="Productivity">
+                        <field name="productivity_report">
+                            <tree>
+                                <field name="shift"/>
+                                <field name="quantity"/>
+                                <field name="work_order_id"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
             </form>
         </field>
     </record>
@@ -235,6 +246,8 @@
                         <field name="bom"/>
                         <field name="shift"/>
                         <field name="approved_by"/>
+                    </group>
+                    <group>
                         <field name="transition_process"/>
                         <label for="transition_quantity" string="Transition Quantity"/>
                         <div class="o_row">
@@ -262,6 +275,24 @@
                         <field name="document_name"/>
                     </group>
                 </group>
+                <notebook>
+                    <page string="Activity Log">
+                        <field name="activity_log_ids" nolabel="1">
+                            <tree>
+                                <field name="activity_date"/>
+                                <field name="user_id"/>
+                                <field name="description"/>
+                            </tree>
+                            <form>
+                                <group>
+                                    <field name="activity_date"/>
+                                    <field name="user_id"/>
+                                    <field name="description"/>
+                                </group>
+                            </form>
+                        </field>
+                    </page>
+                </notebook>
             </form>
         </field>
     </record>
