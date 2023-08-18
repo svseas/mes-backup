@@ -1,13 +1,32 @@
-from odoo import models, fields, api, exceptions
+from odoo import fields, api, models, exceptions
 
 
 class ManufacturingOrder(models.Model):
-    """Manufacturing Order"""
+    """MANUFACTURING ORDER - Lệnh sản xuất"""
     _name = 'mes.manufacturing.order'
-    _rec_name = 'name'
+    _rec_name = 'code'
 
     name = fields.Char(string='Name', required=True)
     code = fields.Char(string='Code', required=True)
+
+    @api.constrains('name', 'code')
+    def _check_name_and_code(self):
+        for record in self:
+            if record.name == record.code:
+                raise exceptions.ValidationError('The name and code must be different.')
+
+    @api.constrains('name')
+    def _check_name_unique(self):
+        for record in self:
+            if self.env['mes.manufacturing.order'].search_count([('name', '=', record.name)]) > 1:
+                raise exceptions.ValidationError('The name must be unique.')
+
+    @api.constrains('code')
+    def _check_code_unique(self):
+        for record in self:
+            if self.env['mes.manufacturing.order'].search_count([('code', '=', record.code)]) > 1:
+                raise exceptions.ValidationError('The code must be unique.')
+
     product = fields.Many2one('product.product', string='Product', required=True)
     bom = fields.Many2one('mrp.bom', string='BOM', required=True)
 
@@ -25,6 +44,13 @@ class ManufacturingOrder(models.Model):
     approved_by = fields.Many2one('res.users', string='Approved By', default=lambda self: self.env.user)
     date_start = fields.Date(string='Date Start', required=True)
     date_end = fields.Date(string='Date End', required=True)
+
+    # SQL Constraints to make sure date_end > date_start
+    _sql_constraints = [
+        ('date_check',
+         'CHECK((date_end > date_start))',
+         'The end date must be after the start date.')
+    ]
     contract_id = fields.Char(string='Contract ID')
     customer_id = fields.Many2one('res.partner', string='Customer')
     document = fields.Binary(string='Document')
@@ -53,6 +79,7 @@ class ProductivityReport(models.Model):
     quantity = fields.Float(string='Quantity')
     work_order_id = fields.Many2one('mes.work.order', string='Work Order')
 
+
 class WorkOrder(models.Model):
     """Work Order - Phiếu giao việc"""
 
@@ -60,6 +87,12 @@ class WorkOrder(models.Model):
     _rec_name = "code"
 
     code = fields.Char(string="Code", required=True)
+    _sql_constraints = [
+        ('code_unique',
+         'UNIQUE(code)',
+         'The code must be unique.')
+    ]
+    manufacturing_id = fields.Many2one('mes.manufacturing.order', string="Manufacturing Order", required=True)
     workshop = fields.Many2one('mes.workshop', string="Workshop", required=True)
     product = fields.Many2one('product.product', string="Product", required=True)
     bom = fields.Many2one('mrp.bom', string="BOM", required=True)
@@ -147,6 +180,7 @@ class WorkOrder(models.Model):
 
     productivity_report = fields.One2many('productivity.report', 'work_order_id', string='Productivity Report')
 
+
 class WorkTransition(models.Model):
     """Work Transition - Phiếu chuyển tiếp"""
 
@@ -154,6 +188,11 @@ class WorkTransition(models.Model):
     _rec_name = "code"
 
     code = fields.Char(string="Code", required=True)
+    _sql_constraints = [
+        ('code_unique',
+         'UNIQUE(code)',
+         'The code must be unique.')
+    ]
     workshop = fields.Many2one('mes.workshop', string="Workshop", required=True)
     manufacturing_order = fields.Many2one('mes.manufacturing.order', string="Manufacturing Order", required=True)
     product = fields.Many2one('product.product', string="Product", required=True)
@@ -185,6 +224,7 @@ class WorkTransition(models.Model):
             self.bom = False
             return {'domain': {'bom': [('id', 'in', boms.ids)]}}
 
+    created_by = fields.Many2one('res.users', string="Created By", default=lambda self: self.env.user)
     approved_by = fields.Many2one('res.users', string="Approved By", default=lambda self: self.env.user)
     transition_process = fields.Many2one('tech.process', string="Transition Process", required=True)
 
@@ -216,13 +256,14 @@ class WorkTransition(models.Model):
                 self.reception_process = False
             return {'domain': {'reception_process': [('id', '=', self.reception_process.id)]}}
 
-    receptionist = fields.Many2one('res.users', string="Receptionist", default=lambda self: self.env.user)
+    receptor = fields.Many2one('res.users', string="Receptor", default=lambda self: self.env.user)
     reception_quantity = fields.Float(string="Reception Quantity", required=True)
     ng_redo = fields.Float(string="NG Redo", required=True)
     ng_not_redo = fields.Float(string="NG Not Redo", required=True)
     documents = fields.Binary(string="Documents")
     document_name = fields.Char(string="Document Name")
     activity_log_ids = fields.One2many('mes.work.transition.activity.log', 'work_transition_id', string="Activity Log")
+
     class WorkTransitionActivityLog(models.Model):
         _name = "mes.work.transition.activity.log"
         _description = "Work Transition Activity Log"
