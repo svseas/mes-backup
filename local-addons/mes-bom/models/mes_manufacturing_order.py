@@ -217,18 +217,19 @@ class WorkTransition(models.Model):
 
     workshop = fields.Many2one('mes.workshop', string="Workshop", required=True)
     manufacturing_order = fields.Many2one('mes.manufacturing.order', string="Manufacturing Order", required=True)
-    product = fields.Many2one('product.product', string="Product", required=True)
+    product = fields.Many2one('product.product', string="Product", related='manufacturing_order.product')
 
-    @api.onchange('manufacturing_order')
-    def _onchange_manufacturing_order(self):
-        """Update Product when manufacturing order is changed"""
-        if self.manufacturing_order:
-            domain = [('product_tmpl_id', '=', self.manufacturing_order.product.product_tmpl_id.id)]
-            products = self.env['product.product'].search(domain)
-            self.product = False  # Clear the product field
-            return {'domain': {'product': [('id', 'in', products.ids)]}}
+    # @api.onchange('manufacturing_order')
+    # def _onchange_manufacturing_order(self):
+    #     """Update Product when manufacturing order is changed"""
+    #     for rec in self:
+    #         if rec.manufacturing_order:
+    #             domain = [('product_tmpl_id', '=', rec.manufacturing_order.product.product_tmpl_id.id)]
+    #             products = rec.env['product.product'].search(domain)
+    #             rec.product = False  # Clear the product field
+    #             return {'domain': {'product': [('id', 'in', products.ids)]}}
 
-    bom = fields.Many2one('mrp.bom', string="BOM", required=True)
+    bom = fields.Many2one('mrp.bom', string="BOM", related='manufacturing_order.bom', store=True)
 
     shift = fields.Selection(
         selection=[('shift_1', 'Shift 1'),
@@ -237,27 +238,41 @@ class WorkTransition(models.Model):
                    ('shift_4', 'Shift 4')],
         string="Shift", required=True)
 
-    @api.onchange('product')
-    def _onchange_product(self):
-        """Update bom domain when product is changed to show only boms related to the product"""
-        if self.product:
-            domain = [('product_tmpl_id', '=', self.product.product_tmpl_id.id)]
-            boms = self.env['mrp.bom'].search(domain)
-            self.bom = False
-            return {'domain': {'bom': [('id', 'in', boms.ids)]}}
+
+    # @api.onchange('product')
+    # def _onchange_product(self):
+    #     """Update bom domain when product is changed to show only boms related to the product"""
+    #     for rec in self:
+    #         if rec.product:
+    #             domain = [('product_tmpl_id', '=', rec.product.product_tmpl_id.id)]
+    #             boms = rec.env['mrp.bom'].search(domain)
+    #             rec.bom = False
+    #             return {'domain': {'bom': [('id', 'in', boms.ids)]}}
 
     created_by = fields.Many2one('res.users', string="Created By", default=lambda self: self.env.user)
     approved_by = fields.Many2one('res.users', string="Approved By", default=lambda self: self.env.user)
-    transition_process = fields.Many2one('tech.process', string="Transition Process", required=True)
+    transition_process = fields.Many2one('tech.process', string="Transition Process", required=True, store=True)
 
-    @api.onchange('bom')
-    def _onchange_bom(self):
-        """Select Process based on bom"""
-        if self.bom:
-            domain = [('bom_ids', '=', self.bom.id)]
-            processes = self.env['tech.process'].search(domain)
-            self.transition_process = False  # Clear the process field
-            return {'domain': {'transition_process': [('id', 'in', processes.ids)]}}
+    # @api.depends('bom')
+    # @api.onchange('bom')
+    # def _onchange_bom(self):
+    #     """Select Process based on bom"""
+    #     for rec in self:
+    #         if rec.bom:
+    #             domain = [('bom_ids', '=', rec.bom.id)]
+    #             processes = rec.env['tech.process'].search(domain)
+    #             rec.transition_process = False  # Clear the process field
+    #             return {'domain': {'transition_process': [('id', 'in', processes.ids)]}}
+    transition_process_domain = fields.Many2many('tech.process', compute='_compute_transition_process_domain')
+
+    @api.depends('bom')
+    def _compute_transition_process_domain(self):
+        for rec in self:
+            if rec.bom:
+                domain = [('bom_ids', '=', rec.bom.id)]
+                rec.transition_process_domain = rec.env['tech.process'].search(domain)
+            else:
+                rec.transition_process_domain = rec.env['tech.process']
 
     transition_quantity = fields.Float(string="Transition Quantity", required=True, default=1.00)
 
@@ -273,17 +288,18 @@ class WorkTransition(models.Model):
     @api.onchange('transition_process')
     def _onchange_transition_process(self):
         """Select Reception Process based on Transition Process"""
-        if self.transition_process and self.bom:
-            next_order = self.transition_process.sequence.order + 1
-            next_process = self.env['tech.process'].search([
-                ('sequence.order', '=', next_order),
-                ('bom_ids', '=', self.bom.id)
-            ], limit=1)
-            if next_process:
-                self.reception_process = next_process.id
-            else:
-                self.reception_process = False
-            return {'domain': {'reception_process': [('id', '=', self.reception_process.id)]}}
+        for rec in self:
+            if rec.transition_process and rec.bom:
+                next_order = rec.transition_process.sequence.order + 1
+                next_process = rec.env['tech.process'].search([
+                    ('sequence.order', '=', next_order),
+                    ('bom_ids', '=', rec.bom.id)
+                ], limit=1)
+                if next_process:
+                    rec.reception_process = next_process.id
+                else:
+                    rec.reception_process = False
+                return {'domain': {'reception_process': [('id', '=', rec.reception_process.id)]}}
 
     receptor = fields.Many2one('res.users', string="Receptor", default=lambda self: self.env.user)
     reception_quantity = fields.Float(string="Reception Quantity", required=True, default=1.00)
