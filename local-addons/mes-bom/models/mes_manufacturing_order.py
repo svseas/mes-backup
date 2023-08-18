@@ -259,7 +259,14 @@ class WorkTransition(models.Model):
             self.transition_process = False  # Clear the process field
             return {'domain': {'transition_process': [('id', 'in', processes.ids)]}}
 
-    transition_quantity = fields.Float(string="Transition Quantity", required=True)
+    transition_quantity = fields.Float(string="Transition Quantity", required=True, default=1.00)
+
+    @api.constrains('transition_quantity')
+    def _check_transition_quantity(self):
+        for rec in self:
+            if rec.transition_quantity <= 0:
+                raise exceptions.ValidationError('Transition quantity must be greater than 0.')
+
     uom = fields.Char(string="UOM", required=True)
     reception_process = fields.Many2one('tech.process', string="Reception Process", required=True)
 
@@ -279,7 +286,14 @@ class WorkTransition(models.Model):
             return {'domain': {'reception_process': [('id', '=', self.reception_process.id)]}}
 
     receptor = fields.Many2one('res.users', string="Receptor", default=lambda self: self.env.user)
-    reception_quantity = fields.Float(string="Reception Quantity", required=True)
+    reception_quantity = fields.Float(string="Reception Quantity", required=True, default=1.00)
+
+    @api.constrains('reception_quantity')
+    def _check_reception_quantity(self):
+        for rec in self:
+            if rec.reception_quantity <= 0:
+                raise exceptions.ValidationError('Reception quantity must be greater than 0.')
+
     ng_redo = fields.Float(string="NG Redo", required=True)
     ng_not_redo = fields.Float(string="NG Not Redo", required=True)
     documents = fields.Binary(string="Documents")

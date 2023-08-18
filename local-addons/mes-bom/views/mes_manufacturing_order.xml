@@ -273,8 +273,8 @@
                             <field name="ng_not_redo"/>
                             <field name="uom"/>
                         </div>
-                        <field name="documents"/>
-                        <field name="document_name"/>
+                        <field name="documents" filename="document_name"/>
+                        <field name="document_name" invisible="1"/>
                     </group>
                 </group>
                 <notebook>
