@@ -218,19 +218,7 @@ class WorkTransition(models.Model):
     workshop = fields.Many2one('mes.workshop', string="Workshop", required=True)
     manufacturing_order = fields.Many2one('mes.manufacturing.order', string="Manufacturing Order", required=True)
     product = fields.Many2one('product.product', string="Product", related='manufacturing_order.product')
-
-    # @api.onchange('manufacturing_order')
-    # def _onchange_manufacturing_order(self):
-    #     """Update Product when manufacturing order is changed"""
-    #     for rec in self:
-    #         if rec.manufacturing_order:
-    #             domain = [('product_tmpl_id', '=', rec.manufacturing_order.product.product_tmpl_id.id)]
-    #             products = rec.env['product.product'].search(domain)
-    #             rec.product = False  # Clear the product field
-    #             return {'domain': {'product': [('id', 'in', products.ids)]}}
-
     bom = fields.Many2one('mrp.bom', string="BOM", related='manufacturing_order.bom', store=True)
-
     shift = fields.Selection(
         selection=[('shift_1', 'Shift 1'),
                    ('shift_2', 'Shift 2'),
@@ -238,31 +226,9 @@ class WorkTransition(models.Model):
                    ('shift_4', 'Shift 4')],
         string="Shift", required=True)
 
-
-    # @api.onchange('product')
-    # def _onchange_product(self):
-    #     """Update bom domain when product is changed to show only boms related to the product"""
-    #     for rec in self:
-    #         if rec.product:
-    #             domain = [('product_tmpl_id', '=', rec.product.product_tmpl_id.id)]
-    #             boms = rec.env['mrp.bom'].search(domain)
-    #             rec.bom = False
-    #             return {'domain': {'bom': [('id', 'in', boms.ids)]}}
-
     created_by = fields.Many2one('res.users', string="Created By", default=lambda self: self.env.user)
     approved_by = fields.Many2one('res.users', string="Approved By", default=lambda self: self.env.user)
-    transition_process = fields.Many2one('tech.process', string="Transition Process", required=True, store=True)
-
-    # @api.depends('bom')
-    # @api.onchange('bom')
-    # def _onchange_bom(self):
-    #     """Select Process based on bom"""
-    #     for rec in self:
-    #         if rec.bom:
-    #             domain = [('bom_ids', '=', rec.bom.id)]
-    #             processes = rec.env['tech.process'].search(domain)
-    #             rec.transition_process = False  # Clear the process field
-    #             return {'domain': {'transition_process': [('id', 'in', processes.ids)]}}
+    transition_process = fields.Many2one('tech.process', string="Transition Process", store=True)
     transition_process_domain = fields.Many2many('tech.process', compute='_compute_transition_process_domain')
 
     @api.depends('bom')
@@ -284,6 +250,19 @@ class WorkTransition(models.Model):
 
     uom = fields.Char(string="UOM", required=True)
     reception_process = fields.Many2one('tech.process', string="Reception Process", required=True)
+
+    @api.constrains('transition_process', 'reception_process', 'bom')
+    def _check_processes_belong_to_bom(self):
+        for rec in self:
+            if rec.bom:
+                # Get the processes related to the selected BOM
+                domain = [('bom_ids', '=', rec.bom.id)]
+                processes = rec.env['tech.process'].search(domain)
+
+                # Check if the selected processes belong to the BOM
+                if rec.transition_process not in processes or rec.reception_process not in processes:
+                    raise exceptions.ValidationError(
+                        'The Transition Process and Reception Process must belong to the selected BOM.')
 
     @api.onchange('transition_process')
     def _onchange_transition_process(self):
