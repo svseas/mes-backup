@@ -65,6 +65,24 @@ class WorkShop(models.Model):
     name = fields.Char(string="Name", required=True)
     code = fields.Char(string="Code", required=True)
 
+    @api.constrains('name', 'code')
+    def _check_name_and_code(self):
+        for record in self:
+            if record.name == record.code:
+                raise exceptions.ValidationError('The name and code must be different.')
+
+    @api.constrains('name')
+    def _check_name_unique(self):
+        for record in self:
+            if self.env['mes.workshop'].search_count([('name', '=', record.name)]) > 1:
+                raise exceptions.ValidationError('The name must be unique.')
+
+    @api.constrains('code')
+    def _check_code_unique(self):
+        for record in self:
+            if self.env['mes.workshop'].search_count([('code', '=', record.code)]) > 1:
+                raise exceptions.ValidationError('The code must be unique.')
+
 
 class ProductivityReport(models.Model):
     _name = 'productivity.report'
@@ -87,11 +105,13 @@ class WorkOrder(models.Model):
     _rec_name = "code"
 
     code = fields.Char(string="Code", required=True)
-    _sql_constraints = [
-        ('code_unique',
-         'UNIQUE(code)',
-         'The code must be unique.')
-    ]
+
+    @api.constrains('code')
+    def _check_code_unique(self):
+        for record in self:
+            if self.env['mes.work.order'].search_count([('code', '=', record.code)]) > 1:
+                raise exceptions.ValidationError('The code must be unique.')
+
     manufacturing_id = fields.Many2one('mes.manufacturing.order', string="Manufacturing Order", required=True)
     workshop = fields.Many2one('mes.workshop', string="Workshop", required=True)
     product = fields.Many2one('product.product', string="Product", required=True)
@@ -188,11 +208,13 @@ class WorkTransition(models.Model):
     _rec_name = "code"
 
     code = fields.Char(string="Code", required=True)
-    _sql_constraints = [
-        ('code_unique',
-         'UNIQUE(code)',
-         'The code must be unique.')
-    ]
+
+    @api.constrains('code')
+    def _check_code_unique(self):
+        for record in self:
+            if self.env['mes.work.transition'].search_count([('code', '=', record.code)]) > 1:
+                raise exceptions.ValidationError('The code must be unique.')
+
     workshop = fields.Many2one('mes.workshop', string="Workshop", required=True)
     manufacturing_order = fields.Many2one('mes.manufacturing.order', string="Manufacturing Order", required=True)
     product = fields.Many2one('product.product', string="Product", required=True)
