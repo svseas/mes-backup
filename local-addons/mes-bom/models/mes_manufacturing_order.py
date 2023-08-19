@@ -1,6 +1,34 @@
 from odoo import fields, api, models, exceptions
 
 
+class ManufacturingOrderLine(models.Model):
+    """MANUFACTURING ORDER LINE - Dòng lệnh sản xuất"""
+    _name = 'mes.manufacturing.order.line'
+    _rec_name = 'product'
+
+    product = fields.Many2one('product.product', string='Product', required=True)
+    bom = fields.Many2one('mrp.bom', string='BOM', required=True)
+
+    @api.onchange('product')
+    def _onchange_product(self):
+        if self.product:
+            domain = [('product_tmpl_id', '=', self.product.product_tmpl_id.id)]
+            boms = self.env['mrp.bom'].search(domain)
+            self.bom = False  # Clear the bom field
+            return {'domain': {'bom': [('id', 'in', boms.ids)]}}
+
+    quantity = fields.Float(string='Quantity*', required=True, default=1.0)
+    uom = fields.Char(string='UOM', required=True)
+    manufacturing_order_id = fields.Many2one('mes.manufacturing.order', string='Manufacturing Order', required=True)
+    date_start = fields.Date(string='Date Start', required=True)
+    date_end = fields.Date(string='Date End', required=True)
+
+    # SQL Constraints to make sure date_end > date_start
+    _sql_constraints = [
+        ('date_check',
+         'CHECK((date_end > date_start))',
+         'The end date must be after the start date.')
+    ]
 class ManufacturingOrder(models.Model):
     """MANUFACTURING ORDER - Lệnh sản xuất"""
     _name = 'mes.manufacturing.order'
@@ -27,19 +55,8 @@ class ManufacturingOrder(models.Model):
             if self.env['mes.manufacturing.order'].search_count([('code', '=', record.code)]) > 1:
                 raise exceptions.ValidationError('The code must be unique.')
 
-    product = fields.Many2one('product.product', string='Product', required=True)
-    bom = fields.Many2one('mrp.bom', string='BOM', required=True)
-
-    @api.onchange('product')
-    def _onchange_product(self):
-        if self.product:
-            domain = [('product_tmpl_id', '=', self.product.product_tmpl_id.id)]
-            boms = self.env['mrp.bom'].search(domain)
-            self.bom = False  # Clear the bom field
-            return {'domain': {'bom': [('id', 'in', boms.ids)]}}
-
-    quantity = fields.Float(string='Quantity*', required=True, default=1.0)
-    uom = fields.Char(string='UOM', required=True)
+    manufacturing_order_line_ids = fields.One2many('mes.manufacturing.order.line', 'manufacturing_order_id',
+                                                   string='Manufacturing Order Lines')
     created_by = fields.Many2one('res.users', string='Created By', default=lambda self: self.env.user)
     approved_by = fields.Many2one('res.users', string='Approved By', default=lambda self: self.env.user)
     date_start = fields.Date(string='Date Start', required=True)
@@ -216,9 +233,10 @@ class WorkTransition(models.Model):
                 raise exceptions.ValidationError('The code must be unique.')
 
     workshop = fields.Many2one('mes.workshop', string="Workshop", required=True)
-    manufacturing_order = fields.Many2one('mes.manufacturing.order', string="Manufacturing Order", required=True)
-    product = fields.Many2one('product.product', string="Product", related='manufacturing_order.product')
-    bom = fields.Many2one('mrp.bom', string="BOM", related='manufacturing_order.bom', store=True)
+    manufacturing_order_line_id = fields.Many2one('mes.manufacturing.order.line', string="Manufacturing Order Line",
+                                                  required=True)
+    product = fields.Many2one('product.product', string="Product", related='manufacturing_order_line_id.product')
+    bom = fields.Many2one('mrp.bom', string="BOM", related='manufacturing_order_line_id.bom', store=True)
     shift = fields.Selection(
         selection=[('shift_1', 'Shift 1'),
                    ('shift_2', 'Shift 2'),

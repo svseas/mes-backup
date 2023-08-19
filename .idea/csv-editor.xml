@@ -10,6 +10,27 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="F:\PycharmProjects\odoo\odoo\addons\l10n_in\data\l10n_in.port.code.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="F:\PycharmProjects\odoo\odoo\addons\l10n_pe\data\l10n_pe.res.city.district.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="F:\PycharmProjects\odoo\odoo\addons\l10n_pe\data\res.city.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="F:\PycharmProjects\odoo\odoo\addons\mrp\security\ir.model.access.csv">
           <value>
             <Attribute>

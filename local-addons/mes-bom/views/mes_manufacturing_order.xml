@@ -29,59 +29,31 @@
                     <group>
                         <field name="name"/>
                         <field name="code"/>
-                        <field name="product"/>
-                        <field name="bom"/>
-                        <label for="quantity" string="Quantity"/>
-                        <div class="o_row">
-                            <field name="quantity"/>
-                            <field name="uom"/>
-                        </div>
-                    </group>
-                    <group>
                         <field name="created_by"/>
                         <field name="approved_by"/>
                         <field name="date_start"/>
                         <field name="date_end"/>
+                    </group>
+                    <group>
                         <field name="contract_id"/>
                         <field name="customer_id"/>
                         <field name="document"/>
                     </group>
-
                 </group>
-                <!--                <notebook>-->
-                <!--                    <page string="Process">-->
-                <!--                        <field name="bom_tech_process_ids">-->
-                <!--                            <tree>-->
-                <!--                                <field name="name"/>-->
-                <!--                                <field name="code"/>-->
-                <!--                                <field name="sequence"/>-->
-                <!--                                <field name="bom_ids" widget="many2many_tags"/>-->
-                <!--                                <field name="child_process_ids" widget="many2many_tags"/>-->
-                <!--                                <field name="output" widget="many2many_tags"/>-->
-                <!--                            </tree>-->
-                <!--                        </field>-->
-                <!--                    </page>-->
-                <!--                    <page string="Materials">-->
-                <!--                        <field name="combined_inputs">-->
-                <!--                            <tree>-->
-                <!--                                <field name="material"/>-->
-                <!--                                <field name="mat_qty"/>-->
-                <!--                                <field name="mat_uom"/>-->
-                <!--                                <field name="mat_waste" widget="percentage"/>-->
-                <!--                                <field name="code"/>-->
-                <!--                                <field name="description"/>-->
-                <!--                                <field name="electronic_material"/>-->
-                <!--                                <field name="designator"/>-->
-                <!--                                <field name="footprint"/>-->
-                <!--                                <field name="lib_ref"/>-->
-                <!--                                <field name="manufacturer_name"/>-->
-                <!--                                <field name="supplier_name"/>-->
-                <!--                                <field name="supplier_code"/>-->
-                <!--                                <field name="tech_process_id"/>-->
-                <!--                            </tree>-->
-                <!--                        </field>-->
-                <!--                    </page>-->
-                <!--                </notebook>-->
+                <notebook>
+                    <page string="Manufacturing Order Line">
+                        <field name="manufacturing_order_line_ids">
+                            <tree>
+                                <field name="product"/>
+                                <field name="bom"/>
+                                <field name="quantity"/>
+                                <field name="uom" placeholder="UOM"/>
+                                <field name="date_start"/>
+                                <field name="date_end"/>
+                            </tree>
+                        </field>
+                    </page>
+                </notebook>
             </form>
         </field>
     </record>
@@ -93,10 +65,7 @@
             <tree>
                 <field name="name"/>
                 <field name="code"/>
-                <field name="product"/>
-                <field name="bom"/>
-                <field name="quantity"/>
-                <field name="uom"/>
+                <field name="manufacturing_order_line_ids" widget="many2many_tags"/>
                 <field name="created_by"/>
                 <field name="approved_by"/>
                 <field name="date_start"/>
@@ -242,7 +211,7 @@
                     <group>
                         <field name="code"/>
                         <field name="workshop"/>
-                        <field name="manufacturing_order"/>
+                        <field name="manufacturing_order_line_id"/>
                         <field name="product"/>
                         <field name="bom"/>
                         <field name="shift"/>
@@ -308,7 +277,7 @@
             <tree>
                 <field name="code"/>
                 <field name="workshop"/>
-                <field name="manufacturing_order"/>
+                <field name="manufacturing_order_line_id"/>
                 <field name="product"/>
                 <field name="bom"/>
                 <field name="shift"/>
