@@ -29,6 +29,8 @@ class ManufacturingOrderLine(models.Model):
          'CHECK((date_end > date_start))',
          'The end date must be after the start date.')
     ]
+
+
 class ManufacturingOrder(models.Model):
     """MANUFACTURING ORDER - Lệnh sản xuất"""
     _name = 'mes.manufacturing.order'
@@ -129,19 +131,26 @@ class WorkOrder(models.Model):
             if self.env['mes.work.order'].search_count([('code', '=', record.code)]) > 1:
                 raise exceptions.ValidationError('The code must be unique.')
 
-    manufacturing_id = fields.Many2one('mes.manufacturing.order', string="Manufacturing Order", required=True)
+    manufacturing_order_line_id = fields.Many2one('mes.manufacturing.order.line',
+                                                  string="Manufacturing Order Line",
+                                                  required=True)
+    manufacturing_order_id = fields.Char(string="Manufacturing Order",
+                                         related='manufacturing_order_line_id.manufacturing_order_id.name')
     workshop = fields.Many2one('mes.workshop', string="Workshop", required=True)
-    product = fields.Many2one('product.product', string="Product", required=True)
-    bom = fields.Many2one('mrp.bom', string="BOM", required=True)
+    product = fields.Many2one('product.product',
+                              string="Product",
+                              required=True,
+                              related='manufacturing_order_line_id.product')
+    bom = fields.Many2one('mrp.bom', string="BOM", required=True, related='manufacturing_order_line_id.bom')
 
-    @api.onchange('product')
-    def _onchange_product(self):
-        """Update bom domain when product is changed to show only boms related to the product"""
-        if self.product:
-            domain = [('product_tmpl_id', '=', self.product.product_tmpl_id.id)]
-            boms = self.env['mrp.bom'].search(domain)
-            self.bom = False  # Clear the bom field
-            return {'domain': {'bom': [('id', 'in', boms.ids)]}}
+    # @api.onchange('product')
+    # def _onchange_product(self):
+    #     """Update bom domain when product is changed to show only boms related to the product"""
+    #     if self.product:
+    #         domain = [('product_tmpl_id', '=', self.product.product_tmpl_id.id)]
+    #         boms = self.env['mrp.bom'].search(domain)
+    #         self.bom = False  # Clear the bom field
+    #         return {'domain': {'bom': [('id', 'in', boms.ids)]}}
 
     process = fields.Many2one('tech.process', string="Process", required=True)
 
