@@ -196,19 +196,13 @@ class WorkOrder(models.Model):
 
     @api.onchange('date_created')
     def _onchange_date_created(self):
-        for rec in self:
-            if rec.date_created:
-                date_created = fields.Date.from_string(rec.date_created)
-                if rec.time_start:
-                    time_start = fields.Datetime.from_string(rec.time_start)
-                    rec.time_start = fields.Datetime.to_string(
-                        datetime.datetime.combine(date_created, time_start.time())
-                    )
-                if rec.time_end:
-                    time_end = fields.Datetime.from_string(rec.time_end)
-                    rec.time_end = fields.Datetime.to_string(
-                        datetime.datetime.combine(date_created, time_end.time())
-                    )
+        for record in self:
+            if record.date_created:
+                record.time_start = record.time_start.replace(year=record.date_created.year,
+                                                              month=record.date_created.month,
+                                                              day=record.date_created.day)
+                record.time_end = record.time_end.replace(year=record.date_created.year,
+                                                          month=record.date_created.month, day=record.date_created.day)
 
     _sql_constraints = [
         ('time_check',
