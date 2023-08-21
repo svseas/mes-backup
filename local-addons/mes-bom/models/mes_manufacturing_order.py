@@ -178,7 +178,7 @@ class WorkOrder(models.Model):
     approved_by = fields.Many2one('res.users', string="Approved By", default=lambda self: self.env.user)
     documents = fields.Binary(string="Documents")
     document_name = fields.Char(string="Document Name")
-    machine_type = fields.Many2one('equipment.template', string="Machine")
+    machine_type = fields.Many2one('equipment.usage', string="Machine Type")
     machine = fields.Char(string="Machine")
     worker_type = fields.Many2one('worker.group', string="Worker Type")
     worker_ids = fields.Many2many('res.users', string="Worker List")

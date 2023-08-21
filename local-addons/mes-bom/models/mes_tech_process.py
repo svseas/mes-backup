@@ -31,6 +31,16 @@ class TechProcess(models.Model):
                                         'parent_process',
                                         string='Child Process')
 
+    def update_child_bom_ids(self):
+        for record in self:
+            for child_process in record.child_process_ids:
+                child_process.bom_ids = record.bom_ids
+
+    @api.onchange('bom_ids')
+    def _get_child_bom(self):
+        for record in self:
+            for child_process in record.child_process_ids:
+                child_process.write({'bom_ids': record.bom_ids.ids})
     # Process Line
     input = fields.One2many('material.line', 'tech_process_id',
                             string="Parent Input")
@@ -99,6 +109,7 @@ class TechProcess(models.Model):
     @api.depends('child_process_ids', 'child_process_ids.worker')
     def _compute_child_workers(self):
         """Compute child worker in child process"""
+
         def get_child_workers(process, is_root=True):
             workers = process.env['worker.type.usage']
             if not is_root:
@@ -124,7 +135,6 @@ class TechProcess(models.Model):
                              string='Output')
     child_process_outputs = fields.Many2many('output.line', compute='_compute_child_outputs',
                                              string='Child Process Output')
-    combined_outputs = fields.Many2many('output.line', compute='_compute_combined_outputs', string='All Output')
 
     @api.depends('child_process_ids', 'child_process_ids.output')
     def _compute_child_outputs(self):
@@ -141,13 +151,6 @@ class TechProcess(models.Model):
         for record in self:
             all_outputs = get_child_outputs(record)
             record.child_process_outputs = [(6, 0, all_outputs.ids)]
-
-    @api.depends('output', 'child_process_outputs')
-    def _compute_combined_outputs(self):
-        """Process Output Combined with Child Process Output"""
-        for record in self:
-            combined_outputs = record.output | record.child_process_outputs
-            record.combined_outputs = [(6, 0, combined_outputs.ids)]
 
     output_description = fields.Html(string='Output Description')
     image = fields.Image(string='Image')
