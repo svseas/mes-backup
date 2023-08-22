@@ -143,15 +143,6 @@ class WorkOrder(models.Model):
                               related='manufacturing_order_line_id.product')
     bom = fields.Many2one('mrp.bom', string="BOM", required=True, related='manufacturing_order_line_id.bom')
 
-    # @api.onchange('product')
-    # def _onchange_product(self):
-    #     """Update bom domain when product is changed to show only boms related to the product"""
-    #     if self.product:
-    #         domain = [('product_tmpl_id', '=', self.product.product_tmpl_id.id)]
-    #         boms = self.env['mrp.bom'].search(domain)
-    #         self.bom = False  # Clear the bom field
-    #         return {'domain': {'bom': [('id', 'in', boms.ids)]}}
-
     process = fields.Many2one('tech.process', string="Process", required=True)
 
     @api.onchange('bom')
@@ -238,6 +229,17 @@ class WorkTransition(models.Model):
     workshop = fields.Many2one('mes.workshop', string="Workshop", required=True)
     manufacturing_order_line_id = fields.Many2one('mes.manufacturing.order.line', string="Manufacturing Order Line",
                                                   required=True)
+    work_order = fields.Many2one('mes.work.order', string="Work Order", required=True)
+
+    @api.onchange('manufacturing_order_line_id')
+    def _onchange_manufacturing_order_line_id(self):
+        """Change Work Order based on Manufacturing Order Line"""
+        if self.manufacturing_order_line_id:
+            domain = [('manufacturing_order_line_id', '=', self.manufacturing_order_line_id.id)]
+            work_orders = self.env['mes.work.order'].search(domain)
+            self.work_order = False
+            return {'domain': {'work_order': [('id', 'in', work_orders.ids)]}}
+
     product = fields.Many2one('product.product', string="Product", related='manufacturing_order_line_id.product')
     bom = fields.Many2one('mrp.bom', string="BOM", related='manufacturing_order_line_id.bom', store=True)
     shift = fields.Selection(
