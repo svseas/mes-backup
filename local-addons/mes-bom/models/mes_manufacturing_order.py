@@ -232,13 +232,14 @@ class WorkTransition(models.Model):
     work_order = fields.Many2one('mes.work.order', string="Work Order", required=True)
 
     @api.onchange('manufacturing_order_line_id')
-    def _onchange_manufacturing_order_line_id(self):
-        """Change Work Order based on Manufacturing Order Line"""
-        if self.manufacturing_order_line_id:
-            domain = [('manufacturing_order_line_id', '=', self.manufacturing_order_line_id.id)]
-            work_orders = self.env['mes.work.order'].search(domain)
-            self.work_order = False
-            return {'domain': {'work_order': [('id', 'in', work_orders.ids)]}}
+    def _get_work_order(self):
+        """Select Work Order based on Manufacturing Order Line"""
+        for rec in self:
+            if rec.manufacturing_order_line_id:
+                domain = [('manufacturing_order_line_id', '=', rec.manufacturing_order_line_id.id)]
+                work_orders = rec.env['mes.work.order'].search(domain)
+                rec.work_order = False
+                return {'domain': {'work_order': [('id', 'in', work_orders.ids)]}}
 
     product = fields.Many2one('product.product', string="Product", related='manufacturing_order_line_id.product')
     bom = fields.Many2one('mrp.bom', string="BOM", related='manufacturing_order_line_id.bom', store=True)
