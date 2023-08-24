@@ -208,7 +208,7 @@
         <field name="model">mes.work.transition</field>
         <field name="arch" type="xml">
             <form>
-                <group>
+                <group string="General Info">
                     <group>
                         <group>
                             <field name="code"/>
@@ -225,84 +225,84 @@
                             <field name="document_name" invisible="1"/>
                         </group>
                     </group>
-                    <group string="Transition Details">
-                        <group>
-                            <field name="work_order_transition"/>
-                            <field name="transition_process_domain" invisible="1"/>
-                            <field name="transition_process" domain="[('id', 'in', transition_process_domain)]"/>
-                            <label for="transition_quantity" string="Transition Quantity"/>
-                            <div class="o_row">
-                                <field name="transition_quantity"/>
-                                <field name="uom" placeholder="UOM"/>
-                            </div>
-                        </group>
-                        <group>
-                            <field name="work_order_receive"/>
-                            <field name="reception_process"/>
-                            <field name="receptor"/>
-                            <label for="reception_quantity" string="Reception Quantity"/>
-                            <div class="o_row">
-                                <field name="reception_quantity"/>
-                                <field name="uom" placeholder="UOM"/>
-                            </div>
-                            <label for="ng_redo" string="NG Redo"/>
-                            <div class="o_row">
-                                <field name="ng_redo"/>
-                                <field name="uom" placeholder="UOM"/>
-                            </div>
-                            <label for="ng_not_redo" string="NG Not Redo"/>
-                            <div class="o_row">
-                                <field name="ng_not_redo"/>
-                                <field name="uom" placeholder="UOM"/>
-                            </div>
-                        </group>
+                </group>
+                <group string="Transition Details">
+                    <group>
+                        <field name="work_order_transition"/>
+                        <field name="transition_process_domain" invisible="1"/>
+                        <field name="transition_process" domain="[('id', 'in', transition_process_domain)]"/>
+                        <label for="transition_quantity" string="Transition Quantity"/>
+                        <div class="o_row">
+                            <field name="transition_quantity"/>
+                            <field name="uom" placeholder="UOM"/>
+                        </div>
+                    </group>
+                    <group>
+                        <field name="work_order_receive"/>
+                        <field name="reception_process"/>
+                        <field name="receptor"/>
+                        <label for="reception_quantity" string="Reception Quantity"/>
+                        <div class="o_row">
+                            <field name="reception_quantity"/>
+                            <field name="uom" placeholder="UOM"/>
+                        </div>
+                        <label for="ng_redo" string="NG Redo"/>
+                        <div class="o_row">
+                            <field name="ng_redo"/>
+                            <field name="uom" placeholder="UOM"/>
+                        </div>
+                        <label for="ng_not_redo" string="NG Not Redo"/>
+                        <div class="o_row">
+                            <field name="ng_not_redo"/>
+                            <field name="uom" placeholder="UOM"/>
+                        </div>
                     </group>
                 </group>
-                <notebook>
-                    <page string="Activity Log">
-                        <field name="activity_log_ids" nolabel="1">
-                            <tree>
+            <notebook>
+                <page string="Activity Log">
+                    <field name="activity_log_ids" nolabel="1">
+                        <tree>
+                            <field name="activity_date"/>
+                            <field name="user_id"/>
+                            <field name="description"/>
+                        </tree>
+                        <form>
+                            <group>
                                 <field name="activity_date"/>
                                 <field name="user_id"/>
                                 <field name="description"/>
-                            </tree>
-                            <form>
-                                <group>
-                                    <field name="activity_date"/>
-                                    <field name="user_id"/>
-                                    <field name="description"/>
-                                </group>
-                            </form>
-                        </field>
-                    </page>
-                </notebook>
-            </form>
-        </field>
-    </record>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+            </notebook>
+        </form>
+    </field>
+</record>
 
-    <!--    Work Transition Tree View-->
-    <record id="work_transition_view_tree" model="ir.ui.view">
-        <field name="name">work.transition.view.tree</field>
-        <field name="model">mes.work.transition</field>
-        <field name="arch" type="xml">
-            <tree>
-                <field name="code"/>
-                <field name="workshop"/>
-                <field name="manufacturing_order_line_id"/>
-                <field name="product"/>
-                <field name="bom"/>
-                <field name="shift"/>
-                <field name="approved_by"/>
-                <field name="transition_process"/>
-                <field name="transition_quantity"/>
-                <field name="reception_process"/>
-                <field name="receptor"/>
-                <field name="reception_quantity"/>
-                <field name="ng_redo"/>
-                <field name="ng_not_redo"/>
-            </tree>
-        </field>
-    </record>
+        <!--    Work Transition Tree View-->
+<record id="work_transition_view_tree" model="ir.ui.view">
+<field name="name">work.transition.view.tree</field>
+<field name="model">mes.work.transition</field>
+<field name="arch" type="xml">
+    <tree>
+        <field name="code"/>
+        <field name="workshop"/>
+        <field name="manufacturing_order_line_id"/>
+        <field name="product"/>
+        <field name="bom"/>
+        <field name="shift"/>
+        <field name="approved_by"/>
+        <field name="transition_process"/>
+        <field name="transition_quantity"/>
+        <field name="reception_process"/>
+        <field name="receptor"/>
+        <field name="reception_quantity"/>
+        <field name="ng_redo"/>
+        <field name="ng_not_redo"/>
+    </tree>
+</field>
+</record>
 
 
-</odoo>
+        </odoo>

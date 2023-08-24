@@ -139,9 +139,20 @@ class WorkOrder(models.Model):
     workshop = fields.Many2one('mes.workshop', string="Workshop", required=True)
     product = fields.Many2one('product.product',
                               string="Product",
-                              required=True,
-                              related='manufacturing_order_line_id.product')
-    bom = fields.Many2one('mrp.bom', string="BOM", required=True, related='manufacturing_order_line_id.bom')
+                              required=True)
+    bom = fields.Many2one('mrp.bom', string="BOM", required=True)
+
+    @api.onchange('manufacturing_order_line_id')
+    def _onchange_manufacturing_order_line_id(self):
+        """Change Product and BOM based on Manufacturing Order Line"""
+        if self.manufacturing_order_line_id:
+            domain = [('manufacturing_order_line_id', '=', self.manufacturing_order_line_id.id)]
+            products = self.env['product.product'].search(domain)
+            boms = self.env['mrp.bom'].search(domain)
+            self.product = False
+            self.bom = False
+            return {'domain': {'product': [('id', 'in', products.ids)],
+                               'bom': [('id', 'in', boms.ids)]}}
 
     process = fields.Many2one('tech.process', string="Process", required=True)
 
@@ -236,20 +247,26 @@ class WorkTransition(models.Model):
     bom = fields.Many2one('mrp.bom', string="BOM", required=True)
 
     @api.onchange('manufacturing_order_line_id')
+    def _get_product_and_bom(self):
+        """Get Product and BOM based on Manufacturing Order Line"""
+        for record in self:
+            if record.manufacturing_order_line_id:
+                record.product = record.manufacturing_order_line_id.product
+                record.bom = record.manufacturing_order_line_id.bom
+            else:
+                record.product = False
+                record.bom = False
+
+    @api.onchange('manufacturing_order_line_id')
     def _onchange_manufacturing_order_line_id(self):
-        """Change Work Order Transition and Work Order Receive, Product, Bom based on Manufacturing Order Line"""
+        """Change Work Order Transition and Work Order Receive based on Manufacturing Order Line"""
         if self.manufacturing_order_line_id:
             domain = [('manufacturing_order_line_id', '=', self.manufacturing_order_line_id.id)]
             work_orders = self.env['mes.work.order'].search(domain)
-            product = self.env['product.product'].search(domain)
-            bom_ids = self.env['mrp.bom'].search(domain)
-            self.work_order = False
-            self.product = False
-            self.bom = False
+            self.work_order_transition = False
+            self.work_order_receive = False
             return {'domain': {'work_order_transition': [('id', 'in', work_orders.ids)],
-                               'work_order_receive': [('id', 'in', work_orders.ids)],
-                               'product': [('id', 'in', product.ids)],
-                               'bom': [('id', 'in', bom_ids.ids)]}}
+                               'work_order_receive': [('id', 'in', work_orders.ids)]}}
 
     shift = fields.Selection(
         selection=[('shift_1', 'Shift 1'),
