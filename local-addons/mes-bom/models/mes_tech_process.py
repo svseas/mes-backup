@@ -31,6 +31,21 @@ class TechProcess(models.Model):
                                         'parent_process',
                                         string='Child Process')
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        """Override create method to update child BOM ids after creation."""
+        records = super(TechProcess, self).create(vals_list)
+        for record in records:
+            record.update_child_bom_ids()
+        return records
+
+    def write(self, vals):
+        """Override write method to update child BOM ids after updating."""
+        res = super(TechProcess, self).write(vals)
+        for record in self:
+            record.update_child_bom_ids()
+        return res
+
     def update_child_bom_ids(self):
         for record in self:
             for child_process in record.child_process_ids:
@@ -41,6 +56,7 @@ class TechProcess(models.Model):
         for record in self:
             for child_process in record.child_process_ids:
                 child_process.write({'bom_ids': record.bom_ids.ids})
+
     # Process Line
     input = fields.One2many('material.line', 'tech_process_id',
                             string="Parent Input")

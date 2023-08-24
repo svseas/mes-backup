@@ -229,19 +229,28 @@ class WorkTransition(models.Model):
     workshop = fields.Many2one('mes.workshop', string="Workshop", required=True)
     manufacturing_order_line_id = fields.Many2one('mes.manufacturing.order.line', string="Manufacturing Order Line",
                                                   required=True)
-    work_order = fields.Many2one('mes.work.order', string="Work Order", required=True)
+    work_order_transition = fields.Many2one('mes.work.order', string="Work Order to Transit", required=True)
+    work_order_receive = fields.Many2one('mes.work.order', string="Work Order to Receive", required=True)
+
+    product = fields.Many2one('product.product', string="Product", required=True)
+    bom = fields.Many2one('mrp.bom', string="BOM", required=True)
 
     @api.onchange('manufacturing_order_line_id')
     def _onchange_manufacturing_order_line_id(self):
-        """Change Work Order based on Manufacturing Order Line"""
+        """Change Work Order Transition and Work Order Receive, Product, Bom based on Manufacturing Order Line"""
         if self.manufacturing_order_line_id:
             domain = [('manufacturing_order_line_id', '=', self.manufacturing_order_line_id.id)]
             work_orders = self.env['mes.work.order'].search(domain)
+            product = self.env['product.product'].search(domain)
+            bom_ids = self.env['mrp.bom'].search(domain)
             self.work_order = False
-            return {'domain': {'work_order': [('id', 'in', work_orders.ids)]}}
+            self.product = False
+            self.bom = False
+            return {'domain': {'work_order_transition': [('id', 'in', work_orders.ids)],
+                               'work_order_receive': [('id', 'in', work_orders.ids)],
+                               'product': [('id', 'in', product.ids)],
+                               'bom': [('id', 'in', bom_ids.ids)]}}
 
-    product = fields.Many2one('product.product', string="Product", related='manufacturing_order_line_id.product')
-    bom = fields.Many2one('mrp.bom', string="BOM", related='manufacturing_order_line_id.bom', store=True)
     shift = fields.Selection(
         selection=[('shift_1', 'Shift 1'),
                    ('shift_2', 'Shift 2'),
