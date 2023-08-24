@@ -290,6 +290,7 @@ class WorkTransition(models.Model):
                 rec.transition_process_domain = rec.env['tech.process']
 
     transition_quantity = fields.Float(string="Transition Quantity", required=True, default=1.00)
+    receive_quantity = fields.Float(string="Receive Quantity", required=True, default=1.00)
 
     @api.constrains('transition_quantity')
     def _check_transition_quantity(self):
@@ -331,6 +332,7 @@ class WorkTransition(models.Model):
 
     receptor = fields.Many2one('res.users', string="Receptor", default=lambda self: self.env.user)
     reception_quantity = fields.Float(string="Reception Quantity", required=True, default=1.00)
+    quality_control_line = fields.One2many('quality.control.line', 'work_transition_id', string="Quality Control Line")
 
     @api.constrains('reception_quantity')
     def _check_reception_quantity(self):
@@ -352,4 +354,13 @@ class WorkTransition(models.Model):
         activity_date = fields.Datetime(string="Activity Date", default=fields.Datetime.now, required=True)
         user_id = fields.Many2one('res.users', string="User", default=lambda self: self.env.user, required=True)
         description = fields.Text(string="Description", required=True)
+        work_transition_id = fields.Many2one('mes.work.transition', string="Work Transition", ondelete='cascade')
+
+    class QualityControlLine(models.Model):
+        _name = "quality.control.line"
+        _description = "Quality Control Line"
+
+        reception_quantity = fields.Float(string="Reception Quantity", required=True)
+        ng_redo = fields.Float(string="NG Redo", required=True)
+        ng_not_redo = fields.Float(string="NG Not Redo", required=True)
         work_transition_id = fields.Many2one('mes.work.transition', string="Work Transition", ondelete='cascade')
