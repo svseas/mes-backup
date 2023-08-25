@@ -330,7 +330,36 @@ class WorkTransition(models.Model):
                     rec.reception_process = False
                 return {'domain': {'reception_process': [('id', '=', rec.reception_process.id)]}}
 
+    @api.onchange('reception_process')
+    def _onchange_reception_process(self):
+        """Select Work Order Receive based on reception process"""
+        for rec in self:
+            if rec.reception_process:
+                domain = [('process', '=', rec.reception_process.id)]
+                work_orders = rec.env['mes.work.order'].search(domain)
+                rec.work_order_receive = False
+                return {'domain': {'work_order_receive': [('id', 'in', work_orders.ids)]}}
+    transistor = fields.Many2one('res.users', string="Transistor", default=lambda self: self.env.user)
     receptor = fields.Many2one('res.users', string="Receptor", default=lambda self: self.env.user)
+
+    @api.onchange('work_order_transition')
+    def _onchange_work_order_transition(self):
+        """Change transistor based on Work Order Transition"""
+        for rec in self:
+            if rec.work_order_transition:
+                rec.transistor = rec.work_order_transition.worker_ids.id
+            else:
+                rec.transistor = False
+
+    @api.onchange('work_order_receive')
+    def _onchange_work_order_receive(self):
+        """Change receptor based on Work Order Receive"""
+        for rec in self:
+            if rec.work_order_receive:
+                rec.receptor = rec.work_order_receive.worker_ids.id
+            else:
+                rec.receptor = False
+
     reception_quantity = fields.Float(string="Reception Quantity", required=True, default=1.00)
     quality_control_line = fields.One2many('quality.control.line', 'work_transition_id', string="Quality Control Line")
 
@@ -340,8 +369,10 @@ class WorkTransition(models.Model):
             if rec.reception_quantity <= 0:
                 raise exceptions.ValidationError('Reception quantity must be greater than 0.')
 
-    ng_redo = fields.Float(string="NG Redo", required=True)
-    ng_not_redo = fields.Float(string="NG Not Redo", required=True)
+    ng_redo_transit = fields.Float(string="NG Redo Transit", required=True)
+    ng_not_redo_transit = fields.Float(string="NG Not Redo", required=True)
+    ng_redo_receive = fields.Float(string="NG Redo Receive", required=True)
+    ng_not_redo_receive = fields.Float(string="NG Not Redo Receive", required=True)
     documents = fields.Binary(string="Documents")
     document_name = fields.Char(string="Document Name")
     activity_log_ids = fields.One2many('mes.work.transition.activity.log', 'work_transition_id', string="Activity Log")
@@ -363,4 +394,5 @@ class WorkTransition(models.Model):
         reception_quantity = fields.Float(string="Reception Quantity", required=True)
         ng_redo = fields.Float(string="NG Redo", required=True)
         ng_not_redo = fields.Float(string="NG Not Redo", required=True)
+        uom = fields.Char(string="UOM", required=True)
         work_transition_id = fields.Many2one('mes.work.transition', string="Work Transition", ondelete='cascade')
