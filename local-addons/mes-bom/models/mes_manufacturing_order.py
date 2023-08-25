@@ -145,14 +145,13 @@ class WorkOrder(models.Model):
     @api.onchange('manufacturing_order_line_id')
     def _onchange_manufacturing_order_line_id(self):
         """Change Product and BOM based on Manufacturing Order Line"""
-        if self.manufacturing_order_line_id:
-            domain = [('manufacturing_order_line_id', '=', self.manufacturing_order_line_id.id)]
-            products = self.env['product.product'].search(domain)
-            boms = self.env['mrp.bom'].search(domain)
-            self.product = False
-            self.bom = False
-            return {'domain': {'product': [('id', 'in', products.ids)],
-                               'bom': [('id', 'in', boms.ids)]}}
+        for rec in self:
+            if rec.manufacturing_order_line_id:
+                rec.product = rec.manufacturing_order_line_id.product
+                rec.bom = rec.manufacturing_order_line_id.bom
+            else:
+                rec.product = False
+                rec.bom = False
 
     process = fields.Many2one('tech.process', string="Process", required=True)
 
