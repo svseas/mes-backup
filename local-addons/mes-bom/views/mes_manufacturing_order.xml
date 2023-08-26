@@ -229,8 +229,7 @@
                 <group string="Transition Details">
                     <group>
                         <field name="work_order_transition"/>
-                        <field name="transition_process_domain" invisible="1"/>
-                        <field name="transition_process" domain="[('id', 'in', transition_process_domain)]"/>
+                        <field name="transition_process"/>
                         <label for="transition_quantity" string="Transition Quantity"/>
                         <div class="o_row">
                             <field name="transition_quantity"/>

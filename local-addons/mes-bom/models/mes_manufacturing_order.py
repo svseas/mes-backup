@@ -1,4 +1,5 @@
 from odoo import fields, api, models, exceptions
+from datetime import datetime
 
 
 class ManufacturingOrderLine(models.Model):
@@ -197,13 +198,24 @@ class WorkOrder(models.Model):
 
     @api.onchange('date_created')
     def _onchange_date_created(self):
+        """Set time_start and time_end to the same date as date_created"""
         for record in self:
             if record.date_created:
-                record.time_start = record.time_start.replace(year=record.date_created.year,
+                # If time_start or time_end is not set, use a default time
+                if not record.time_start:
+                    record.time_start = datetime.combine(record.date_created,
+                                                         datetime.min.time())  # Default to 00:00:00
+                else:
+                    record.time_start = record.time_start.replace(year=record.date_created.year,
+                                                                  month=record.date_created.month,
+                                                                  day=record.date_created.day)
+
+                if not record.time_end:
+                    record.time_end = datetime.combine(record.date_created, datetime.min.time())  # Default to 00:00:00
+                else:
+                    record.time_end = record.time_end.replace(year=record.date_created.year,
                                                               month=record.date_created.month,
                                                               day=record.date_created.day)
-                record.time_end = record.time_end.replace(year=record.date_created.year,
-                                                          month=record.date_created.month, day=record.date_created.day)
 
     _sql_constraints = [
         ('time_check',
@@ -277,16 +289,15 @@ class WorkTransition(models.Model):
     created_by = fields.Many2one('res.users', string="Created By", default=lambda self: self.env.user)
     approved_by = fields.Many2one('res.users', string="Approved By", default=lambda self: self.env.user)
     transition_process = fields.Many2one('tech.process', string="Transition Process", store=True)
-    transition_process_domain = fields.Many2many('tech.process', compute='_compute_transition_process_domain')
 
-    @api.depends('bom')
-    def _compute_transition_process_domain(self):
+    @api.onchange('work_order_transition')
+    def _compute_transition_process(self):
+        """Get transition process based on work order transition"""
         for rec in self:
-            if rec.bom:
-                domain = [('bom_ids', '=', rec.bom.id)]
-                rec.transition_process_domain = rec.env['tech.process'].search(domain)
+            if rec.work_order_transition:
+                rec.transition_process = rec.work_order_transition.process
             else:
-                rec.transition_process_domain = rec.env['tech.process']
+                rec.transition_process = False
 
     transition_quantity = fields.Float(string="Transition Quantity", required=True, default=1.00)
     receive_quantity = fields.Float(string="Receive Quantity", required=True, default=1.00)
@@ -338,6 +349,7 @@ class WorkTransition(models.Model):
                 work_orders = rec.env['mes.work.order'].search(domain)
                 rec.work_order_receive = False
                 return {'domain': {'work_order_receive': [('id', 'in', work_orders.ids)]}}
+
     transistor = fields.Many2one('res.users', string="Transistor", default=lambda self: self.env.user)
     receptor = fields.Many2one('res.users', string="Receptor", default=lambda self: self.env.user)
 
