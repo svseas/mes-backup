@@ -23,12 +23,17 @@ class ManufacturingOrderLine(models.Model):
     date_start = fields.Date(string='Date Start', required=True)
     date_end = fields.Date(string='Date End', required=True)
 
-    # SQL Constraints to make sure date_end > date_start
     _sql_constraints = [
         ('date_check',
          'CHECK((date_end > date_start))',
-         'The end date must be after the start date.')
+         'BBBBBBBBBBBBBBBB')
     ]
+
+    # @api.constrains('date_start', 'date_end')
+    # def _check_date_start_end(self):
+    #     for record in self:
+    #         if record.date_start > record.date_end:
+    #             raise exceptions.ValidationError('AAAAAAAAAAAAAAAAAAAAAAAAAAAA')
 
 
 class ManufacturingOrder(models.Model):
@@ -64,15 +69,15 @@ class ManufacturingOrder(models.Model):
     date_start = fields.Date(string='Date Start', required=True)
     date_end = fields.Date(string='Date End', required=True)
 
-    # SQL Constraints to make sure date_end > date_start
-    _sql_constraints = [
-        ('date_check',
-         'CHECK((date_end > date_start))',
-         'The end date must be after the start date.')
-    ]
     contract_id = fields.Char(string='Contract ID')
     customer_id = fields.Many2one('res.partner', string='Customer')
     document = fields.Binary(string='Document')
+
+    @api.constrains('date_start', 'date_end')
+    def _check_date_start_end(self):
+        for record in self:
+            if record.date_start > record.date_end:
+                raise exceptions.ValidationError('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
 
 
 class WorkShop(models.Model):

@@ -1,0 +1,8 @@
+.table-color{
+    color: red;
+}
+
+table td {
+  border: 1px solid black;
+  padding: 2px 4px;
+}
