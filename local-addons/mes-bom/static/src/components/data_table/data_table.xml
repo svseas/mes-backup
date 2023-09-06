@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="mes-bom.DataTable" owl="1">
+        <link rel="stylesheet" href="/mes-bom/static/src/components/data_table/data_table.scss"/>
+        <div class="container">
+            <div id="table-container"/>
+        </div>
+    </t>
+</templates>

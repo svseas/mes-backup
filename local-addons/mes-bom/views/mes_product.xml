@@ -7,6 +7,12 @@
         <field name="res_model">material.material</field>
         <field name="view_mode">tree,form</field>
     </record>
+
+    <record id="action_data_table_js" model="ir.actions.client">
+        <field name="name">Data Table</field>
+        <field name="tag">mes-bom.action_data_table_js</field>
+    </record>
+
     <menuitem id="menu_mes_material_details"
               parent="mrp.menu_mrp_configuration"
               name="Material Library"
@@ -20,7 +26,7 @@
         <field name="arch" type="xml">
             <form>
                 <div class="oe_button_box" name="button_box">
-                  <button name="button_table_view" type="object" class="oe_stat_button" icon="fa-bars" string="Overview"/>
+                  <button name ="button_table_view" type="object"  class="oe_stat_button" icon="fa-bars" string="Overview"/>
                 </div>
                 <group string="General Information">
                     <field name="name"/>

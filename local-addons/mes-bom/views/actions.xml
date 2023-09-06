@@ -10,12 +10,12 @@
         <field name="name">table.test.view</field>
         <field name="model">table.test</field>
         <field name="arch" type="xml">
-            <form>
+            <form string="Your Model" class="custom-full-screen">
                 <link rel="stylesheet" href="/mes-bom/static/src/css/table_style.css"/>
                 <notebook>
                     <page string="Test Page">
                         <group>
-                            <div id="table-container" class="table-color">
+                            <div id="table-container">
                             </div>
                         </group>
                     </page>

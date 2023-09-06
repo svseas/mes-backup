@@ -8,5 +8,5 @@ class InheritProduct(models.Model):
     name = fields.Char(string='Name*')
 
     def button_table_view(self):
-        action = self.env.ref('mes-bom.view_table_action').read()[0]
+        action = self.env.ref('mes-bom.action_data_table_js').read()[0]
         return action
