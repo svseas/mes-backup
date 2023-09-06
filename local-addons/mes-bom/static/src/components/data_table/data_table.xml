@@ -4,7 +4,8 @@
     <t t-name="mes-bom.DataTable" owl="1">
         <link rel="stylesheet" href="/mes-bom/static/src/components/data_table/data_table.scss"/>
         <div class="container">
-            <div id="table-container"/>
+            <div class="table-container"/>
+            <h2>test</h2>
         </div>
     </t>
 </templates>
