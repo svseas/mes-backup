@@ -2,10 +2,37 @@
 <templates xml:space="preserve">
 
     <t t-name="mes-bom.DataTable" owl="1">
-        <link rel="stylesheet" href="/mes-bom/static/src/components/data_table/data_table.scss"/>
-        <div class="container">
-            <div class="table-container"/>
-            <h2>test</h2>
+        <link rel="stylesheet" href="/mes-bom/static/src/components/data_table/data_table.css"/>
+        <h2>Data Table</h2>
+        <div class="table-container">
+            <table class="styled-table" t-ref="data-table">
+                <thead>
+                    <tr>
+                        <th>Level</th>
+                        <th>Bước CĐ</th>
+                        <th t-attf-data-field="display_name">Công đoạn</th>
+                        <th>Nội dung công đoạn</th>
+                        <th>Thành phần đầu ra</th>
+                        <th>Hình ảnh đầu ra</th>
+                        <th>Quy cách thành phần</th>
+                        <th>Mã sản phẩm</th>
+                        <th>Mã thành phần cấp 1</th>
+                        <th>Mã thành phần cấp 2</th>
+                        <th>Mã Nguyên liệu</th>
+                        <th>Tên nguyên liệu</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr t-foreach="dataTable.data"
+                        t-as="data"
+                        t-key="data_index"
+                        t-att-data-value="data.id">
+                        <td t-attf-data-field="display_name" t-out="data.display_name"/>
+                        <td t-out="data.code"/>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </t>
 </templates>

@@ -6,21 +6,20 @@ const rpc = require('web.rpc');
 export class DataTable extends Component {
     setup(){
         super.setup(...arguments);
+        this.dataTable = useState({ data: [] })
         onMounted(()=>{
-            this.renderTable();
+            this.loadData();
         })
     }
-
-    renderTable() {
-        const self = this;
-        const template = `
-            <div>1</div>
-        `;
-//        self.$('.table-container').append(template)
-        function creatTable(template) {
-        self.$('.table-container').append(template)
-        };
-        console.log("Test============= ")
+    loadData(){
+        let self = this;
+         rpc.query({
+            model: 'tech.process',
+            method: 'get_table_data',
+            }).then(function(data){
+                self.dataTable.data = data;
+                console.log("Data=============: ", data)
+        });
     }
 }
 DataTable.template = "mes-bom.DataTable";
