@@ -3,6 +3,7 @@
     overflow-y: auto;
     overflow-x: auto;
     margin: 5px;
+    border-radius: 5px;
 }
 .styled-table {
     border-collapse: collapse;
@@ -15,11 +16,12 @@
 .styled-table thead tr {
     background-color: #002060;
     color: #ffffff;
-    text-align: left;
+    text-align: center;
 }
 .styled-table th,
 .styled-table td {
     padding: 12px 15px;
+    border-left: 1px solid #dddddd;
 }
 .styled-table tbody tr {
     border-bottom: 1px solid #dddddd;
@@ -31,4 +33,9 @@
 
 .styled-table tbody tr:last-of-type {
     border-bottom: 2px solid #009879;
+}
+.header-container {
+    margin-top: 20px;
+    text-align: center;
+    color: #002060;
 }

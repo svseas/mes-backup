@@ -3,34 +3,36 @@
 
     <t t-name="mes-bom.DataTable" owl="1">
         <link rel="stylesheet" href="/mes-bom/static/src/components/data_table/data_table.css"/>
-        <h2>Data Table</h2>
+        <div class="header-container">
+            <h2>Data Table</h2>
+        </div>
+
         <div class="table-container">
             <table class="styled-table" t-ref="data-table">
                 <thead>
                     <tr>
-                        <th>Level</th>
-                        <th>Bước CĐ</th>
-                        <th t-attf-data-field="display_name">Công đoạn</th>
-                        <th>Nội dung công đoạn</th>
-                        <th>Thành phần đầu ra</th>
-                        <th>Hình ảnh đầu ra</th>
-                        <th>Quy cách thành phần</th>
-                        <th>Mã sản phẩm</th>
-                        <th>Mã thành phần cấp 1</th>
-                        <th>Mã thành phần cấp 2</th>
-                        <th>Mã Nguyên liệu</th>
-                        <th>Tên nguyên liệu</th>
+                        <th t-foreach="dataTable.dict"
+                            t-as="key"
+                            t-key="key_index"
+                            t-att-data-value="key.id">
+                            <t t-out="key"/>
+                        </th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    <tr t-foreach="dataTable.data"
-                        t-as="data"
-                        t-key="data_index"
-                        t-att-data-value="data.id">
-                        <td t-attf-data-field="display_name" t-out="data.display_name"/>
-                        <td t-out="data.code"/>
-                    </tr>
+                    <t t-foreach="dataTable.data" t-as="record" t-key="record_index" t-att-data-value="record.id">
+                        <tr>
+                            <td t-foreach="dataTable.keys" t-as="key" t-key="key_index">
+                                <span t-if="key!='process_names'"><t t-out="record[key]"/></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td t-foreach="dataTable.keys" t-as="key" t-key="key_index">
+                                <span t-if="key=='process_names'"><t t-out="record[key]"/></span>
+                            </td>
+                        </tr>
+                    </t>
                 </tbody>
             </table>
         </div>
