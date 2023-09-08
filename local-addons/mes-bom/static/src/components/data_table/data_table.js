@@ -6,7 +6,12 @@ const rpc = require('web.rpc');
 export class DataTable extends Component {
     setup(){
         super.setup(...arguments);
-        this.dataTable = useState({ data: [], keys: [], dict: [] })
+        this.dataTable = useState({ data: [],
+                                    keys: [],
+                                    dict: [],
+                                    child_process: [],
+                                    i: [1],
+                                    })
         onMounted(()=>{
             this.loadData();
         })
@@ -21,6 +26,22 @@ export class DataTable extends Component {
              self.dataTable.keys = data[1];
              self.dataTable.dict = data[2];
              console.log("Data=============: ", data)
+         }).catch(function(error) {
+            console.error('Error fetching data for ', error);
+         });
+    }
+    loadChildProcess(ids){
+         let self = this;
+         let myArguments = ids
+         console.log("arg================ ", myArguments)
+         rpc.query({
+            model: 'tech.process',
+            method: 'get_child_process',
+            args:[myArguments]
+         }).then(function(data){
+             self.dataTable.child_process = data;
+             self.dataTable.i = i++
+             console.log("DataChild=============: ", data,i )
          }).catch(function(error) {
             console.error('Error fetching data for ', error);
          });
