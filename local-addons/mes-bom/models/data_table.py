@@ -18,7 +18,7 @@ class DataTable(models.Model):
             child_input_names = [input.name for input in record.child_process_inputs]
             record_data = {
                 'level': record.level if hasattr(record, 'level') else '1',
-                'process_level': record.process_level if hasattr(record, 'process_level') else '',
+                'process_level': record.process_level if hasattr(record, 'process_level') else '1.1',
                 'name': record.name,
                 'process_names': ', '.join(child_process_names),
                 'output_names': ', '.join(output_names),

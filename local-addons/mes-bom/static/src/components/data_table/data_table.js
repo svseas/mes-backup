@@ -10,7 +10,6 @@ export class DataTable extends Component {
         onMounted(()=>{
             this.loadData();
         })
-
     }
     loadData(){
         let self = this;
