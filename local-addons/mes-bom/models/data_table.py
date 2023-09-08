@@ -22,6 +22,7 @@ class DataTable(models.Model):
             }
             result.append(record_data)
 
+
         # Define custom labels for each key
         table_keys = {
             'level': "Level",

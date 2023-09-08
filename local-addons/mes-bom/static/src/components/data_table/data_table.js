@@ -10,7 +10,6 @@ export class DataTable extends Component {
                                     keys: [],
                                     dict: [],
                                     child_process: [],
-                                    i: [1],
                                     })
         onMounted(()=>{
             this.loadData();
@@ -40,8 +39,7 @@ export class DataTable extends Component {
             args:[myArguments]
          }).then(function(data){
              self.dataTable.child_process = data;
-             self.dataTable.i = i++
-             console.log("DataChild=============: ", data,i )
+             console.log("DataChild=============: ", data)
          }).catch(function(error) {
             console.error('Error fetching data for ', error);
          });
