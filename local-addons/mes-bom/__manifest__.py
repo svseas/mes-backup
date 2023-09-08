@@ -30,13 +30,15 @@
         'views/mes_views_menu.xml',
         'views/mes_product.xml',
         'views/mes_manufacturing_order.xml',
-        'views/actions.xml',
+        # 'views/actions.xml',
         'data/mes_bom_sample_data.xml',
     ],
 
     'assets': {
         'web.assets_backend': [
-            # 'mes-bom/static/src/js/table_script.js',
+            'mes-bom/static/src/components/*/*.js',
+            'mes-bom/static/src/components/*/*.xml',
+            'mes-bom/static/src/components/*/*.scss',
         ],
     },
 

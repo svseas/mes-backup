@@ -90,6 +90,10 @@
             <field name="res_model">material.line</field>
             <field name="view_mode">tree,form</field>
         </record>
+        <record id="action_main_page_js" model="ir.actions.client">
+            <field name="name">Main Page</field>
+            <field name="tag">mes-bom.action_main_page_js</field>
+        </record>
 
         <menuitem id="menu_mes_tech_process"
                   parent="mrp.menu_mrp_configuration"
@@ -100,6 +104,11 @@
                   parent="mrp.menu_mrp_configuration"
                   name="Material Line"
                   action="material_action"
+                  sequence="40"/>
+        <menuitem id="menu_mes_main_page"
+                  parent="mrp.menu_mrp_root"
+                  name="Main Page"
+                  action="action_main_page_js"
                   sequence="40"/>
 
 
