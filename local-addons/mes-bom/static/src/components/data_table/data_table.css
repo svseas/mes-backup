@@ -2,7 +2,7 @@
     height: 600px;
     overflow-y: auto;
     overflow-x: auto;
-    margin: 5px;
+    margin: 5px 5px 5px 20px;
     border-radius: 5px;
 }
 .styled-table {
@@ -52,4 +52,18 @@
     font-size: 22px;
     font-style: normal;
     font-weight: 600;
+}
+
+.border-x {
+    border: 1px solid salmon;
+}
+
+.nest-parent {
+    position: relative;
+}
+
+.btn-nest {
+    position: absolute;
+    top: 50%;
+    left: 0px;
 }

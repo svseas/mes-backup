@@ -22,24 +22,17 @@
 
                 <tbody>
                     <t t-foreach="dataTable.data" t-as="record" t-key="record_index" t-att-data-value="record.id">
-                        <tr>
+
+                        <tr class="nest-parent">
+                            <t>
+                                <t t-call="() => toggleShow(record_index)"/>
+                                <button class="btn btn-primary btn-nest" t-on-click="() => toggleShow(record_index)">+</button>
+                            </t>
                             <td t-foreach="dataTable.keys" t-as="key" t-key="key_index">
                                     <t t-out="record[key]"/>
                             </td>
                         </tr>
-
-                        <t t-set="childProcessLoaded" t-value="False"/>
-                        <t t-if="!childProcessLoaded">
-                            <t t-set="childProcessLoaded" t-value="True"/>
-                            <t t-esc="loadChildProcess(record.child_process_ids)"/>
-<!--                            <t t-foreach="dataTable.child_process" t-as="child_record" t-key="child_record_index" t-att-data-value="child_record.id">-->
-<!--                                <tr>-->
-<!--                                    <td t-foreach="dataTable.keys" t-as="key" t-key="key_index">-->
-<!--                                        <t t-out="child_record[key]"/>-->
-<!--                                    </td>-->
-<!--                                </tr>-->
-<!--                            </t>-->
-                        </t>
+                        <Nested data="record.child_process" dataTable="dataTable"></Nested>
                     </t>
                 </tbody>
             </table>

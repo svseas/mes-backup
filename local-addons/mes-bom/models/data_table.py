@@ -13,11 +13,12 @@ class DataTable(models.Model):
         for record in data:
             output_names = [output.output.name for output in record.output if output.output]
             child_process_ids = [child.id for child in record.child_process_ids]
+            child_process = self.get_child_process(child_process_ids)
             record_data = {
                 'level': record.level if hasattr(record, 'level') else '1',
                 'process_level': record.process_level if hasattr(record, 'process_level') else '1.1',
                 'name': record.name,
-                'child_process_ids': child_process_ids,
+                'child_process': child_process,
                 'output_name': ', '.join(output_names),
             }
             result.append(record_data)
@@ -64,14 +65,28 @@ class DataTable(models.Model):
 
             for record in data:
                 output_names = [output.output.name for output in record.output if output.output]
-                input_names = [input.name for input in record.child_process_inputs]
-                record_data = {
-                    'level': record.level if hasattr(record, 'level') else '2',
-                    'process_level': record.process_level if hasattr(record, 'process_level') else '1.2',
-                    'process_name': record.name,
-                    'output_name': ', '.join(output_names),
-                    'input_names': ', '.join(input_names),
-                }
-                results.append(record_data)
+                input_names = [input.name for input in record.input]
 
+                cloned_child_process = {}
+                if not input_names:
+                    # Add the process with an empty string for input_names
+                    cloned_child_process = {
+                        'level': record.level if hasattr(record, 'level') else '2',
+                        'process_level': record.process_level if hasattr(record, 'process_level') else '1.2',
+                        'process_name': record.name,
+                        'output_name': ', '.join(output_names),
+                        'input_names': '',  # Empty string or any other indicator you prefer
+                    }
+                    results.append(cloned_child_process)
+
+                for input_name in input_names:
+                        # Clone the record data without creating new records in the database
+                        cloned_child_process = {
+                            'level': record.level if hasattr(record, 'level') else '2',
+                            'process_level': record.process_level if hasattr(record, 'process_level') else '1.2',
+                            'process_name': record.name,
+                            'output_name': ', '.join(output_names),
+                            'input_names': input_name,
+                        }
+                        results.append(cloned_child_process)
         return results
