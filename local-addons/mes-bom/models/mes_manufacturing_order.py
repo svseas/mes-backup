@@ -23,6 +23,8 @@ class ManufacturingOrderLine(models.Model):
     manufacturing_order_id = fields.Many2one('mes.manufacturing.order', string='Manufacturing Order', required=True)
     date_start = fields.Date(string='Date Start', required=True)
     date_end = fields.Date(string='Date End', required=True)
+    stock_entry_date = fields.Date(string='Stock Entry Date', required=True)
+    delivery_date = fields.Date(string='Delivery Date', required=True)
 
     # SQL Constraints to make sure date_end > date_start
     _sql_constraints = [
