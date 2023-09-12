@@ -208,25 +208,46 @@
         <field name="model">mes.work.transition</field>
         <field name="arch" type="xml">
             <form>
-                <group>
+                <group string="General Info">
                     <group>
-                        <field name="code"/>
-                        <field name="workshop"/>
-                        <field name="manufacturing_order_line_id"/>
-                        <field name="product"/>
-                        <field name="bom"/>
-                        <field name="shift"/>
-                        <field name="created_by"/>
-                        <field name="approved_by"/>
+                        <group>
+                            <field name="code"/>
+                            <field name="workshop"/>
+                            <field name="manufacturing_order_line_id"/>
+                            <field name="product"/>
+                            <field name="bom"/>
+                        </group>
+                        <group>
+                            <field name="shift"/>
+                            <field name="created_by"/>
+                            <field name="approved_by"/>
+                            <field name="documents" filename="document_name"/>
+                            <field name="document_name" invisible="1"/>
+                        </group>
                     </group>
+                </group>
+                <group string="Transition Details">
                     <group>
-                        <field name="transition_process_domain" invisible="1"/>
-                        <field name="transition_process" domain="[('id', 'in', transition_process_domain)]"/>
+                        <field name="work_order_transition"/>
+                        <field name="transition_process"/>
                         <label for="transition_quantity" string="Transition Quantity"/>
                         <div class="o_row">
                             <field name="transition_quantity"/>
                             <field name="uom" placeholder="UOM"/>
                         </div>
+                        <label for="ng_redo_transit" string="NG Redo"/>
+                        <div class="o_row">
+                            <field name="ng_redo_transit"/>
+                            <field name="uom" placeholder="UOM"/>
+                        </div>
+                        <label for="ng_not_redo_transit" string="NG Not Redo"/>
+                        <div class="o_row">
+                            <field name="ng_not_redo_transit"/>
+                            <field name="uom" placeholder="UOM"/>
+                        </div>
+                    </group>
+                    <group>
+                        <field name="work_order_receive"/>
                         <field name="reception_process"/>
                         <field name="receptor"/>
                         <label for="reception_quantity" string="Reception Quantity"/>
@@ -234,21 +255,30 @@
                             <field name="reception_quantity"/>
                             <field name="uom" placeholder="UOM"/>
                         </div>
-                        <label for="ng_redo" string="NG Redo"/>
+                        <label for="ng_redo_receive" string="NG Redo"/>
                         <div class="o_row">
-                            <field name="ng_redo"/>
+                            <field name="ng_redo_receive"/>
                             <field name="uom" placeholder="UOM"/>
                         </div>
-                        <label for="ng_not_redo" string="NG Not Redo"/>
+                        <label for="ng_not_redo_receive" string="NG Not Redo"/>
                         <div class="o_row">
-                            <field name="ng_not_redo"/>
+                            <field name="ng_not_redo_receive"/>
                             <field name="uom" placeholder="UOM"/>
                         </div>
-                        <field name="documents" filename="document_name"/>
-                        <field name="document_name" invisible="1"/>
                     </group>
                 </group>
                 <notebook>
+                    <page string="Quality Control">
+                        <field name="quality_control_line">
+                            <tree>
+                                <field name="reception_quantity"/>
+                                <field name="ng_redo"/>
+                                <field name="ng_not_redo"/>
+                                <field name="uom"/>
+                                <field name="work_transition_id"/>
+                            </tree>
+                        </field>
+                    </page>
                     <page string="Activity Log">
                         <field name="activity_log_ids" nolabel="1">
                             <tree>
@@ -288,11 +318,7 @@
                 <field name="reception_process"/>
                 <field name="receptor"/>
                 <field name="reception_quantity"/>
-                <field name="ng_redo"/>
-                <field name="ng_not_redo"/>
             </tree>
         </field>
     </record>
-
-
 </odoo>
