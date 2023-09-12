@@ -29,7 +29,12 @@
 <!--                                <button class="btn btn-primary btn-nest" t-on-click="() => toggleShow(record_index)">+</button>-->
 <!--                            </td>-->
                             <td t-foreach="dataTable.keys" t-as="key" t-key="key_index">
+                                <t t-if="record[key]">
                                     <t t-out="record[key]"/>
+                                </t>
+                                <t t-else="">
+                                    <t t-out="'Enter ' + key"/>
+                                </t>
                             </td>
                         </tr>
                         <Nested data="record.child_process" dataTable="dataTable"></Nested>
