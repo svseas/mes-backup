@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="mes-bom.DataTable" owl="1">
+        <link rel="stylesheet" href="/mes-bom/static/src/components/data_table/data_table.css"/>
+        <div class="header-container">
+            <h2>Data Table</h2>
+        </div>
+
+        <div class="table-container">
+            <table class="styled-table" t-ref="data-table">
+                <thead>
+                    <tr>
+                        <th t-foreach="dataTable.dict"
+                            t-as="key"
+                            t-key="key_index"
+                            t-att-data-value="key.id">
+                            <t t-out="key"/>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <t t-foreach="dataTable.data" t-as="record" t-key="record_index" t-att-data-value="record.id">
+
+                        <tr>
+<!--                            <td >-->
+<!--                                <t t-esc="(() => toggleShow(record_index))"/>-->
+<!--                                <button class="btn btn-primary btn-nest" t-on-click="() => toggleShow(record_index)">+</button>-->
+<!--                            </td>-->
+                            <td t-foreach="dataTable.keys" t-as="key" t-key="key_index">
+                                <t t-if="record[key]">
+                                    <t t-out="record[key]"/>
+                                </t>
+                                <t t-else="">
+                                    <t t-out="'Enter ' + key"/>
+                                </t>
+                            </td>
+                        </tr>
+                        <Nested data="record.child_process" dataTable="dataTable"></Nested>
+                    </t>
+                </tbody>
+            </table>
+        </div>
+    </t>
+</templates>
