@@ -1,8 +1,8 @@
-from odoo import models, fields, api, exceptions
+from odoo import models, fields
 
 
 class InheritProduct(models.Model):
-    _inherit = ['material.material']
+    _inherit = ['mrp.bom']
     _description = 'Table Test'
 
     name = fields.Char(string='Name*')

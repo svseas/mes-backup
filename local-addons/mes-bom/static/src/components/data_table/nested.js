@@ -17,7 +17,7 @@ export class Nested extends Component {
 //        });
     }
     static template = xml`
-        <button class="btn btn-primary" t-on-click="() => { state.isClick = !state.isClick; state.show = !state.show; }">
+        <button class="btn btn-primary fixed-width-button" t-on-click="() => { state.isClick = !state.isClick; state.show = !state.show; }">
             <t t-if="state.isClick">-</t>
             <t t-else="">+</t>
         </button>

@@ -62,10 +62,6 @@
     font-weight: 600;
 }
 
-.border-x {
-    border: 1px solid salmon;
-}
-
 .nest-parent {
     position: relative;
 }
@@ -74,4 +70,7 @@
     position: absolute;
     top: 50%;
     left: 0px;
+}
+.fixed-width-button {
+    width: 30px;
 }
