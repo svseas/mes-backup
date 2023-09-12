@@ -22,16 +22,17 @@
 
                 <tbody>
                     <t t-foreach="dataTable.data" t-as="record" t-key="record_index" t-att-data-value="record.id">
+
                         <tr>
+<!--                            <td >-->
+<!--                                <t t-esc="(() => toggleShow(record_index))"/>-->
+<!--                                <button class="btn btn-primary btn-nest" t-on-click="() => toggleShow(record_index)">+</button>-->
+<!--                            </td>-->
                             <td t-foreach="dataTable.keys" t-as="key" t-key="key_index">
-                                <span t-if="key!='process_names'"><t t-out="record[key]"/></span>
+                                    <t t-out="record[key]"/>
                             </td>
                         </tr>
-                        <tr>
-                            <td t-foreach="dataTable.keys" t-as="key" t-key="key_index">
-                                <span t-if="key=='process_names'"><t t-out="record[key]"/></span>
-                            </td>
-                        </tr>
+                        <Nested data="record.child_process" dataTable="dataTable"></Nested>
                     </t>
                 </tbody>
             </table>
