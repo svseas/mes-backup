@@ -29,14 +29,21 @@ export class Nested extends Component {
                 <t t-if="processed_names.includes(child_record['process_name'])">
                     <tr>
                         <t t-foreach="props.dataTable.keys" t-as="key" t-key="key_index">
-                            <t t-if="!['level', 'process_level', 'process_name', 'output_name'].includes(key)">
-                                <td>
-                                    <t t-out="child_record[key]"/>
-                                </td>
+                            <t t-if="child_record[key]">
+                                <t t-if="!['level', 'process_level', 'process_name', 'output_name', 'name'].includes(key)">
+                                    <td>
+                                        <t t-out="child_record[key]"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td>
+                                        <t t-out="''"/>
+                                    </td>
+                                </t>
                             </t>
                             <t t-else="">
                                 <td>
-                                    <t t-out="''"/>
+                                    <t t-out="'Enter ' + key"/>
                                 </td>
                             </t>
                         </t>
@@ -47,7 +54,12 @@ export class Nested extends Component {
                     <tr>
                         <t t-foreach="props.dataTable.keys" t-as="key" t-key="key_index">
                             <td>
-                                <t t-out="child_record[key]"/>
+                                <t t-if="child_record[key]">
+                                    <t t-out="child_record[key]"/>
+                                </t>
+                                <t t-else="">
+                                    <t t-out="'Enter ' + key"/>
+                                </t>
                             </td>
                         </t>
                     </tr>

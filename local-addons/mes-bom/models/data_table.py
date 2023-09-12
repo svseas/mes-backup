@@ -19,6 +19,7 @@ class DataTable(models.Model):
                 'level': '1',
                 'process_level': f'{index+1}',
                 'name': record.name,
+                'process_name': record.name,
                 'child_process': child_process,
                 'output_name': ', '.join(output_names),
             }
@@ -111,6 +112,7 @@ class DataTable(models.Model):
                     cloned_child_process = {
                         'level': record.level if hasattr(record, 'level') else '2',
                         'process_level': f'{parent_index+1}.{process_level_counter}',
+                        'name': record.name,
                         'process_name': record.name,
                         'output_name': ', '.join(output_names),
                         'input_names': '',  # Empty string or any other indicator you prefer
@@ -122,6 +124,7 @@ class DataTable(models.Model):
                         cloned_child_process = {
                             'level': record.level if hasattr(record, 'level') else '2',
                             'process_level': f'{parent_index+1}.{process_level_counter}',
+                            'name': record.name,
                             'process_name': record.name,
                             'output_name': ', '.join(output_names),
                             'input_names': input_name,
@@ -134,7 +137,7 @@ class DataTable(models.Model):
                             cloned_child_process['material_description'] = material_line.description
                             cloned_child_process['material_mat_qty'] = material_line.mat_qty
                             cloned_child_process['material_mat_uom'] = material_line.mat_uom
-                            cloned_child_process['material_mat_waste'] = material_line.mat_waste
+                            cloned_child_process['material_mat_waste'] = "{:.2%}".format(material_line.mat_waste)
                             cloned_child_process['material_designator'] = material_line.designator
                             cloned_child_process['material_footprint'] = material_line.footprint
                             cloned_child_process['material_lib_ref'] = material_line.lib_ref
