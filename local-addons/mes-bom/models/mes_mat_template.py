@@ -54,3 +54,6 @@ class OutputLine(models.Model):
     output = fields.Many2one('material.material', string='Output')
     output_description = fields.Html('Output Description')
     tech_process_id = fields.Many2one('tech.process')
+
+
+

@@ -1,4 +1,5 @@
 from odoo import fields, api, models, exceptions
+from datetime import datetime
 
 
 class ManufacturingOrderLine(models.Model):
@@ -22,6 +23,8 @@ class ManufacturingOrderLine(models.Model):
     manufacturing_order_id = fields.Many2one('mes.manufacturing.order', string='Manufacturing Order', required=True)
     date_start = fields.Date(string='Date Start', required=True)
     date_end = fields.Date(string='Date End', required=True)
+    stock_entry_date = fields.Date(string='Stock Entry Date', required=True)
+    delivery_date = fields.Date(string='Delivery Date', required=True)
 
     _sql_constraints = [
         ('date_check',
@@ -144,18 +147,19 @@ class WorkOrder(models.Model):
     workshop = fields.Many2one('mes.workshop', string="Workshop", required=True)
     product = fields.Many2one('product.product',
                               string="Product",
-                              required=True,
-                              related='manufacturing_order_line_id.product')
-    bom = fields.Many2one('mrp.bom', string="BOM", required=True, related='manufacturing_order_line_id.bom')
+                              required=True)
+    bom = fields.Many2one('mrp.bom', string="BOM", required=True)
 
-    # @api.onchange('product')
-    # def _onchange_product(self):
-    #     """Update bom domain when product is changed to show only boms related to the product"""
-    #     if self.product:
-    #         domain = [('product_tmpl_id', '=', self.product.product_tmpl_id.id)]
-    #         boms = self.env['mrp.bom'].search(domain)
-    #         self.bom = False  # Clear the bom field
-    #         return {'domain': {'bom': [('id', 'in', boms.ids)]}}
+    @api.onchange('manufacturing_order_line_id')
+    def _onchange_manufacturing_order_line_id(self):
+        """Change Product and BOM based on Manufacturing Order Line"""
+        for rec in self:
+            if rec.manufacturing_order_line_id:
+                rec.product = rec.manufacturing_order_line_id.product
+                rec.bom = rec.manufacturing_order_line_id.bom
+            else:
+                rec.product = False
+                rec.bom = False
 
     process = fields.Many2one('tech.process', string="Process", required=True)
 
@@ -183,7 +187,7 @@ class WorkOrder(models.Model):
     approved_by = fields.Many2one('res.users', string="Approved By", default=lambda self: self.env.user)
     documents = fields.Binary(string="Documents")
     document_name = fields.Char(string="Document Name")
-    machine_type = fields.Many2one('equipment.template', string="Machine")
+    machine_type = fields.Many2one('equipment.usage', string="Machine Type")
     machine = fields.Char(string="Machine")
     worker_type = fields.Many2one('worker.group', string="Worker Type")
     worker_ids = fields.Many2many('res.users', string="Worker List")
@@ -201,19 +205,24 @@ class WorkOrder(models.Model):
 
     @api.onchange('date_created')
     def _onchange_date_created(self):
-        for rec in self:
-            if rec.date_created:
-                date_created = fields.Date.from_string(rec.date_created)
-                if rec.time_start:
-                    time_start = fields.Datetime.from_string(rec.time_start)
-                    rec.time_start = fields.Datetime.to_string(
-                        datetime.datetime.combine(date_created, time_start.time())
-                    )
-                if rec.time_end:
-                    time_end = fields.Datetime.from_string(rec.time_end)
-                    rec.time_end = fields.Datetime.to_string(
-                        datetime.datetime.combine(date_created, time_end.time())
-                    )
+        """Set time_start and time_end to the same date as date_created"""
+        for record in self:
+            if record.date_created:
+                # If time_start or time_end is not set, use a default time
+                if not record.time_start:
+                    record.time_start = datetime.combine(record.date_created,
+                                                         datetime.min.time())  # Default to 00:00:00
+                else:
+                    record.time_start = record.time_start.replace(year=record.date_created.year,
+                                                                  month=record.date_created.month,
+                                                                  day=record.date_created.day)
+
+                if not record.time_end:
+                    record.time_end = datetime.combine(record.date_created, datetime.min.time())  # Default to 00:00:00
+                else:
+                    record.time_end = record.time_end.replace(year=record.date_created.year,
+                                                              month=record.date_created.month,
+                                                              day=record.date_created.day)
 
     _sql_constraints = [
         ('time_check',
@@ -249,8 +258,34 @@ class WorkTransition(models.Model):
     workshop = fields.Many2one('mes.workshop', string="Workshop", required=True)
     manufacturing_order_line_id = fields.Many2one('mes.manufacturing.order.line', string="Manufacturing Order Line",
                                                   required=True)
-    product = fields.Many2one('product.product', string="Product", related='manufacturing_order_line_id.product')
-    bom = fields.Many2one('mrp.bom', string="BOM", related='manufacturing_order_line_id.bom', store=True)
+    work_order_transition = fields.Many2one('mes.work.order', string="Work Order to Transit", required=True)
+    work_order_receive = fields.Many2one('mes.work.order', string="Work Order to Receive", required=True)
+
+    product = fields.Many2one('product.product', string="Product", required=True)
+    bom = fields.Many2one('mrp.bom', string="BOM", required=True)
+
+    @api.onchange('manufacturing_order_line_id')
+    def _get_product_and_bom(self):
+        """Get Product and BOM based on Manufacturing Order Line"""
+        for record in self:
+            if record.manufacturing_order_line_id:
+                record.product = record.manufacturing_order_line_id.product
+                record.bom = record.manufacturing_order_line_id.bom
+            else:
+                record.product = False
+                record.bom = False
+
+    @api.onchange('manufacturing_order_line_id')
+    def _onchange_manufacturing_order_line_id(self):
+        """Change Work Order Transition and Work Order Receive based on Manufacturing Order Line"""
+        if self.manufacturing_order_line_id:
+            domain = [('manufacturing_order_line_id', '=', self.manufacturing_order_line_id.id)]
+            work_orders = self.env['mes.work.order'].search(domain)
+            self.work_order_transition = False
+            self.work_order_receive = False
+            return {'domain': {'work_order_transition': [('id', 'in', work_orders.ids)],
+                               'work_order_receive': [('id', 'in', work_orders.ids)]}}
+
     shift = fields.Selection(
         selection=[('shift_1', 'Shift 1'),
                    ('shift_2', 'Shift 2'),
@@ -261,18 +296,18 @@ class WorkTransition(models.Model):
     created_by = fields.Many2one('res.users', string="Created By", default=lambda self: self.env.user)
     approved_by = fields.Many2one('res.users', string="Approved By", default=lambda self: self.env.user)
     transition_process = fields.Many2one('tech.process', string="Transition Process", store=True)
-    transition_process_domain = fields.Many2many('tech.process', compute='_compute_transition_process_domain')
 
-    @api.depends('bom')
-    def _compute_transition_process_domain(self):
+    @api.onchange('work_order_transition')
+    def _compute_transition_process(self):
+        """Get transition process based on work order transition"""
         for rec in self:
-            if rec.bom:
-                domain = [('bom_ids', '=', rec.bom.id)]
-                rec.transition_process_domain = rec.env['tech.process'].search(domain)
+            if rec.work_order_transition:
+                rec.transition_process = rec.work_order_transition.process
             else:
-                rec.transition_process_domain = rec.env['tech.process']
+                rec.transition_process = False
 
     transition_quantity = fields.Float(string="Transition Quantity", required=True, default=1.00)
+    receive_quantity = fields.Float(string="Receive Quantity", required=True, default=1.00)
 
     @api.constrains('transition_quantity')
     def _check_transition_quantity(self):
@@ -312,8 +347,39 @@ class WorkTransition(models.Model):
                     rec.reception_process = False
                 return {'domain': {'reception_process': [('id', '=', rec.reception_process.id)]}}
 
+    @api.onchange('reception_process')
+    def _onchange_reception_process(self):
+        """Select Work Order Receive based on reception process"""
+        for rec in self:
+            if rec.reception_process:
+                domain = [('process', '=', rec.reception_process.id)]
+                work_orders = rec.env['mes.work.order'].search(domain)
+                rec.work_order_receive = False
+                return {'domain': {'work_order_receive': [('id', 'in', work_orders.ids)]}}
+
+    transistor = fields.Many2one('res.users', string="Transistor", default=lambda self: self.env.user)
     receptor = fields.Many2one('res.users', string="Receptor", default=lambda self: self.env.user)
+
+    @api.onchange('work_order_transition')
+    def _onchange_work_order_transition(self):
+        """Change transistor based on Work Order Transition"""
+        for rec in self:
+            if rec.work_order_transition:
+                rec.transistor = rec.work_order_transition.worker_ids.id
+            else:
+                rec.transistor = False
+
+    @api.onchange('work_order_receive')
+    def _onchange_work_order_receive(self):
+        """Change receptor based on Work Order Receive"""
+        for rec in self:
+            if rec.work_order_receive:
+                rec.receptor = rec.work_order_receive.worker_ids.id
+            else:
+                rec.receptor = False
+
     reception_quantity = fields.Float(string="Reception Quantity", required=True, default=1.00)
+    quality_control_line = fields.One2many('quality.control.line', 'work_transition_id', string="Quality Control Line")
 
     @api.constrains('reception_quantity')
     def _check_reception_quantity(self):
@@ -321,8 +387,10 @@ class WorkTransition(models.Model):
             if rec.reception_quantity <= 0:
                 raise exceptions.ValidationError('Reception quantity must be greater than 0.')
 
-    ng_redo = fields.Float(string="NG Redo", required=True)
-    ng_not_redo = fields.Float(string="NG Not Redo", required=True)
+    ng_redo_transit = fields.Float(string="NG Redo Transit", required=True)
+    ng_not_redo_transit = fields.Float(string="NG Not Redo", required=True)
+    ng_redo_receive = fields.Float(string="NG Redo Receive", required=True)
+    ng_not_redo_receive = fields.Float(string="NG Not Redo Receive", required=True)
     documents = fields.Binary(string="Documents")
     document_name = fields.Char(string="Document Name")
     activity_log_ids = fields.One2many('mes.work.transition.activity.log', 'work_transition_id', string="Activity Log")
@@ -335,4 +403,14 @@ class WorkTransition(models.Model):
         activity_date = fields.Datetime(string="Activity Date", default=fields.Datetime.now, required=True)
         user_id = fields.Many2one('res.users', string="User", default=lambda self: self.env.user, required=True)
         description = fields.Text(string="Description", required=True)
+        work_transition_id = fields.Many2one('mes.work.transition', string="Work Transition", ondelete='cascade')
+
+    class QualityControlLine(models.Model):
+        _name = "quality.control.line"
+        _description = "Quality Control Line"
+
+        reception_quantity = fields.Float(string="Reception Quantity", required=True)
+        ng_redo = fields.Float(string="NG Redo", required=True)
+        ng_not_redo = fields.Float(string="NG Not Redo", required=True)
+        uom = fields.Char(string="UOM", required=True)
         work_transition_id = fields.Many2one('mes.work.transition', string="Work Transition", ondelete='cascade')
