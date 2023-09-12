@@ -8,14 +8,19 @@ export class Nested extends Component {
                     "dataTable",
     ]
     setup(){
-        this.state = useState({show: false})
+        this.state = useState({show: false,
+                               isClick: false,
+        })
 
 //        onWillUpdateProps(nextProps => {
 //          return this.state.show = !this.props.isToggle[this.props.btnIndex];
 //        });
     }
     static template = xml`
-        <button class="btn btn-primary" t-on-click="() => state.show = !state.show">+</button>
+        <button class="btn btn-primary" t-on-click="() => { state.isClick = !state.isClick; state.show = !state.show; }">
+            <t t-if="state.isClick">-</t>
+            <t t-else="">+</t>
+        </button>
         <t class="nest-child" t-if="state.show">
 
             <t t-set="processed_names" t-value="[]"/>
