@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="mes-bom.MainPage" owl="1">
+        <link rel="stylesheet" href="/mes-bom/static/src/components/main_page/main_page.scss"/>
+        <div class="container">
+            <div>Test</div>
+        </div>
+    </t>
+</templates>
