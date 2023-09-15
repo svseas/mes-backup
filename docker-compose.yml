@@ -48,7 +48,7 @@
           context: .
           dockerfile: Dockerfile-nginx
       ports:
-          - "8069:8069"
+          - "8068:8069"
       networks:
         - odoo
 
