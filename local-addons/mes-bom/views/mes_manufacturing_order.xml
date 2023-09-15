@@ -50,6 +50,9 @@
                                 <field name="uom" placeholder="UOM"/>
                                 <field name="date_start"/>
                                 <field name="date_end"/>
+                                <field name="stock_entry_date"/>
+                                <field name="delivery_date"/>
+                                <field name="packaging_requirements"/>
                             </tree>
                         </field>
                     </page>

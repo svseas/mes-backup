@@ -28,6 +28,7 @@ class ManufacturingOrderLine(models.Model):
 
     stock_entry_date = fields.Date(string='Stock Entry Date', required=True)
     delivery_date = fields.Date(string='Delivery Date', required=True)
+    packaging_requirements = fields.Char(string='Packaging Requirements', required=True)
 
     _sql_constraints = [
         ('date_check',
@@ -37,12 +38,11 @@ class ManufacturingOrderLine(models.Model):
 
 
 class DeliverySchedule(models.Model):
-    """TO DO: MOVE THIS MODEL TO SALE ORDER LATER. Delivery Schedule - Tiến độ giao hàng"""
+    """TODO: MOVE THIS MODEL TO SALE ORDER LATER. Delivery Schedule - Tiến độ giao hàng"""
     _name = 'mes.delivery.schedule'
 
     manufacturing_order_id = fields.Many2one('mes.manufacturing.order', string='Manufacturing Order', required=True)
-    product_id = fields.Many2one('product.product', string='Product', required=True,
-                                 compute='_compute_product_id', store=True, readonly=False)
+    product_id = fields.Many2one('product.product', string='Product', required=True, compute='_compute_product_id', store=True, readonly=False)
 
     @api.depends('manufacturing_order_id', 'manufacturing_order_id.manufacturing_order_line_ids.product')
     def _compute_product_id(self):
@@ -59,7 +59,7 @@ class DeliverySchedule(models.Model):
     bom_id = fields.Many2one('mrp.bom', string='BOM', required=True,
                              compute='_compute_bom_id', store=True, readonly=False)
 
-    @api.depends('product_id')
+    @api.depends('product_id', 'manufacturing_order_id', 'manufacturing_order_id.manufacturing_order_line_ids.product')
     def _compute_bom_id(self):
         for schedule in self:
             if schedule.product_id:
@@ -73,10 +73,27 @@ class DeliverySchedule(models.Model):
                 schedule.bom_id = False
 
     quantity = fields.Float(string='Quantity', required=True)
-    uom = fields.Char(string='UOM', required=True)
-    stock_entry_date = fields.Date(string='Stock Entry Date', required=True)
-    delivery_date = fields.Date(string='Delivery Date', required=True)
+    uom = fields.Char(string='UOM', compute='_compute_uom', store=True, readonly=False)
 
+    @api.depends('product_id', 'manufacturing_order_id')
+    def _compute_uom(self):
+        for schedule in self:
+            if schedule.product_id and schedule.manufacturing_order_id:
+                # Find the corresponding ManufacturingOrderLine record
+                mol = self.env['mes.manufacturing.order.line'].search([
+                    ('product', '=', schedule.product_id.id),
+                    ('manufacturing_order_id', '=', schedule.manufacturing_order_id.id)
+                ], limit=1)
+
+                # If found, assign the UOM from that record to the uom field of the DeliverySchedule
+                if mol:
+                    schedule.uom = mol.uom
+                else:
+                    schedule.uom = False
+            else:
+                schedule.uom = False
+    
+    delivery_date = fields.Date(string='Delivery Date', required=True)
 
 class ManufacturingOrder(models.Model):
     """MANUFACTURING ORDER - Lệnh sản xuất"""
