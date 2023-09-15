@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+  <record id="mes_procurement_plan_action" model="ir.actions.act_window">
+    <field name="name">Procurement Plan</field>
+    <field name="res_model">mes.procurement.plan</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <record id="mes_procurement_plan_menu_root" model="ir.ui.menu">
+    <field name="name">Procurement Plan</field>
+    <field name="parent_id" ref="mrp.menu_mrp_root"/>
+    <field name="sequence" type="int">20</field>
+  </record>
+
+  <record id="procurement_menu" model="ir.ui.menu">
+    <field name="name">Procurement Plan</field>
+    <field name="parent_id" ref="mes_manufacturing_order_menu_root"/>
+    <field name="action" ref="mes_procurement_plan_action"/>
+    <field name="sequence" type="int">20</field>
+  </record>
+
+
+  <!--  PROCUREMENT PLAN VIEW FORM, TREE-->
+  <record id="procurement_plan_view_form" model="ir.ui.view">
+    <field name="name">mes.procurement.plan.view.form</field>
+    <field name="model">mes.procurement.plan</field>
+    <field name="arch" type="xml">
+      <form>
+        <group>
+          <field name="code"/>
+          <field name="manufacturing_order_id"/>
+        </group>
+      </form>
+    </field>
+  </record>
+
+  <record id="procurement_plan_view_tree" model="ir.ui.view">
+    <field name="name">mes.procurement.plan.view.tree</field>
+    <field name="model">mes.procurement.plan</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="code"/>
+        <field name="manufacturing_order_id"/>
+      </tree>
+    </field>
+  </record>
+</odoo>

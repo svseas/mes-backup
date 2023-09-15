@@ -36,6 +36,28 @@ class ManufacturingOrderLine(models.Model):
          'Date end must be after date start.')
     ]
 
+    delivery_schedule = fields.One2many('delivery.schedule', 'manufacturing_order_line_id', string='Delivery Schedule')
+
+
+class DeliverySchedule(models.Model):
+    _name = 'delivery.schedule'
+    _rec_name = 'delivery_date'
+
+    manufacturing_order_line_id = fields.Many2one('mes.manufacturing.order.line', string='Manufacturing Order Line')
+    product = fields.Many2one('product.product', string='Product', related='manufacturing_order_line_id.product')
+    bom = fields.Many2one('mrp.bom', string='BOM', related='manufacturing_order_line_id.bom')
+    quantity = fields.Float(string='Quantity', required=True)
+    uom = fields.Char(string='UOM', required=True)
+    delivery_date = fields.Date(string='Delivery Date', required=True)
+
+    @api.onchange('manufacturing_order_line_id')
+    def _onchange_manufacturing_order_line_id(self):
+        for rec in self:
+            if rec.manufacturing_order_line_id:
+                rec.product = rec.manufacturing_order_line_id.product
+                rec.bom = rec.manufacturing_order_line_id.bom
+                rec.uom = rec.manufacturing_order_line_id.uom
+
 
 class ManufacturingOrder(models.Model):
     """MANUFACTURING ORDER - Lệnh sản xuất"""

@@ -1,328 +1,360 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-    <!--    MANUFACTURING ORDER MENU ITEMS AND VIEWS-->
-    <record id="mes_manufacturing_order_action" model="ir.actions.act_window">
-        <field name="name">Manufacturing Order</field>
-        <field name="res_model">mes.manufacturing.order</field>
-        <field name="view_mode">tree,form</field>
-    </record>
+  <!--    MANUFACTURING ORDER MENU ITEMS AND VIEWS-->
+  <record id="mes_manufacturing_order_action" model="ir.actions.act_window">
+    <field name="name">Manufacturing Order</field>
+    <field name="res_model">mes.manufacturing.order</field>
+    <field name="view_mode">tree,form</field>
+  </record>
 
-    <record id="mes_manufacturing_order_menu_root" model="ir.ui.menu">
-        <field name="name">Manufacturing Order</field>
-        <field name="parent_id" ref="mrp.menu_mrp_root"/>
-        <field name="sequence" type="int">20</field>
-    </record>
+  <record id="mes_manufacturing_order_menu_root" model="ir.ui.menu">
+    <field name="name">Manufacturing Order</field>
+    <field name="parent_id" ref="mrp.menu_mrp_root"/>
+    <field name="sequence" type="int">20</field>
+  </record>
 
-    <record id="manufacturing_order_menu" model="ir.ui.menu">
-        <field name="name">Manufacturing Order</field>
-        <field name="parent_id" ref="mes_manufacturing_order_menu_root"/>
-        <field name="action" ref="mes_manufacturing_order_action"/>
-        <field name="sequence" type="int">10</field>
-    </record>
+  <record id="manufacturing_order_menu" model="ir.ui.menu">
+    <field name="name">Manufacturing Order</field>
+    <field name="parent_id" ref="mes_manufacturing_order_menu_root"/>
+    <field name="action" ref="mes_manufacturing_order_action"/>
+    <field name="sequence" type="int">10</field>
+  </record>
 
-    <record id="manufacturing_order_view_form" model="ir.ui.view">
-        <field name="name">manufacturing.order.view.form</field>
-        <field name="model">mes.manufacturing.order</field>
-        <field name="arch" type="xml">
-            <form>
-                <group>
-                    <group>
-                        <field name="name"/>
-                        <field name="code"/>
-                        <field name="created_by"/>
-                        <field name="approved_by"/>
-                        <field name="date_start"/>
-                        <field name="date_end"/>
-                    </group>
-                    <group>
-                        <field name="contract_id"/>
-                        <field name="customer_id"/>
-                        <field name="document"/>
-                    </group>
-                </group>
-                <notebook>
-                    <page string="Manufacturing Order Line">
-                        <field name="manufacturing_order_line_ids">
-                            <tree>
-                                <field name="product"/>
-                                <field name="bom"/>
-                                <field name="quantity"/>
-                                <field name="uom" placeholder="UOM"/>
-                                <field name="date_start"/>
-                                <field name="date_end"/>
-                                <field name="stock_entry_date"/>
-                                <field name="delivery_date"/>
-                                <field name="packaging_requirements"/>
-                            </tree>
-                        </field>
-                    </page>
-                </notebook>
-            </form>
-        </field>
-    </record>
-
-    <record id="manufacturing_order_view_tree" model="ir.ui.view">
-        <field name="name">manufacturing.order.view.tree</field>
-        <field name="model">mes.manufacturing.order</field>
-        <field name="arch" type="xml">
-            <tree>
-                <field name="name"/>
-                <field name="code"/>
-                <field name="manufacturing_order_line_ids" widget="many2many_tags"/>
-                <field name="created_by"/>
-                <field name="approved_by"/>
+  <record id="manufacturing_order_view_form" model="ir.ui.view">
+    <field name="name">manufacturing.order.view.form</field>
+    <field name="model">mes.manufacturing.order</field>
+    <field name="arch" type="xml">
+      <form>
+        <group>
+          <group>
+            <field name="name"/>
+            <field name="code"/>
+            <field name="created_by"/>
+            <field name="approved_by"/>
+            <field name="date_start"/>
+            <field name="date_end"/>
+          </group>
+          <group>
+            <field name="contract_id"/>
+            <field name="customer_id"/>
+            <field name="document"/>
+          </group>
+        </group>
+        <notebook>
+          <page string="Manufacturing Order Line">
+            <field name="manufacturing_order_line_ids">
+              <tree>
+                <field name="product"/>
+                <field name="bom"/>
+                <field name="quantity"/>
+                <field name="uom" placeholder="UOM"/>
                 <field name="date_start"/>
                 <field name="date_end"/>
-                <field name="contract_id"/>
-                <field name="customer_id"/>
-                <field name="document"/>
-            </tree>
-        </field>
-    </record>
+                <field name="stock_entry_date"/>
+                <field name="delivery_date"/>
+                <field name="packaging_requirements"/>
+                <field name="delivery_schedule" widget="many2many_tags"/>
+              </tree>
+            </field>
+          </page>
+        </notebook>
+      </form>
+    </field>
+  </record>
 
-    <!-- Work Order Menu Items and Views -->
-    <record id="work_order_action" model="ir.actions.act_window">
-        <field name="name">Work Order</field>
-        <field name="res_model">mes.work.order</field>
-        <field name="view_mode">tree,form</field>
-    </record>
+  <record id="manufacturing_order_view_tree" model="ir.ui.view">
+    <field name="name">manufacturing.order.view.tree</field>
+    <field name="model">mes.manufacturing.order</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name"/>
+        <field name="code"/>
+        <field name="manufacturing_order_line_ids" widget="many2many_tags"/>
+        <field name="created_by"/>
+        <field name="approved_by"/>
+        <field name="date_start"/>
+        <field name="date_end"/>
+        <field name="contract_id"/>
+        <field name="customer_id"/>
+        <field name="document"/>
+      </tree>
+    </field>
+  </record>
 
-    <record id="work_order_menu" model="ir.ui.menu">
-        <field name="name">Work Order</field>
-        <field name="parent_id" ref="mes_manufacturing_order_menu_root"/>
-        <field name="action" ref="work_order_action"/>
-        <field name="sequence" type="int">10</field>
-    </record>
-
-    <!--    WORK ORDER VIEW FORM-->
-    <record id="work_order_view_form" model="ir.ui.view">
-        <field name="name">work.order.view.form</field>
-        <field name="model">mes.work.order</field>
-        <field name="arch" type="xml">
-            <form>
-                <group>
-                    <group>
-                        <group>
-                            <field name="code"/>
-                            <field name="manufacturing_order_line_id"/>
-                            <field name="manufacturing_order_id"/>
-                            <field name="workshop"/>
-                            <field name="product"/>
-                            <field name="bom"/>
-                            <field name="process"/>
-                            <field name="sfg"/>
-                            <field name="created_by"/>
-                            <field name="approved_by"/>
-                            <field name="documents" filename="document_name"/>
-                            <field name="document_name" invisible="1"/>
-                        </group>
-                        <group>
-                            <field name="machine_type"/>
-                            <field name="machine"/>
-                            <field name="worker_type"/>
-                            <field name="worker_ids" widget="many2many_tags"/>
-                            <field name="date_created"/>
-                            <field name="time_start"/>
-                            <field name="time_end"/>
-                            <label for="quantity" string="Quantity"/>
-                            <div class="o_row">
-                                <field name="quantity"/>
-                                <field name="uom" placeholder="UOM"/>
-                            </div>
-                            <label for="quantity_new" string="Quantity New"/>
-                            <div class="o_row">
-                                <field name="quantity_new"/>
-                                <field name="uom" placeholder="UOM"/>
-                            </div>
-                            <label for="quantity_redo" string="Quantity Redo"/>
-                            <div class="o_row">
-                                <field name="quantity_redo"/>
-                                <field name="uom" placeholder="UOM"/>
-                            </div>
-                            <field name="status"/>
-                        </group>
-                    </group>
-                </group>
-                <notebook>
-                    <page string="Productivity">
-                        <field name="productivity_report">
-                            <tree>
-                                <field name="shift"/>
-                                <field name="quantity"/>
-                                <field name="work_order_id"/>
-                            </tree>
-                        </field>
-                    </page>
-
-                </notebook>
-            </form>
-        </field>
-    </record>
-
-    <!--    WORK ORDER VIEW TREE-->
-    <record id="work_order_view_tree" model="ir.ui.view">
-        <field name="name">work.order.view.tree</field>
-        <field name="model">mes.work.order</field>
-        <field name="arch" type="xml">
+  <!--  Manufacturing Order Line Views-->
+  <record id="manufacturing_order_line_view_form" model="ir.ui.view">
+    <field name="name">manufacturing.order.line.view.form</field>
+    <field name="model">mes.manufacturing.order.line</field>
+    <field name="arch" type="xml">
+      <form>
+        <group>
+          <field name="manufacturing_order_id" invisible="1"/>
+          <field name="product"/>
+          <field name="bom"/>
+          <field name="quantity"/>
+          <field name="uom" placeholder="UOM"/>
+          <field name="date_start"/>
+          <field name="date_end"/>
+          <field name="stock_entry_date"/>
+          <field name="delivery_date"/>
+          <field name="packaging_requirements"/>
+          <field name="delivery_schedule">
             <tree>
-                <field name="code"/>
-                <field name="workshop"/>
-                <field name="product"/>
-                <field name="bom"/>
-                <field name="process"/>
-                <field name="sfg"/>
-                <field name="created_by"/>
-                <field name="approved_by"/>
-                <field name="documents" filename="document_name"/>
-                <field name="document_name" invisible="1"/>
-                <field name="machine_type"/>
-                <field name="machine"/>
-                <field name="worker_type"/>
-                <field name="worker_ids" widget="many2many_tags"/>
-                <field name="date_created"/>
-                <field name="time_start"/>
-                <field name="time_end"/>
+              <field name="product"/>
+              <field name="bom"/>
+              <field name="quantity"/>
+              <field name="uom" placeholder="UOM"/>
+              <field name="delivery_date"/>
+            </tree>
+          </field>
+        </group>
+      </form>
+    </field>
+  </record>
+
+  <!-- Work Order Menu Items and Views -->
+  <record id="work_order_action" model="ir.actions.act_window">
+    <field name="name">Work Order</field>
+    <field name="res_model">mes.work.order</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <record id="work_order_menu" model="ir.ui.menu">
+    <field name="name">Work Order</field>
+    <field name="parent_id" ref="mes_manufacturing_order_menu_root"/>
+    <field name="action" ref="work_order_action"/>
+    <field name="sequence" type="int">10</field>
+  </record>
+
+  <!--    WORK ORDER VIEW FORM-->
+  <record id="work_order_view_form" model="ir.ui.view">
+    <field name="name">work.order.view.form</field>
+    <field name="model">mes.work.order</field>
+    <field name="arch" type="xml">
+      <form>
+        <group>
+          <group>
+            <group>
+              <field name="code"/>
+              <field name="manufacturing_order_line_id"/>
+              <field name="manufacturing_order_id"/>
+              <field name="workshop"/>
+              <field name="product"/>
+              <field name="bom"/>
+              <field name="process"/>
+              <field name="sfg"/>
+              <field name="created_by"/>
+              <field name="approved_by"/>
+              <field name="documents" filename="document_name"/>
+              <field name="document_name" invisible="1"/>
+            </group>
+            <group>
+              <field name="machine_type"/>
+              <field name="machine"/>
+              <field name="worker_type"/>
+              <field name="worker_ids" widget="many2many_tags"/>
+              <field name="date_created"/>
+              <field name="time_start"/>
+              <field name="time_end"/>
+              <label for="quantity" string="Quantity"/>
+              <div class="o_row">
                 <field name="quantity"/>
+                <field name="uom" placeholder="UOM"/>
+              </div>
+              <label for="quantity_new" string="Quantity New"/>
+              <div class="o_row">
                 <field name="quantity_new"/>
+                <field name="uom" placeholder="UOM"/>
+              </div>
+              <label for="quantity_redo" string="Quantity Redo"/>
+              <div class="o_row">
                 <field name="quantity_redo"/>
-                <field name="uom"/>
-                <field name="status"/>
-            </tree>
-        </field>
-    </record>
-
-    <!-- Work Transition Menu Items and Views -->
-    <record id="work_transition_action" model="ir.actions.act_window">
-        <field name="name">Work Transition</field>
-        <field name="res_model">mes.work.transition</field>
-        <field name="view_mode">tree,form</field>
-    </record>
-
-    <record id="work_transition_menu" model="ir.ui.menu">
-        <field name="name">Work Transition</field>
-        <field name="parent_id" ref="mes_manufacturing_order_menu_root"/>
-        <field name="action" ref="work_transition_action"/>
-        <field name="sequence" type="int">40</field>
-    </record>
-
-    <!--    Work Transition Form View-->
-
-    <record id="work_transition_view_form" model="ir.ui.view">
-        <field name="name">work.transition.view.form</field>
-        <field name="model">mes.work.transition</field>
-        <field name="arch" type="xml">
-            <form>
-                <group string="General Info">
-                    <group>
-                        <group>
-                            <field name="code"/>
-                            <field name="workshop"/>
-                            <field name="manufacturing_order_line_id"/>
-                            <field name="product"/>
-                            <field name="bom"/>
-                        </group>
-                        <group>
-                            <field name="shift"/>
-                            <field name="created_by"/>
-                            <field name="approved_by"/>
-                            <field name="documents" filename="document_name"/>
-                            <field name="document_name" invisible="1"/>
-                        </group>
-                    </group>
-                </group>
-                <group string="Transition Details">
-                    <group>
-                        <field name="work_order_transition"/>
-                        <field name="transition_process"/>
-                        <label for="transition_quantity" string="Transition Quantity"/>
-                        <div class="o_row">
-                            <field name="transition_quantity"/>
-                            <field name="uom" placeholder="UOM"/>
-                        </div>
-                        <label for="ng_redo_transit" string="NG Redo"/>
-                        <div class="o_row">
-                            <field name="ng_redo_transit"/>
-                            <field name="uom" placeholder="UOM"/>
-                        </div>
-                        <label for="ng_not_redo_transit" string="NG Not Redo"/>
-                        <div class="o_row">
-                            <field name="ng_not_redo_transit"/>
-                            <field name="uom" placeholder="UOM"/>
-                        </div>
-                    </group>
-                    <group>
-                        <field name="work_order_receive"/>
-                        <field name="reception_process"/>
-                        <field name="receptor"/>
-                        <label for="reception_quantity" string="Reception Quantity"/>
-                        <div class="o_row">
-                            <field name="reception_quantity"/>
-                            <field name="uom" placeholder="UOM"/>
-                        </div>
-                        <label for="ng_redo_receive" string="NG Redo"/>
-                        <div class="o_row">
-                            <field name="ng_redo_receive"/>
-                            <field name="uom" placeholder="UOM"/>
-                        </div>
-                        <label for="ng_not_redo_receive" string="NG Not Redo"/>
-                        <div class="o_row">
-                            <field name="ng_not_redo_receive"/>
-                            <field name="uom" placeholder="UOM"/>
-                        </div>
-                    </group>
-                </group>
-                <notebook>
-                    <page string="Quality Control">
-                        <field name="quality_control_line">
-                            <tree>
-                                <field name="reception_quantity"/>
-                                <field name="ng_redo"/>
-                                <field name="ng_not_redo"/>
-                                <field name="uom"/>
-                                <field name="work_transition_id"/>
-                            </tree>
-                        </field>
-                    </page>
-                    <page string="Activity Log">
-                        <field name="activity_log_ids" nolabel="1">
-                            <tree>
-                                <field name="activity_date"/>
-                                <field name="user_id"/>
-                                <field name="description"/>
-                            </tree>
-                            <form>
-                                <group>
-                                    <field name="activity_date"/>
-                                    <field name="user_id"/>
-                                    <field name="description"/>
-                                </group>
-                            </form>
-                        </field>
-                    </page>
-                </notebook>
-            </form>
-        </field>
-    </record>
-
-    <!--    Work Transition Tree View-->
-    <record id="work_transition_view_tree" model="ir.ui.view">
-        <field name="name">work.transition.view.tree</field>
-        <field name="model">mes.work.transition</field>
-        <field name="arch" type="xml">
-            <tree>
-                <field name="code"/>
-                <field name="workshop"/>
-                <field name="manufacturing_order_line_id"/>
-                <field name="product"/>
-                <field name="bom"/>
+                <field name="uom" placeholder="UOM"/>
+              </div>
+              <field name="status"/>
+            </group>
+          </group>
+        </group>
+        <notebook>
+          <page string="Productivity">
+            <field name="productivity_report">
+              <tree>
                 <field name="shift"/>
-                <field name="approved_by"/>
-                <field name="transition_process"/>
-                <field name="transition_quantity"/>
-                <field name="reception_process"/>
-                <field name="receptor"/>
+                <field name="quantity"/>
+                <field name="work_order_id"/>
+              </tree>
+            </field>
+          </page>
+
+        </notebook>
+      </form>
+    </field>
+  </record>
+
+  <!--    WORK ORDER VIEW TREE-->
+  <record id="work_order_view_tree" model="ir.ui.view">
+    <field name="name">work.order.view.tree</field>
+    <field name="model">mes.work.order</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="code"/>
+        <field name="workshop"/>
+        <field name="product"/>
+        <field name="bom"/>
+        <field name="process"/>
+        <field name="sfg"/>
+        <field name="created_by"/>
+        <field name="approved_by"/>
+        <field name="documents" filename="document_name"/>
+        <field name="document_name" invisible="1"/>
+        <field name="machine_type"/>
+        <field name="machine"/>
+        <field name="worker_type"/>
+        <field name="worker_ids" widget="many2many_tags"/>
+        <field name="date_created"/>
+        <field name="time_start"/>
+        <field name="time_end"/>
+        <field name="quantity"/>
+        <field name="quantity_new"/>
+        <field name="quantity_redo"/>
+        <field name="uom"/>
+        <field name="status"/>
+      </tree>
+    </field>
+  </record>
+
+  <!-- Work Transition Menu Items and Views -->
+  <record id="work_transition_action" model="ir.actions.act_window">
+    <field name="name">Work Transition</field>
+    <field name="res_model">mes.work.transition</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <record id="work_transition_menu" model="ir.ui.menu">
+    <field name="name">Work Transition</field>
+    <field name="parent_id" ref="mes_manufacturing_order_menu_root"/>
+    <field name="action" ref="work_transition_action"/>
+    <field name="sequence" type="int">40</field>
+  </record>
+
+  <!--    Work Transition Form View-->
+
+  <record id="work_transition_view_form" model="ir.ui.view">
+    <field name="name">work.transition.view.form</field>
+    <field name="model">mes.work.transition</field>
+    <field name="arch" type="xml">
+      <form>
+        <group string="General Info">
+          <group>
+            <group>
+              <field name="code"/>
+              <field name="workshop"/>
+              <field name="manufacturing_order_line_id"/>
+              <field name="product"/>
+              <field name="bom"/>
+            </group>
+            <group>
+              <field name="shift"/>
+              <field name="created_by"/>
+              <field name="approved_by"/>
+              <field name="documents" filename="document_name"/>
+              <field name="document_name" invisible="1"/>
+            </group>
+          </group>
+        </group>
+        <group string="Transition Details">
+          <group>
+            <field name="work_order_transition"/>
+            <field name="transition_process"/>
+            <label for="transition_quantity" string="Transition Quantity"/>
+            <div class="o_row">
+              <field name="transition_quantity"/>
+              <field name="uom" placeholder="UOM"/>
+            </div>
+            <label for="ng_redo_transit" string="NG Redo"/>
+            <div class="o_row">
+              <field name="ng_redo_transit"/>
+              <field name="uom" placeholder="UOM"/>
+            </div>
+            <label for="ng_not_redo_transit" string="NG Not Redo"/>
+            <div class="o_row">
+              <field name="ng_not_redo_transit"/>
+              <field name="uom" placeholder="UOM"/>
+            </div>
+          </group>
+          <group>
+            <field name="work_order_receive"/>
+            <field name="reception_process"/>
+            <field name="receptor"/>
+            <label for="reception_quantity" string="Reception Quantity"/>
+            <div class="o_row">
+              <field name="reception_quantity"/>
+              <field name="uom" placeholder="UOM"/>
+            </div>
+            <label for="ng_redo_receive" string="NG Redo"/>
+            <div class="o_row">
+              <field name="ng_redo_receive"/>
+              <field name="uom" placeholder="UOM"/>
+            </div>
+            <label for="ng_not_redo_receive" string="NG Not Redo"/>
+            <div class="o_row">
+              <field name="ng_not_redo_receive"/>
+              <field name="uom" placeholder="UOM"/>
+            </div>
+          </group>
+        </group>
+        <notebook>
+          <page string="Quality Control">
+            <field name="quality_control_line">
+              <tree>
                 <field name="reception_quantity"/>
-            </tree>
-        </field>
-    </record>
+                <field name="ng_redo"/>
+                <field name="ng_not_redo"/>
+                <field name="uom"/>
+                <field name="work_transition_id"/>
+              </tree>
+            </field>
+          </page>
+          <page string="Activity Log">
+            <field name="activity_log_ids" nolabel="1">
+              <tree>
+                <field name="activity_date"/>
+                <field name="user_id"/>
+                <field name="description"/>
+              </tree>
+              <form>
+                <group>
+                  <field name="activity_date"/>
+                  <field name="user_id"/>
+                  <field name="description"/>
+                </group>
+              </form>
+            </field>
+          </page>
+        </notebook>
+      </form>
+    </field>
+  </record>
+
+  <!--    Work Transition Tree View-->
+  <record id="work_transition_view_tree" model="ir.ui.view">
+    <field name="name">work.transition.view.tree</field>
+    <field name="model">mes.work.transition</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="code"/>
+        <field name="workshop"/>
+        <field name="manufacturing_order_line_id"/>
+        <field name="product"/>
+        <field name="bom"/>
+        <field name="shift"/>
+        <field name="approved_by"/>
+        <field name="transition_process"/>
+        <field name="transition_quantity"/>
+        <field name="reception_process"/>
+        <field name="receptor"/>
+        <field name="reception_quantity"/>
+      </tree>
+    </field>
+  </record>
 </odoo>

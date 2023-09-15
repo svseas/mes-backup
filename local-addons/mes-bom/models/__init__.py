@@ -8,3 +8,4 @@ from . import mes_tech_process
 from . import mes_manufacturing_order
 from . import data_table
 from . import inhe_product
+from . import mes_manufacturing_plan
