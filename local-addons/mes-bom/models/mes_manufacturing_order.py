@@ -25,12 +25,49 @@ class ManufacturingOrderLine(models.Model):
     date_end = fields.Date(string='Date End', required=True)
 
     # SQL Constraints to make sure date_end > date_start
+
+    stock_entry_date = fields.Date(string='Stock Entry Date', required=True)
+    delivery_date = fields.Date(string='Delivery Date', required=True)
+    packaging_requirements = fields.Char(string='Packaging Requirements', required=True)
+
     _sql_constraints = [
         ('date_check',
          'CHECK((date_end > date_start))',
-         'The end date must be after the start date.')
+         'Date end must be after date start.')
     ]
 
+    delivery_schedule = fields.One2many('delivery.schedule', 'manufacturing_order_line_id', string='Delivery Schedule')
+
+
+class DeliverySchedule(models.Model):
+    _name = 'delivery.schedule'
+    _rec_name = 'delivery_date'
+
+    manufacturing_order_line_id = fields.Many2one('mes.manufacturing.order.line', string='Manufacturing Order Line')
+    product = fields.Many2one('product.product', string='Product', related='manufacturing_order_line_id.product')
+    bom = fields.Many2one('mrp.bom', string='BOM', related='manufacturing_order_line_id.bom')
+    quantity = fields.Float(string='Quantity', required=True)
+    uom = fields.Char(string='UOM', required=True)
+    delivery_date = fields.Date(string='Delivery Date', required=True)
+
+    @api.onchange('manufacturing_order_line_id')
+    def _onchange_manufacturing_order_line_id(self):
+        for rec in self:
+            if rec.manufacturing_order_line_id:
+                rec.product = rec.manufacturing_order_line_id.product
+                rec.bom = rec.manufacturing_order_line_id.bom
+                rec.uom = rec.manufacturing_order_line_id.uom
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        for record in records:
+            # Create a new procurement plan record for each delivery date
+            plan_data = {
+                'delivery_schedule_id': record.id,
+            }
+            self.env['mes.procurement.plan'].create(plan_data)
+        return records
 
 class ManufacturingOrder(models.Model):
     """MANUFACTURING ORDER - Lệnh sản xuất"""
@@ -65,15 +102,15 @@ class ManufacturingOrder(models.Model):
     date_start = fields.Date(string='Date Start', required=True)
     date_end = fields.Date(string='Date End', required=True)
 
-    # SQL Constraints to make sure date_end > date_start
-    _sql_constraints = [
-        ('date_check',
-         'CHECK((date_end > date_start))',
-         'The end date must be after the start date.')
-    ]
     contract_id = fields.Char(string='Contract ID')
     customer_id = fields.Many2one('res.partner', string='Customer')
     document = fields.Binary(string='Document')
+
+    @api.constrains('date_start', 'date_end')
+    def _check_date_start_end(self):
+        for record in self:
+            if record.date_start > record.date_end:
+                raise exceptions.ValidationError('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
 
 
 class WorkShop(models.Model):

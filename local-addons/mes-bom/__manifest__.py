@@ -30,11 +30,20 @@
         'views/mes_views_menu.xml',
         'views/mes_product.xml',
         'views/mes_manufacturing_order.xml',
+        'views/mes_procurement_plan.xml',
         'data/mes_bom_sample_data.xml',
     ],
+
+    'assets': {
+        'web.assets_backend': [
+            'mes-bom/static/src/components/*/*.js',
+            'mes-bom/static/src/components/*/*.xml',
+            'mes-bom/static/src/components/*/*.scss',
+        ],
+    },
+
     # only loaded in demonstration mode
     'demo': [
         'demo/demo.xml',
     ],
 }
-
