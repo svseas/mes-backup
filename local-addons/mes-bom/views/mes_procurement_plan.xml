@@ -27,8 +27,20 @@
     <field name="arch" type="xml">
       <form>
         <group>
-          <field name="code"/>
-          <field name="manufacturing_order_id"/>
+          <field name="delivery_schedule_id"/>
+          <field name="delivery_date"/>
+          <field name="bom_id"/>
+          <field name="quantity"/>
+          <field name="material_ids" widget="many2many_tags"/>
+          <field name="calculated_material_ids">
+            <tree>
+              <field name="material_id"/>
+              <field name="mat_qty"/>
+              <field name="mat_uom"/>
+              <field name="mat_waste"/>
+              <field name="calculated_quantity"/>
+            </tree>
+          </field>
         </group>
       </form>
     </field>
@@ -39,8 +51,10 @@
     <field name="model">mes.procurement.plan</field>
     <field name="arch" type="xml">
       <tree>
-        <field name="code"/>
-        <field name="manufacturing_order_id"/>
+        <field name="delivery_schedule_id"/>
+        <field name="delivery_date"/>
+        <field name="bom_id"/>
+        <field name="material_ids" widget="many2many_tags"/>
       </tree>
     </field>
   </record>

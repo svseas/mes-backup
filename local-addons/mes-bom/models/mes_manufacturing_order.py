@@ -58,6 +58,16 @@ class DeliverySchedule(models.Model):
                 rec.bom = rec.manufacturing_order_line_id.bom
                 rec.uom = rec.manufacturing_order_line_id.uom
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        for record in records:
+            # Create a new procurement plan record for each delivery date
+            plan_data = {
+                'delivery_schedule_id': record.id,
+            }
+            self.env['mes.procurement.plan'].create(plan_data)
+        return records
 
 class ManufacturingOrder(models.Model):
     """MANUFACTURING ORDER - Lệnh sản xuất"""
